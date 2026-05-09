@@ -135,11 +135,8 @@
       "brand": {
         "tagline": { "en": "East Africa's leading consumer electronics brand", "sw": "Chapa inayoongoza ya vifaa vya umeme Afrika Mashariki" },
         "socials": {
-          "facebook": "https://facebook.com/mruktz",
-          "instagram": "https://instagram.com/mruktz",
-          "linkedin": "https://linkedin.com/company/mruktz",
-          "youtube": "https://youtube.com/@mruktz",
-          "whatsapp": "https://wa.me/255677000001"
+          "instagram": "https://www.instagram.com/mruklimited",
+          "tiktok": "https://www.tiktok.com/@mruklimited"
         },
         "contactDisplay": ["phones", "emails"]
       },
@@ -190,19 +187,15 @@
     },
     "contact": {
       "phones": [
-        { "id": "ph-001", "value": "+255 677 000 001", "label": { "en": "Main", "sw": "Mkuu" } },
-        { "id": "ph-002", "value": "+255 677 000 002", "label": { "en": "Sales", "sw": "Mauzo" } }
+        { "id": "ph-001", "value": "+255 741 737 373", "label": { "en": "Main", "sw": "Mkuu" } }
       ],
       "emails": [
-        { "id": "em-001", "value": "info@mruk.co.tz", "label": { "en": "General", "sw": "Jumla" } },
-        { "id": "em-002", "value": "support@mruk.co.tz", "label": { "en": "Support", "sw": "Msaada" } }
+        { "id": "em-001", "value": "info@mruk.co.tz", "label": { "en": "General", "sw": "Jumla" } }
       ],
-      "whatsapp": "+255677000001",
+      "whatsapp": "+255741737373",
       "offices": [
-        { "id": "off-001", "isHQ": true, "name": { "en": "Head Office", "sw": "Ofisi Kuu" }, "address": { "en": "123 Samora Avenue, Masaki, Dar es Salaam", "sw": "123 Mtaa wa Samora, Masaki, Dar es Salaam" }, "city": { "en": "Dar es Salaam", "sw": "Dar es Salaam" }, "lat": -6.7924, "lng": 39.2083, "phones": ["+255 677 000 001"] },
-        { "id": "off-002", "isHQ": false, "name": { "en": "Mwanza Office", "sw": "Ofisi ya Mwanza" }, "address": { "en": "Nyerere Road, Nyamagana, Mwanza", "sw": "Barabara ya Nyerere, Nyamagana, Mwanza" }, "city": { "en": "Mwanza", "sw": "Mwanza" }, "lat": -2.5379, "lng": 32.9483, "phones": ["+255 677 000 003"] },
-        { "id": "off-003", "isHQ": false, "name": { "en": "Mbeya Office", "sw": "Ofisi ya Mbeya" }, "address": { "en": "Lupa Way, Block D, Mbeya", "sw": "Njia ya Lupa, Kizuizi D, Mbeya" }, "city": { "en": "Mbeya", "sw": "Mbeya" }, "lat": -8.8902, "lng": 33.4441, "phones": ["+255 677 000 004"] },
-        { "id": "off-004", "isHQ": false, "name": { "en": "Arusha Office", "sw": "Ofisi ya Arusha" }, "address": { "en": "Sokoine Road, Arusha", "sw": "Barabara ya Sokoine, Arusha" }, "city": { "en": "Arusha", "sw": "Arusha" }, "lat": -3.3869, "lng": 36.683, "phones": ["+255 677 000 005"] }
+        { "id": "off-001", "isHQ": true, "name": { "en": "Magila Branch", "sw": "Tawi la Magila" }, "address": { "en": "Magila, Dar es Salaam", "sw": "Magila, Dar es Salaam" }, "city": { "en": "Dar es Salaam", "sw": "Dar es Salaam" }, "lat": -6.7924, "lng": 39.2083, "phones": ["+255 741 737 373"] },
+        { "id": "off-002", "isHQ": false, "name": { "en": "Likoma Branch", "sw": "Tawi la Likoma" }, "address": { "en": "Likoma, Dar es Salaam", "sw": "Likoma, Dar es Salaam" }, "city": { "en": "Dar es Salaam", "sw": "Dar es Salaam" }, "lat": -6.7924, "lng": 39.2083, "phones": ["+255 741 737 373"] }
       ],
       "hours": {
         "timezone": "Africa/Dar_es_Salaam",

@@ -39,10 +39,28 @@ export function PopularProducts({ heading, limit = 3 }: PopularProductsProps) {
   )
 }
 
-const img = (n: number) => `/products/product-${String(n).padStart(2, '0')}.png`
-
+// Three popular picks across distinct sub-categories — one each from
+// Kitchen, Refrigerator & AC, and Agriculture — so the row is visually varied.
 const MOCK_POPULAR: ProductCardData[] = [
-  { id: 'pop-1', name: 'Air fryer', description: 'Smart control, 4kg capacity, Dual cooking, 360 heat circulation', href: '/products/oven', imageUrl: img(3) },
-  { id: 'pop-2', name: 'Air fryer', description: 'Smart control, 4kg capacity, Dual cooking, 360 heat circulation', href: '/products/water-pump', imageUrl: img(14) },
-  { id: 'pop-3', name: 'Air fryer', description: 'Smart control, 4kg capacity, Dual cooking, 360 heat circulation', href: '/products/microwave', imageUrl: img(2) },
+  {
+    id: 'pop-microwave',
+    name: 'P605TMSWD Microwave',
+    description: 'Total no frost, electronic control, LED light and 32L oven capacity',
+    href: '/products/p605tmswd',
+    imageUrl: '/categories/categories%3Akitchen/microwave.svg',
+  },
+  {
+    id: 'pop-fridge',
+    name: 'Two-Door Refrigerator',
+    description: '420L capacity, freshness starts here, sleek black inox finish',
+    href: '/products/rf4200',
+    imageUrl: '/categories/categories%3Arefrigirator/two-door-refrigirator.svg',
+  },
+  {
+    id: 'pop-pump',
+    name: 'Water Pump 1.5HP',
+    description: 'High flow rate, low noise — built for farms and homesteads',
+    href: '/products/water-pump',
+    imageUrl: '/categories/categories%3Aagriculture/water-pump.svg',
+  },
 ]
