@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 import { Container } from '@/components/atoms'
 import {
@@ -10,8 +10,21 @@ import {
   ProductSpecs,
   ProductDiscover,
 } from '@/components/product'
-import { getProduct, listAllSlugs } from '@/data/products'
+import { CATEGORIES, getProduct, listAllSlugs } from '@/data/products'
 import { getTenantConfig } from '@/lib/tenant'
+
+interface SearchParams {
+  // Home-page links append `?from=<category>` so a missing SKU detail
+  // page redirects to its parent category landing instead of 404'ing.
+  from?: string
+}
+
+function fallbackUrl(from: string | undefined): string {
+  if (from && CATEGORIES.some((c) => c.slug === from)) {
+    return `/products?category=${from}`
+  }
+  return '/products'
+}
 
 // Pre-render every product slug at build time. Once the backend is live this
 // becomes a paginated `getStaticPaths`-style fetch from the catalog API.
@@ -27,7 +40,7 @@ export async function generateMetadata({
   const { slug } = await params
   const product = getProduct(slug)
   const tenant = await getTenantConfig()
-  if (!product) return { title: 'Product not found' }
+  if (!product) return { title: tenant.identity.companyName }
 
   const lang = tenant.defaultLang
   const name = product.name[lang] ?? product.name.en
@@ -46,12 +59,17 @@ export async function generateMetadata({
 
 export default async function ProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<SearchParams>
 }) {
   const { slug } = await params
+  const { from } = await searchParams
   const product = getProduct(slug)
-  if (!product) notFound()
+  // No SKU detail page yet for this slug? Send the visitor to the category
+  // landing instead of a dead-end 404 — they'll see related products there.
+  if (!product) redirect(fallbackUrl(from))
 
   const tenant = await getTenantConfig()
   const lang = tenant.defaultLang

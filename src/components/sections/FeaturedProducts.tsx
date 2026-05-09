@@ -160,27 +160,31 @@ function CategoryHeroCard({
 // Mock products keyed by category — featured-grid SVGs live in
 // /public/categories/categories:<category>/. The folder name uses a literal
 // colon so the URL has to be `%3A` encoded.
+//
+// Every href appends `?from=<category>`. When a slug doesn't have its own
+// detail page yet, the [slug] route reads `from` and redirects to the
+// matching category landing instead of throwing a 404.
 const MOCK_PRODUCTS: Record<string, ProductCardData[]> = {
   kitchen: [
-    { id: 'p1', name: 'Air fryer', description: '4kg capacity, Dual cooking, 360 heat circulation', href: '/products/air-fryer', imageUrl: '/categories/categories%3Akitchen/air-frier.png', isNew: true },
-    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/p605tmswd', imageUrl: '/categories/categories%3Akitchen/microwave.png' },
-    { id: 'p3', name: 'MR-UK Dual cooking f...', description: 'Four cooks with oven', href: '/products/mr-uk-dual-cooker', imageUrl: '/categories/categories%3Akitchen/dual-cooking.png' },
-    { id: 'p4', name: 'UK- 45 Blender', description: 'Smart control, 360 heat circulation', href: '/products/uk-45-blender', imageUrl: '/categories/categories%3Akitchen/blender.png' },
+    { id: 'p1', name: 'Air fryer', description: '4kg capacity, Dual cooking, 360 heat circulation', href: '/products/air-fryer?from=kitchen', imageUrl: '/categories/categories%3Akitchen/air-frier.png', isNew: true },
+    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/p605tmswd?from=kitchen', imageUrl: '/categories/categories%3Akitchen/microwave.png' },
+    { id: 'p3', name: 'MR-UK Dual cooking f...', description: 'Four cooks with oven', href: '/products/mr-uk-dual-cooker?from=kitchen', imageUrl: '/categories/categories%3Akitchen/dual-cooking.png' },
+    { id: 'p4', name: 'UK- 45 Blender', description: 'Smart control, 360 heat circulation', href: '/products/uk-45-blender?from=kitchen', imageUrl: '/categories/categories%3Akitchen/blender.png' },
   ],
   music: [
-    { id: 'm1', name: 'Soundbar', description: 'Dolby Atmos, wireless subwoofer', href: '/products/soundbar', imageUrl: '/categories/categories%3Amusics/soundbar.png' },
-    { id: 'm2', name: 'Mini Soundbar', description: 'Compact, room-filling sound', href: '/products/mini-soundbar', imageUrl: '/categories/categories%3Amusics/minisoundbar.png' },
-    { id: 'm3', name: 'Subwoofer', description: 'Deep bass, wireless pairing', href: '/products/subwoofer', imageUrl: '/categories/categories%3Amusics/subwoofer.png' },
-    { id: 'm4', name: 'Super Bass', description: 'Floor-shaking bass, 12-hour battery', href: '/products/super-bass', imageUrl: '/categories/categories%3Amusics/super-base.png' },
+    { id: 'm1', name: 'Soundbar', description: 'Dolby Atmos, wireless subwoofer', href: '/products/soundbar?from=music', imageUrl: '/categories/categories%3Amusics/soundbar.png' },
+    { id: 'm2', name: 'Mini Soundbar', description: 'Compact, room-filling sound', href: '/products/mini-soundbar?from=music', imageUrl: '/categories/categories%3Amusics/minisoundbar.png' },
+    { id: 'm3', name: 'Subwoofer', description: 'Deep bass, wireless pairing', href: '/products/subwoofer?from=music', imageUrl: '/categories/categories%3Amusics/subwoofer.png' },
+    { id: 'm4', name: 'Super Bass', description: 'Floor-shaking bass, 12-hour battery', href: '/products/super-bass?from=music', imageUrl: '/categories/categories%3Amusics/super-base.png' },
   ],
   refrigerator: [
-    { id: 'r1', name: 'Two Door Refrigerator', description: 'Freshness starts here, 420L', href: '/products/rf4200', imageUrl: '/categories/categories%3Arefrigirator/two-door-refrigirator.png', isNew: true },
-    { id: 'r2', name: 'Inverter Split AC', description: 'Whisper-quiet, energy efficient', href: '/products/inverter-split-ac', imageUrl: '/categories/categories%3Arefrigirator/ac.png' },
-    { id: 'r3', name: 'Metal Fan', description: 'Quiet motor, three-speed', href: '/products/metal-fan', imageUrl: '/categories/categories%3Arefrigirator/metal-fan.png' },
-    { id: 'r4', name: 'Black Inox Freezer', description: '180L, fast-freeze technology', href: '/products/black-inox-freezer', imageUrl: '/categories/categories%3Arefrigirator/blank-inox.png' },
+    { id: 'r1', name: 'Two Door Refrigerator', description: 'Freshness starts here, 420L', href: '/products/rf4200?from=refrigerator-ac', imageUrl: '/categories/categories%3Arefrigirator/two-door-refrigirator.png', isNew: true },
+    { id: 'r2', name: 'Inverter Split AC', description: 'Whisper-quiet, energy efficient', href: '/products/inverter-split-ac?from=refrigerator-ac', imageUrl: '/categories/categories%3Arefrigirator/ac.png' },
+    { id: 'r3', name: 'Metal Fan', description: 'Quiet motor, three-speed', href: '/products/metal-fan?from=refrigerator-ac', imageUrl: '/categories/categories%3Arefrigirator/metal-fan.png' },
+    { id: 'r4', name: 'Black Inox Freezer', description: '180L, fast-freeze technology', href: '/products/black-inox-freezer?from=refrigerator-ac', imageUrl: '/categories/categories%3Arefrigirator/blank-inox.png' },
   ],
   agriculture: [
-    { id: 'a1', name: 'Water Pump 1.5HP', description: 'High flow, low noise', href: '/products/water-pump', imageUrl: '/categories/categories%3Aagriculture/water-pump.png' },
-    { id: 'a2', name: 'Diesel Generator', description: '5kVA, fuel efficient', href: '/products/diesel-generator', imageUrl: '/categories/categories%3Aagriculture/generator.png' },
+    { id: 'a1', name: 'Water Pump 1.5HP', description: 'High flow, low noise', href: '/products/water-pump?from=agriculture', imageUrl: '/categories/categories%3Aagriculture/water-pump.png' },
+    { id: 'a2', name: 'Diesel Generator', description: '5kVA, fuel efficient', href: '/products/diesel-generator?from=agriculture', imageUrl: '/categories/categories%3Aagriculture/generator.png' },
   ],
 }

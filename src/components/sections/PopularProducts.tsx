@@ -41,26 +41,29 @@ export function PopularProducts({ heading, limit = 3 }: PopularProductsProps) {
 
 // Three popular picks across distinct sub-categories — one each from
 // Kitchen, Refrigerator & AC, and Agriculture — so the row is visually varied.
+//
+// Every href appends `?from=<category>` so a slug without its own detail
+// page redirects to that category landing instead of 404'ing.
 const MOCK_POPULAR: ProductCardData[] = [
   {
     id: 'pop-microwave',
     name: 'P605TMSWD Microwave',
     description: 'Total no frost, electronic control, LED light and 32L oven capacity',
-    href: '/products/p605tmswd',
+    href: '/products/p605tmswd?from=kitchen',
     imageUrl: '/categories/categories%3Akitchen/microwave.png',
   },
   {
     id: 'pop-fridge',
     name: 'Two-Door Refrigerator',
     description: '420L capacity, freshness starts here, sleek black inox finish',
-    href: '/products/rf4200',
+    href: '/products/rf4200?from=refrigerator-ac',
     imageUrl: '/categories/categories%3Arefrigirator/two-door-refrigirator.png',
   },
   {
     id: 'pop-pump',
     name: 'Water Pump 1.5HP',
     description: 'High flow rate, low noise — built for farms and homesteads',
-    href: '/products/water-pump',
+    href: '/products/water-pump?from=agriculture',
     imageUrl: '/categories/categories%3Aagriculture/water-pump.png',
   },
 ]
