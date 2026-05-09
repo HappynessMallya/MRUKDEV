@@ -52,7 +52,7 @@ export function HeroCarousel({ autoPlay = true, autoPlayInterval = 5500, slides 
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
     >
-      <div className="relative h-[420px] sm:h-[600px] md:h-[660px] lg:h-[720px] w-full">
+      <div className="relative h-[480px] sm:h-[600px] md:h-[660px] lg:h-[720px] w-full">
         {slides.map((slide, i) => (
           <SlideContent key={slide.id} slide={slide} active={i === active} t={t} />
         ))}
@@ -105,8 +105,53 @@ function SlideContent({
       style={{ background: slide.gradient }}
       aria-hidden={!active}
     >
-      <div className="mx-auto h-full w-full max-w-[1440px] px-24 md:px-32 lg:px-40">
-        <div className="grid h-full grid-cols-1 md:grid-cols-2 items-center gap-10 lg:gap-14">
+      {/*
+        Mobile (< md): vertical stack — image on top, then short title, then
+        a small CTA. We need extra horizontal padding so the prev/next arrows
+        sitting at px-6 don't overlap the image. Title + button live below
+        the image in the lower third.
+
+        Desktop (md+): unchanged 50/50 split with copy on the left, full
+        product photo on the right.
+      */}
+      <div className="mx-auto h-full w-full max-w-[1440px] px-16 sm:px-20 md:px-32 lg:px-40">
+        {/* Mobile-only stacked layout. Extra bottom padding (pb-14) keeps
+            the Learn more button clear of the absolutely-positioned slide
+            indicator strip that sits at bottom-6 of the hero band. */}
+        <div className="flex h-full flex-col items-center justify-center gap-5 pt-6 pb-14 md:hidden">
+          <div className="relative w-full flex-1 min-h-0">
+            <Image
+              src={slide.imageUrl}
+              alt={t(slide.title)}
+              fill
+              priority={active}
+              sizes="(max-width: 640px) 70vw, 60vw"
+              className="object-contain"
+            />
+          </div>
+          <div className="flex flex-col items-center gap-3 text-center">
+            <h2
+              className="font-heading"
+              style={{
+                color: fg,
+                fontSize: 'clamp(20px, 5vw, 26px)',
+                lineHeight: 1.2,
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {t(slide.title)}
+            </h2>
+            <Link href={slide.cta.href}>
+              <Button variant="solid" size="sm">
+                {t(slide.cta.label)}
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Desktop two-column layout */}
+        <div className="hidden h-full md:grid md:grid-cols-2 md:items-center md:gap-10 lg:gap-14">
           <div className="flex flex-col justify-center max-w-[520px]">
             <h2
               className="font-heading"
@@ -130,7 +175,7 @@ function SlideContent({
             </div>
           </div>
 
-          <div className="relative h-full hidden md:block">
+          <div className="relative h-full">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative h-[80%] w-full">
                 <Image

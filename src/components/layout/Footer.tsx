@@ -28,13 +28,19 @@ export function Footer({ config }: { config: TenantConfig }) {
 
   return (
     <footer className="bg-primary text-white">
-      <Container className="py-12 md:py-14">
+      <Container className="py-10 md:py-14">
         <div className="grid gap-10 lg:grid-cols-[auto_1fr_auto] lg:gap-16">
           <div className="flex items-start lg:pt-1">
             <FooterLogo logoUrl="/branding/logo-white.png" name={config.identity.companyName} />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+          {/*
+            Mobile: stack the three columns (Shop / Company / Support) so
+            each gets full width — fixes the awkward empty cell that grid-2
+            was leaving when you have 3 columns.
+            sm-md: spread inline at 3-up.
+          */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {visibleColumns.slice(0, 3).map((col) => (
               <div key={col.id} className="space-y-3">
                 <h4

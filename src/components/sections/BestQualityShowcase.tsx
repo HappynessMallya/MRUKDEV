@@ -59,7 +59,13 @@ function ShowcaseItemCard({
         href={item.cta.href}
         className="group relative block overflow-hidden rounded-xl"
       >
-        <div className="relative aspect-[21/9] w-full">
+        {/*
+          Aspect ratio steps up with viewport: a 21:9 cinematic strip looks
+          great on desktop but turns into an unreadable ~155px-tall sliver
+          on a phone. Mobile uses 4:5 (taller than wide) so the lifestyle
+          photo + overlay text both have room.
+        */}
+        <div className="relative aspect-[4/5] sm:aspect-[16/9] md:aspect-[21/9] w-full">
           {item.imageUrl && !imgErrored ? (
             <Image
               src={item.imageUrl}
@@ -86,15 +92,15 @@ function ShowcaseItemCard({
                 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0) 100%)',
             }}
           />
-          <div className="absolute inset-x-0 top-0 flex flex-col items-center gap-2 px-6 pt-8 text-center text-white md:pt-12">
+          <div className="absolute inset-x-0 top-0 flex flex-col items-center gap-2 px-5 pt-6 text-center text-white sm:px-6 sm:pt-8 md:pt-12">
             <h3
               className="font-heading"
-              style={{ fontSize: 'clamp(20px, 2.4vw, 30px)', lineHeight: 1.2, fontWeight: 700 }}
+              style={{ fontSize: 'clamp(18px, 2.4vw, 30px)', lineHeight: 1.2, fontWeight: 700 }}
             >
               {t(item.title)}
             </h3>
             <p
-              className="text-white/85"
+              className="max-w-md text-white/85"
               style={{ fontSize: 'clamp(13px, 1.2vw, 15px)', lineHeight: 1.4, fontWeight: 400 }}
             >
               {t(item.subtitle)}
