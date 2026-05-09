@@ -66,11 +66,11 @@ export function Footer({ config }: { config: TenantConfig }) {
         </div>
 
         <div className="mt-12 border-t border-white/15 pt-6">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col items-center justify-center gap-4 text-center md:flex-row md:gap-8">
             <p className="text-white/60" style={{ fontSize: 13, lineHeight: '20px' }}>
               {t(footer.bottomBar.copyright)}
             </p>
-            <ul className="flex flex-wrap items-center gap-6">
+            <ul className="flex flex-wrap items-center justify-center gap-6">
               {footer.bottomBar.legalLinks.map((link) => (
                 <li key={link.id}>
                   <Link

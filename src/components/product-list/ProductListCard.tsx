@@ -7,20 +7,16 @@ import { Icon } from '@iconify/react'
 
 import { Button } from '@/components/atoms'
 import { useTenantStore } from '@/stores/tenantStore'
-import { useCompareStore } from '@/stores/compareStore'
-import { cn } from '@/lib/cn'
 import type { Product } from '@/types/product'
 
 // Frame 27 in Figma — list-page product card. White surface, rounded corners,
 // product image at the top with prev/next arrows under it that cycle through
-// the product's image array, then title/model, bullet features, a Compare
-// checkbox, and a full-width Learn More CTA at the bottom.
+// the product's image array, then title/model, a thin pale-gray-bordered band
+// of bullet features, and a full-width Learn More CTA at the bottom.
 export function ProductListCard({ product }: { product: Product }) {
   const t = useTenantStore((s) => s.t)
   const [active, setActive] = useState(0)
   const [errored, setErrored] = useState<Set<number>>(new Set())
-  const compared = useCompareStore((s) => s.items.some((i) => i.id === product.id))
-  const toggleCompare = useCompareStore((s) => s.toggle)
 
   const images = product.images.length > 0 ? product.images : ['']
   const fail = (i: number) => setErrored((s) => new Set(s).add(i))
@@ -93,19 +89,15 @@ export function ProductListCard({ product }: { product: Product }) {
       </div>
 
       {bullets.length > 0 && (
-        <div className="border-y border-foreground/10 px-6 py-5">
-          <ul className="space-y-2">
+        <div className="mx-6 border-y border-gray-200 py-5">
+          <ul className="list-disc space-y-2 pl-5 marker:text-foreground">
             {bullets.map((b, i) => (
               <li
                 key={i}
-                className="flex items-start gap-2.5 text-foreground/80"
+                className="text-foreground/80 pl-1"
                 style={{ fontSize: 14, lineHeight: '20px' }}
               >
-                <span
-                  aria-hidden
-                  className="mt-[7px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-foreground"
-                />
-                <span>{t(b)}</span>
+                {t(b)}
               </li>
             ))}
           </ul>

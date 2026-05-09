@@ -42,12 +42,12 @@ export function ProductTabs() {
   }, [])
 
   return (
-    <div className="sticky top-16 z-30 bg-background">
+    <div className="sticky top-16 z-30 bg-surface">
       <Container>
         <nav
           role="tablist"
           aria-label="Product sections"
-          className="flex items-center justify-center gap-8"
+          className="flex items-center justify-start gap-10"
         >
           {TABS.map((tab) => {
             const label = tabsCopy[tab.key] ?? { en: tab.fallback }
@@ -68,13 +68,15 @@ export function ProductTabs() {
                 )}
                 style={{ fontSize: 15, lineHeight: '20px', fontWeight: 600 }}
               >
-                {t(label)}
-                {isActive && (
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-0 bottom-2 h-0.5 rounded-full bg-primary"
-                  />
-                )}
+                <span className="relative inline-block">
+                  {t(label)}
+                  {isActive && (
+                    <span
+                      aria-hidden
+                      className="absolute -bottom-2 left-0 right-0 h-0.5 rounded-full bg-primary"
+                    />
+                  )}
+                </span>
               </a>
             )
           })}

@@ -513,28 +513,25 @@ export interface SubcategoryEntry {
 
 export const SUBCATEGORIES: Record<string, SubcategoryEntry[]> = {
   kitchen: [
-    { slug: 'microwaves', label: { en: 'Microwaves' }, imageUrl: '/products/product-02.png' },
-    { slug: 'blender', label: { en: 'Blender' }, imageUrl: '/products/product-04.png' },
-    { slug: 'air-fryer', label: { en: 'Air Fryer' }, imageUrl: '/products/product-01.png' },
-    { slug: 'cookers', label: { en: 'Cookers' }, imageUrl: '/products/product-11.png' },
-    { slug: 'kettles', label: { en: 'Kettles' }, imageUrl: '/products/product-12.png' },
-    { slug: 'gas-stove', label: { en: 'Electric & Gas stove' }, imageUrl: '/products/product-03.png' },
+    { slug: 'microwaves', label: { en: 'Microwaves' }, imageUrl: '/categories/nav/microwaves.svg' },
+    { slug: 'blender', label: { en: 'Blender' }, imageUrl: '/categories/nav/blender.svg' },
+    { slug: 'air-fryer', label: { en: 'Air Fryer' }, imageUrl: '/categories/nav/air-friers.svg' },
+    { slug: 'cookers', label: { en: 'Cookers' }, imageUrl: '/categories/nav/cookers.svg' },
+    { slug: 'kettles', label: { en: 'Kettles' }, imageUrl: '/categories/nav/kettles.svg' },
+    { slug: 'gas-stove', label: { en: 'Electric & Gas stove' }, imageUrl: '/categories/nav/Electric%20%26%20Gas%20stove.svg' },
   ],
   music: [
-    { slug: 'soundbars', label: { en: 'Soundbars' }, imageUrl: '/products/product-06.png' },
-    { slug: 'speakers', label: { en: 'Speakers' }, imageUrl: '/products/product-07.png' },
-    { slug: 'headphones', label: { en: 'Headphones' }, imageUrl: '/products/product-08.png' },
-    { slug: 'home-theater', label: { en: 'Home theater' }, imageUrl: '/products/product-05.png' },
+    { slug: 'music-systems', label: { en: 'Music systems' }, imageUrl: '/categories/nav/music.svg' },
   ],
   'refrigerator-ac': [
-    { slug: 'refrigerator', label: { en: 'Refrigarator' }, imageUrl: '/products/regrigirator-1.png' },
-    { slug: 'air-conditioning', label: { en: 'Air conditioning' }, imageUrl: '/products/ac-1.png' },
+    { slug: 'refrigerator', label: { en: 'Refrigarator' }, imageUrl: '/categories/nav/freezer.svg' },
+    { slug: 'air-conditioning', label: { en: 'Air conditioning' }, imageUrl: '/categories/nav/ac.svg' },
   ],
   agriculture: [
-    { slug: 'water-pumps', label: { en: 'Water pumps' }, imageUrl: '/products/product-14.png' },
-    { slug: 'generators', label: { en: 'Generators' }, imageUrl: '/products/product-13.png' },
-    { slug: 'inverters', label: { en: 'Inverters' }, imageUrl: '/products/product-15.png' },
-    { slug: 'mills', label: { en: 'Mills' }, imageUrl: '/products/product-16.png' },
+    { slug: 'water-pumps', label: { en: 'Water pumps' }, imageUrl: '/categories/nav/water-pump.svg' },
+    { slug: 'generators', label: { en: 'Generators' }, imageUrl: '/categories/nav/generator.svg' },
+    { slug: 'pvc-hoses', label: { en: 'PVC hoses' }, imageUrl: '/categories/nav/pvs-horses.svg' },
+    { slug: 'garden-hoses', label: { en: 'Garden hoses' }, imageUrl: '/categories/nav/garnen-horses.svg' },
   ],
 }
 
