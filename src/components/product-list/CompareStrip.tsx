@@ -33,7 +33,6 @@ export function CompareStrip() {
                   src={item.imageUrl}
                   alt={item.name}
                   fill
-                  unoptimized
                   sizes="96px"
                   className="object-contain p-2"
                 />

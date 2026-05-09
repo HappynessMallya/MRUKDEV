@@ -58,7 +58,6 @@ export function ProductListCard({
               src={images[active]}
               alt={t(product.name)}
               fill
-              unoptimized
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain"
               onError={() => fail(active)}

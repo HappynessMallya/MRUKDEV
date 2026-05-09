@@ -138,7 +138,6 @@ function SlideContent({
                   alt={t(slide.title)}
                   fill
                   priority={active}
-                  unoptimized
                   sizes="(min-width: 1024px) 720px, 50vw"
                   className="object-contain"
                 />
@@ -211,7 +210,6 @@ function ArrowButton({
         alt=""
         width={10}
         height={18}
-        unoptimized
         className={cn('h-3.5 w-auto md:h-4', direction === 'prev' && 'rotate-180')}
       />
     </button>

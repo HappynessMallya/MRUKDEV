@@ -125,7 +125,6 @@ function ProductColumn({ product, t }: { product: Product; t: (f: { en: string; 
             src={cardImage}
             alt={t(product.name)}
             fill
-            unoptimized
             sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
             className="object-contain"
           />

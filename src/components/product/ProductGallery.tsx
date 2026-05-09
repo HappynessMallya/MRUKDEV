@@ -28,7 +28,6 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
             alt={alt}
             fill
             priority
-            unoptimized
             sizes="(min-width: 1024px) 600px, 100vw"
             className="object-contain p-8"
             onError={() => fail(active)}
@@ -66,7 +65,6 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
                   src={src}
                   alt={`${alt} thumbnail ${i + 1}`}
                   fill
-                  unoptimized
                   sizes="120px"
                   className="object-contain p-2"
                   onError={() => fail(i)}

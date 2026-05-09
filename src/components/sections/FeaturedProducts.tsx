@@ -114,7 +114,6 @@ function CategoryHeroCard({
               src={hero.imageUrl}
               alt={t(hero.title)}
               fill
-              unoptimized
               sizes="(min-width: 1024px) 60vw, 100vw"
               className="object-cover"
               onError={() => setImgErrored(true)}

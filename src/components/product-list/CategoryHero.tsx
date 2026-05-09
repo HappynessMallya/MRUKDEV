@@ -58,7 +58,6 @@ export function CategoryHero({
                     alt={t(sub.label)}
                     fill
                     sizes="120px"
-                    unoptimized
                     className="object-contain p-2 mix-blend-multiply transition-transform group-hover:scale-105"
                   />
                 </div>
