@@ -20,12 +20,12 @@ const PRODUCTS: Record<string, Product> = {
     // /microwave/ subfolder so the rich photo set stays scoped to this SKU.
     listImage: '/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20black.png',
     images: [
-      '/products/kitchen/microwave/m1.png',
-      '/products/kitchen/microwave/m2.png',
-      '/products/kitchen/microwave/m3.png',
-      '/products/kitchen/microwave/m4.png',
-      '/products/kitchen/microwave/m5.png',
-      '/products/kitchen/microwave/m6.png',
+      '/products/kitchen/microwave/1.png',
+      '/products/kitchen/microwave/2.png',
+      '/products/kitchen/microwave/3.png',
+      '/products/kitchen/microwave/4.png',
+      '/products/kitchen/microwave/5.png',
+      '/products/kitchen/microwave/6.png',
     ],
     featureBullets: [
       { en: 'Total no frost' },
