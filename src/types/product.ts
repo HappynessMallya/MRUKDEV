@@ -42,6 +42,12 @@ export interface Product {
   // Key-value specifications table
   specifications?: SpecRow[]
 
+  // Flat key/value pairs surfaced by the /compare table. Keys must match the
+  // attribute identifiers the compare page renders (`netTotal`, `dimension`,
+  // `color`, `energyClass`, `type`). Localized later if/when the compare
+  // page goes bilingual.
+  compareSpecs?: Record<string, string>
+
   // IDs of related products (resolved against the products map)
   relatedSlugs?: string[]
 }

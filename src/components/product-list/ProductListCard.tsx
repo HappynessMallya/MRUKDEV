@@ -142,14 +142,22 @@ export function ProductListCard({
               <input
                 type="checkbox"
                 checked={compared}
-                onChange={() =>
+                onChange={() => {
+                  const wasCompared = compared
                   toggleCompare({
                     id: product.id,
                     slug: product.slug,
                     name: t(product.name),
                     imageUrl: product.listImage ?? product.images[0] ?? '',
                   })
-                }
+                  // When the user is *adding* a product (was not yet in the
+                  // strip) and they're scrolled down the catalog, jump them
+                  // back to the top so the Compare strip is visible and they
+                  // can keep picking more products to compare.
+                  if (!wasCompared && typeof window !== 'undefined') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }}
                 className={cn(
                   'h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border border-border bg-background transition-colors',
                   'checked:border-primary checked:bg-primary',

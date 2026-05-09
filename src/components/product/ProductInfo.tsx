@@ -1,11 +1,12 @@
 'use client'
 
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { Button } from '@/components/atoms'
 import { useTenantStore } from '@/stores/tenantStore'
+import { useCartStore } from '@/stores/cartStore'
 import { cn } from '@/lib/cn'
 import type { Product } from '@/types/product'
 import type { BilingualText } from '@/types/tenant'
@@ -21,10 +22,12 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const colors = product.colors ?? []
   const [activeColor, setActiveColor] = useState(colors[0]?.id)
+  const [justAdded, setJustAdded] = useState(false)
+  const router = useRouter()
+  const addToCartStore = useCartStore((s) => s.add)
 
   const addToCart = texts.addToCart ?? { en: 'Add to cart' }
   const getQuote = texts.getQuote ?? { en: 'Get a quotation' }
-  const modelLabel = texts.modelLabel ?? { en: 'Model' }
   const outOfStock = texts.outOfStock ?? { en: 'Out of stock' }
   const whatsapp = config?.global.contact.whatsapp
 
@@ -43,23 +46,22 @@ export function ProductInfo({ product }: { product: Product }) {
 
       {product.model && (
         <p
-          className="text-foreground/45"
-          style={{ fontSize: 14, lineHeight: '20px' }}
+          className="text-gray-300"
+          style={{ fontSize: 16, lineHeight: '22px', fontWeight: 500 }}
         >
-          {t(modelLabel)}: <span className="text-foreground/70">{product.model}</span>
+          {product.model}
         </p>
       )}
 
       {product.featureBullets && product.featureBullets.length > 0 && (
-        <ul className="flex flex-col gap-2 mt-2">
+        <ul className="mt-2 list-disc space-y-2 pl-5 marker:text-foreground">
           {product.featureBullets.map((b, i) => (
             <li
               key={i}
-              className="flex items-start gap-2 text-foreground/80"
-              style={{ fontSize: 14, lineHeight: '20px' }}
+              className="text-foreground/80 pl-1"
+              style={{ fontSize: 15, lineHeight: '22px' }}
             >
-              <span aria-hidden className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-foreground/60" />
-              <span>{t(b)}</span>
+              {t(b)}
             </li>
           ))}
         </ul>
@@ -83,10 +85,10 @@ export function ProductInfo({ product }: { product: Product }) {
                   onClick={() => setActiveColor(c.id)}
                   aria-pressed={isActive}
                   className={cn(
-                    'rounded-md border px-5 py-2 text-foreground transition-colors',
+                    'rounded-md border bg-background px-5 py-2 text-foreground transition-colors',
                     isActive
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border-subtle hover:border-foreground/30'
+                      ? 'border-primary text-primary'
+                      : 'border-gray-200 hover:border-foreground/30'
                   )}
                   style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500 }}
                 >
@@ -98,28 +100,46 @@ export function ProductInfo({ product }: { product: Product }) {
         </div>
       )}
 
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {product.isAvailable === false ? (
-          <Button variant="solid" size="md" disabled fullWidth>
+          <Button variant="solid" size="md" disabled fullWidth className="sm:col-span-2">
             {t(outOfStock)}
           </Button>
         ) : (
           <>
-            <Link href="/inquiry">
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Icon icon="material-symbols:request-quote-outline" width={16} />}
-              >
-                {t(getQuote)}
-              </Button>
-            </Link>
             <Button
-              variant="solid"
-              size="sm"
-              leftIcon={<Icon icon="tdesign:cart" width={16} />}
+              variant="soft"
+              size="md"
+              fullWidth
+              leftIcon={<Icon icon="material-symbols:request-quote-outline" width={16} />}
+              onClick={() => {
+                const params = new URLSearchParams({
+                  product: product.slug,
+                  subject: `Quotation request: ${t(product.name)}`,
+                })
+                router.push(`/contact?${params.toString()}`)
+              }}
             >
-              {t(addToCart)}
+              {t(getQuote)}
+            </Button>
+            <Button
+              variant="soft"
+              size="md"
+              fullWidth
+              leftIcon={<Icon icon={justAdded ? 'material-symbols:check-rounded' : 'tdesign:cart'} width={16} />}
+              onClick={() => {
+                addToCartStore({
+                  id: product.id,
+                  slug: product.slug,
+                  name: t(product.name),
+                  imageUrl: product.listImage ?? product.images[0] ?? '',
+                  model: product.model,
+                })
+                setJustAdded(true)
+                setTimeout(() => setJustAdded(false), 1500)
+              }}
+            >
+              {justAdded ? 'Added' : t(addToCart)}
             </Button>
           </>
         )}

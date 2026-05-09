@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Icon } from '@iconify/react'
 
 import { Button, Container } from '@/components/atoms'
@@ -32,6 +33,7 @@ export function CompareStrip() {
                   src={item.imageUrl}
                   alt={item.name}
                   fill
+                  unoptimized
                   sizes="96px"
                   className="object-contain p-2"
                 />
@@ -39,9 +41,10 @@ export function CompareStrip() {
                   type="button"
                   onClick={() => remove(item.id)}
                   aria-label={`Remove ${item.name} from compare`}
-                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 text-white transition-colors hover:bg-foreground"
+                  title={`Remove ${item.name} from compare`}
+                  className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-md transition-transform hover:scale-110"
                 >
-                  <Icon icon="material-symbols:close-rounded" width={14} />
+                  <Icon icon="material-symbols:close-rounded" width={16} />
                 </button>
               </div>
             ))}
@@ -57,14 +60,22 @@ export function CompareStrip() {
             ))}
           </div>
 
-          <Button
-            variant={canCompare ? 'solid' : 'ghost'}
-            size="sm"
-            disabled={!canCompare}
-            className={cn(!canCompare && 'pointer-events-none opacity-60')}
-          >
-            Compare
-          </Button>
+          {canCompare ? (
+            <Link href="/compare">
+              <Button variant="solid" size="sm">
+                Compare
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled
+              className={cn('pointer-events-none opacity-60')}
+            >
+              Compare
+            </Button>
+          )}
 
           <button
             type="button"

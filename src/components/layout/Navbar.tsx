@@ -8,6 +8,7 @@ import { Button, Container, Logo } from '@/components/atoms'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { MegaMenu } from './MegaMenu'
 import { useTenantStore } from '@/stores/tenantStore'
+import { useCartStore } from '@/stores/cartStore'
 import { cn } from '@/lib/cn'
 import type { TenantConfig } from '@/types/tenant'
 
@@ -20,7 +21,7 @@ import type { TenantConfig } from '@/types/tenant'
 // reactive bits — language, cart count.
 export function Navbar({ config }: { config: TenantConfig }) {
   const t = useTenantStore((s) => s.t)
-  const cartCount = useTenantStore((s) => s.cartCount)
+  const cartCount = useCartStore((s) => s.count)
   const features = config.features
 
   const [openMenu, setOpenMenu] = useState<string | null>(null)

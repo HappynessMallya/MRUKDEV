@@ -20,12 +20,12 @@ const PRODUCTS: Record<string, Product> = {
     // /microwave/ subfolder so the rich photo set stays scoped to this SKU.
     listImage: '/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20black.svg',
     images: [
-      '/products/kitchen/microwave/1.png',
-      '/products/kitchen/microwave/2.png',
-      '/products/kitchen/microwave/3.png',
-      '/products/kitchen/microwave/4.png',
-      '/products/kitchen/microwave/5.png',
-      '/products/kitchen/microwave/6.png',
+      '/products/kitchen/microwave/m1.svg',
+      '/products/kitchen/microwave/m2.svg',
+      '/products/kitchen/microwave/m3.svg',
+      '/products/kitchen/microwave/m4.svg',
+      '/products/kitchen/microwave/m5.svg',
+      '/products/kitchen/microwave/m6.svg',
     ],
     featureBullets: [
       { en: 'Total no frost' },
@@ -113,6 +113,13 @@ const PRODUCTS: Record<string, Product> = {
       { id: 's8', label: { en: 'Color' }, value: { en: 'Black, White' } },
     ],
     relatedSlugs: ['mw-32l-black-2', 'mw-32l-black-3', 'kt-32l-black', 'kt-32l-white'],
+    compareSpecs: {
+      netTotal: '32 litre',
+      dimension: '357*255*357',
+      color: 'Black',
+      energyClass: 'A',
+      type: 'Convection',
+    },
   },
 
   // Two more microwave variants in the Kitchen › Microwaves subcategory list.
@@ -131,6 +138,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '32 litre',
+      dimension: '357*255*357',
+      color: 'Black',
+      energyClass: 'A',
+      type: 'Grill',
+    },
   },
   'mw-32l-black-3': {
     id: 'mw-32l-black-3',
@@ -146,6 +160,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '32 litre',
+      dimension: '357*255*357',
+      color: 'Black',
+      energyClass: 'A',
+      type: 'Solo',
+    },
   },
 
   // Kettles subcategory.
@@ -163,6 +184,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '1.7 litre',
+      dimension: '220*150*250',
+      color: 'Black',
+      energyClass: 'A',
+      type: 'Kettle',
+    },
   },
   'kt-32l-white': {
     id: 'kt-32l-white',
@@ -178,6 +206,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '1.7 litre',
+      dimension: '220*150*250',
+      color: 'White',
+      energyClass: 'A',
+      type: 'Kettle',
+    },
   },
 
   // Refrigerator subcategory — nine SKUs (paths URL-encoded because the
@@ -196,6 +231,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '439 litre',
+      dimension: '91*50*177',
+      color: 'Black',
+      energyClass: 'F',
+      type: 'Convection',
+    },
   },
   'sky-50-5bi': {
     id: 'sky-50-5bi',
@@ -211,12 +253,19 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '423 litre',
+      dimension: '79*60*190',
+      color: 'Black',
+      energyClass: 'E',
+      type: 'Grill',
+    },
   },
   'sky-32-black-inox': {
     id: 'sky-32-black-inox',
     slug: 'sky-32-black-inox',
     name: { en: 'SKY -32-Black Inox' },
-    model: 'MS23K3513AW/SG',
+    model: 'SKY -32',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
     images: ['/products/refrigirator%26ac/SKY%20-32-Black%20Inox.svg'],
@@ -226,6 +275,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '320 litre',
+      dimension: '64*67*186',
+      color: 'Black',
+      energyClass: 'D',
+      type: 'Oven',
+    },
   },
   'combi-style-no-frost': {
     id: 'combi-style-no-frost',
@@ -241,6 +297,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '320 litre',
+      dimension: '70*65*180',
+      color: 'Black',
+      energyClass: 'D',
+      type: 'No Frost',
+    },
   },
   'sky-10-8i': {
     id: 'sky-10-8i',
@@ -256,6 +319,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '108 litre',
+      dimension: '55*52*84',
+      color: 'White',
+      energyClass: 'A',
+      type: 'Defrost',
+    },
   },
   'sky-13-8i': {
     id: 'sky-13-8i',
@@ -271,6 +341,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '138 litre',
+      dimension: '60*55*86',
+      color: 'White',
+      energyClass: 'B',
+      type: 'Defrost',
+    },
   },
   'sky-17-3bg': {
     id: 'sky-17-3bg',
@@ -286,6 +363,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '173 litre',
+      dimension: '60*55*88',
+      color: 'Brown',
+      energyClass: 'C',
+      type: 'Defrost',
+    },
   },
   'sky-10-8i-2': {
     id: 'sky-10-8i-2',
@@ -301,6 +385,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '108 litre',
+      dimension: '55*52*84',
+      color: 'Silver',
+      energyClass: 'A',
+      type: 'Defrost',
+    },
   },
   'sky-13-8i-2': {
     id: 'sky-13-8i-2',
@@ -316,6 +407,13 @@ const PRODUCTS: Record<string, Product> = {
       { en: 'Clock timer' },
     ],
     isAvailable: true,
+    compareSpecs: {
+      netTotal: '138 litre',
+      dimension: '60*55*86',
+      color: 'Cream',
+      energyClass: 'B',
+      type: 'Defrost',
+    },
   },
 
 }

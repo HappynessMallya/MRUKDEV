@@ -14,6 +14,7 @@ export type ButtonVariant =
   | 'outline'       // transparent, navy border + text (use on light surfaces)
   | 'outlineLight'  // transparent, white border + text (use on dark surfaces)
   | 'ghost'         // navy/20 bg, white text — used for chips like "Compare"
+  | 'soft'          // soft gray bg, no border, dark text — for secondary actions on PDPs
 
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
@@ -28,6 +29,8 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
     'bg-transparent text-white border border-white hover:bg-white/10',
   ghost:
     'bg-primary/20 text-white hover:bg-primary/30',
+  soft:
+    'bg-surface text-foreground hover:bg-surface-alt',
 }
 
 // Heights tightened from the original Figma extract (51/56/61) so CTAs read
