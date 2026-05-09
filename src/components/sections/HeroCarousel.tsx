@@ -52,7 +52,7 @@ export function HeroCarousel({ autoPlay = true, autoPlayInterval = 5500, slides 
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
     >
-      <div className="relative h-[520px] sm:h-[600px] md:h-[660px] lg:h-[720px] w-full">
+      <div className="relative h-[420px] sm:h-[600px] md:h-[660px] lg:h-[720px] w-full">
         {slides.map((slide, i) => (
           <SlideContent key={slide.id} slide={slide} active={i === active} t={t} />
         ))}

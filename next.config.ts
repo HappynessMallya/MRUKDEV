@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'bucket.mruk.co.tz' },
       { protocol: 'https', hostname: '*.mruk.co.tz' },
+      // Temporary placeholder source — used for music + agriculture product
+      // mocks until the real catalog photography is supplied. Drop this entry
+      // once every product image lives under /products/<category>/.
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
     // Modern formats first — Vercel's optimizer picks the smallest the
     // browser can render. AVIF is ~50% smaller than the equivalent JPEG/PNG;

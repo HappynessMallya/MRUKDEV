@@ -114,7 +114,13 @@ function CategoryHeroCard({
               src={hero.imageUrl}
               alt={t(hero.title)}
               fill
-              sizes="(min-width: 1024px) 60vw, 100vw"
+              // This image is the LCP element on mobile (the hero slide is
+              // `hidden md:block`, so on phones the first big visual the
+              // browser actually paints is this category card). `priority`
+              // emits a <link rel="preload"> so the AVIF/WebP variant starts
+              // downloading alongside the HTML.
+              priority
+              sizes="(min-width: 1024px) 720px, (min-width: 640px) 50vw, 100vw"
               className="object-cover"
               onError={() => setImgErrored(true)}
             />
