@@ -110,16 +110,29 @@ export function Navbar({ config }: { config: TenantConfig }) {
             )}
           </div>
 
-          {/* Mobile burger */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((o) => !o)}
-            className="lg:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
-            aria-expanded={mobileOpen}
-          >
-            <Icon icon={mobileOpen ? 'material-symbols:close' : 'material-symbols:menu'} width={24} />
-          </button>
+          {/* Mobile right cluster — keep cart + profile accessible from the
+              top bar on phones, plus the burger for nav. Wishlist / search /
+              language live inside the drawer to keep the bar uncluttered. */}
+          <div className="flex items-center gap-1 lg:hidden">
+            {nav.showCart && (
+              <IconButton
+                icon="tdesign:cart"
+                label="Cart"
+                href="/cart"
+                badge={cartCount > 0 ? cartCount : undefined}
+              />
+            )}
+            <IconButton icon="iconoir:profile-circle" label="Account" href="/account/profile" />
+            <button
+              type="button"
+              onClick={() => setMobileOpen((o) => !o)}
+              className="p-2 text-foreground"
+              aria-label="Toggle menu"
+              aria-expanded={mobileOpen}
+            >
+              <Icon icon={mobileOpen ? 'material-symbols:close' : 'material-symbols:menu'} width={24} />
+            </button>
+          </div>
         </div>
 
         {/* Mega menu panel — single instance, content swapped by openMenu */}

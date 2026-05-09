@@ -77,7 +77,7 @@ export default function CartPage() {
         {items.map((item) => (
           <li
             key={item.id}
-            className="flex items-center gap-4 px-4 py-5 md:gap-6 md:px-6"
+            className="grid grid-cols-[80px_1fr_auto] items-center gap-x-4 gap-y-3 px-4 py-5 md:grid-cols-[96px_1fr_auto_auto] md:gap-x-6 md:px-6"
           >
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-surface md:h-24 md:w-24">
               {item.imageUrl ? (
@@ -113,7 +113,13 @@ export default function CartPage() {
               )}
             </div>
 
-            <div className="flex items-center gap-1 rounded-lg border border-gray-200 px-1 py-1">
+            {/*
+              On mobile we don't have horizontal space for qty + remove
+              alongside the image+name, so the qty stepper drops to the
+              second grid row spanning the columns under the name. The
+              remove × stays in the right slot so it's always reachable.
+            */}
+            <div className="col-start-2 row-start-2 flex items-center gap-1 self-start rounded-lg border border-gray-200 px-1 py-1 md:col-start-3 md:row-start-1 md:self-auto">
               <button
                 type="button"
                 onClick={() => setQty(item.id, item.qty - 1)}
@@ -142,7 +148,7 @@ export default function CartPage() {
               type="button"
               onClick={() => remove(item.id)}
               aria-label={`Remove ${item.name} from cart`}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-foreground/55 transition-colors hover:bg-surface hover:text-foreground"
+              className="row-start-1 col-start-3 flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-full text-foreground/55 transition-colors hover:bg-surface hover:text-foreground md:col-start-4 md:self-auto"
             >
               <Icon icon="material-symbols:close-rounded" width={20} />
             </button>

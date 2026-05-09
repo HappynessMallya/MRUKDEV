@@ -94,6 +94,7 @@ export default function ComparePage() {
             attr={attr}
             products={products}
             zebra={i % 2 === 0}
+            t={t}
           />
         ))}
       </div>
@@ -167,10 +168,12 @@ function AttributeRow({
   attr,
   products,
   zebra,
+  t,
 }: {
   attr: CompareAttribute
   products: Product[]
   zebra: boolean
+  t: (f: { en: string; sw?: string }) => string
 }) {
   return (
     <div className={zebra ? 'bg-surface' : 'bg-background'}>
@@ -191,7 +194,7 @@ function AttributeRow({
             />
           </div>
           <div
-            className={`grid flex-1 gap-4 ${
+            className={`grid flex-1 gap-x-4 gap-y-3 ${
               products.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'
             }`}
           >
@@ -201,7 +204,19 @@ function AttributeRow({
                 className="text-foreground"
                 style={{ fontSize: 14, lineHeight: '20px' }}
               >
-                {p.compareSpecs?.[attr.key] ?? '—'}
+                {/*
+                  On mobile each value is labelled with its product name so
+                  the user knows which value belongs to which SKU when the
+                  product columns aren't visible above. Hidden from md+ since
+                  the columns are then visually aligned.
+                */}
+                <span
+                  className="block text-foreground/55 sm:hidden"
+                  style={{ fontSize: 12, lineHeight: '16px', fontWeight: 600 }}
+                >
+                  {t(p.name)}
+                </span>
+                <span>{p.compareSpecs?.[attr.key] ?? '—'}</span>
               </div>
             ))}
           </div>
