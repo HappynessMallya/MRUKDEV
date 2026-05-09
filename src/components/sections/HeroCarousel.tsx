@@ -206,10 +206,11 @@ function ArrowButton({
       className="pointer-events-auto flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-[#E8EAEC] shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors hover:bg-[#DDDFE2]"
     >
       <Image
-        src="/Vector.svg"
+        src="/arrow.svg"
         alt=""
         width={10}
         height={18}
+        unoptimized
         className={cn('h-3.5 w-auto md:h-4', direction === 'prev' && 'rotate-180')}
       />
     </button>

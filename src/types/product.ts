@@ -48,6 +48,9 @@ export interface ColorVariant {
 
 export interface HighlightIcon {
   id: string
+  // Either an Iconify name (e.g. "material-symbols:bolt") or a /public asset
+  // path (e.g. "/1.svg"). The renderer picks based on whether the value
+  // starts with "/".
   iconName: string
   label: BilingualText
 }

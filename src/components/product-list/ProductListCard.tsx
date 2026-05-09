@@ -92,45 +92,27 @@ export function ProductListCard({ product }: { product: Product }) {
         )}
       </div>
 
-      <div className="border-t border-border-subtle px-6 pt-4 pb-4">
-        {bullets.length > 0 && (
-          <ul className="mb-4 space-y-1.5">
+      {bullets.length > 0 && (
+        <div className="border-y border-foreground/10 px-6 py-5">
+          <ul className="space-y-2">
             {bullets.map((b, i) => (
               <li
                 key={i}
-                className="flex items-start gap-2 text-foreground/80"
+                className="flex items-start gap-2.5 text-foreground/80"
                 style={{ fontSize: 14, lineHeight: '20px' }}
               >
-                <span aria-hidden className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-foreground/60" />
+                <span
+                  aria-hidden
+                  className="mt-[7px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-foreground"
+                />
                 <span>{t(b)}</span>
               </li>
             ))}
           </ul>
-        )}
+        </div>
+      )}
 
-        <label className="inline-flex cursor-pointer items-center gap-2 text-foreground/80">
-          <input
-            type="checkbox"
-            checked={compared}
-            onChange={() =>
-              toggleCompare({
-                id: product.id,
-                slug: product.slug,
-                name: t(product.name),
-                imageUrl: product.images[0] ?? '',
-              })
-            }
-            className={cn(
-              'h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border border-border bg-background transition-colors',
-              'checked:border-primary checked:bg-primary',
-              'relative checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-2.5 checked:after:w-1.5 checked:after:-translate-x-1/2 checked:after:-translate-y-[60%] checked:after:rotate-45 checked:after:border-b-2 checked:after:border-r-2 checked:after:border-white'
-            )}
-          />
-          <span style={{ fontSize: 14, lineHeight: '20px' }}>Compare</span>
-        </label>
-      </div>
-
-      <div className="px-6 pb-6">
+      <div className="px-6 py-5">
         <Link href={href} className="block">
           <Button variant="solid" size="sm" fullWidth>
             Learn More

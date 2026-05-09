@@ -66,14 +66,14 @@ export function ProductInfo({ product }: { product: Product }) {
       )}
 
       {colors.length > 0 && (
-        <div className="mt-3 space-y-2">
+        <div className="mt-3 space-y-3">
           <p
             className="text-foreground"
-            style={{ fontSize: 13, lineHeight: '18px', fontWeight: 600 }}
+            style={{ fontSize: 14, lineHeight: '20px', fontWeight: 700 }}
           >
             Choose your model
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {colors.map((c) => {
               const isActive = c.id === activeColor
               return (
@@ -81,19 +81,19 @@ export function ProductInfo({ product }: { product: Product }) {
                   key={c.id}
                   type="button"
                   onClick={() => setActiveColor(c.id)}
-                  aria-label={t(c.label)}
                   aria-pressed={isActive}
                   className={cn(
-                    'relative h-7 w-7 rounded-full transition-transform',
-                    isActive && 'ring-2 ring-primary ring-offset-2'
+                    'rounded-md border px-5 py-2 text-foreground transition-colors',
+                    isActive
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border-subtle hover:border-foreground/30'
                   )}
-                  style={{ background: c.hex }}
-                />
+                  style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500 }}
+                >
+                  {t(c.label)}
+                </button>
               )
             })}
-            <span className="text-foreground/60" style={{ fontSize: 13, lineHeight: '18px' }}>
-              {t(colors.find((c) => c.id === activeColor)?.label ?? colors[0].label)}
-            </span>
           </div>
         </div>
       )}

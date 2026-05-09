@@ -44,7 +44,20 @@ export function ProductCharacteristics({
                 key={h.id}
                 className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-surface px-4 py-10 text-center"
               >
-                <Icon icon={h.iconName} width={42} className="text-foreground" />
+                {h.iconName.startsWith('/') ? (
+                  // SVGs from /public — `unoptimized` skips the /_next/image
+                  // round-trip since vector icons don't benefit from it.
+                  <Image
+                    src={h.iconName}
+                    alt=""
+                    width={42}
+                    height={42}
+                    unoptimized
+                    className="h-10 w-auto"
+                  />
+                ) : (
+                  <Icon icon={h.iconName} width={42} className="text-foreground" />
+                )}
                 <span
                   className="text-foreground"
                   style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
@@ -109,6 +122,7 @@ function CharacteristicBlockView({
         src={block.imageUrl}
         alt={t(block.title)}
         fill
+        unoptimized
         sizes="(min-width: 1024px) 1200px, 100vw"
         className="object-cover"
         onError={() => setErrored(true)}

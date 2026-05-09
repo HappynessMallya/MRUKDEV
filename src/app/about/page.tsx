@@ -159,13 +159,13 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="relative aspect-[5/4] w-full max-w-[480px] overflow-hidden rounded-2xl bg-background">
+            <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-surface-alt">
               <Image
                 src="/promise.png"
                 alt="Two hands forming a promise gesture"
                 fill
-                sizes="(min-width: 1024px) 480px, 100vw"
-                className="object-contain p-6"
+                sizes="(min-width: 1024px) 600px, 100vw"
+                className="object-cover"
               />
             </div>
           </div>
@@ -198,13 +198,13 @@ function CategoryCard({ category }: { category: CategoryTile }) {
   return (
     <Link
       href={category.href}
-      className="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-surface"
+      className="group relative block aspect-square overflow-hidden rounded-2xl bg-surface"
     >
       <Image
         src={category.imageUrl}
         alt={category.label.replace('\n', ' ')}
         fill
-        sizes="(min-width: 1024px) 220px, (min-width: 640px) 50vw, 100vw"
+        sizes="(min-width: 1024px) 240px, (min-width: 640px) 50vw, 100vw"
         className="object-cover transition-transform group-hover:scale-105"
       />
       <div
@@ -212,12 +212,12 @@ function CategoryCard({ category }: { category: CategoryTile }) {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 35%, rgba(0,0,0,0) 65%)',
+            'linear-gradient(0deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0) 55%)',
         }}
       />
       <span
-        className="absolute bottom-4 left-4 right-4 whitespace-pre-line text-white"
-        style={{ fontSize: 13, lineHeight: '18px', fontWeight: 700 }}
+        className="absolute bottom-5 left-5 right-5 whitespace-pre-line text-white"
+        style={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}
       >
         {category.label}
       </span>
