@@ -1,0 +1,6 @@
+export { Navbar } from './Navbar'
+export { Footer } from './Footer'
+export { MegaMenu } from './MegaMenu'
+export { LanguageSwitcher } from './LanguageSwitcher'
+export { SocialIcons } from './SocialIcons'
+export { WhatsAppFab } from './WhatsAppFab'

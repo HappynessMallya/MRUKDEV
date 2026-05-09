@@ -1,0 +1,61 @@
+{
+  "$source": "Figma — Mr UK / Templates / 'Home page' section (id 707917:1945). Extracted 2026-05-08.",
+  "$note": "Canonical design tokens. Per-tenant overrides live in tenant.branding (colors, fonts only). The type scale and gradients are brand-system level and rarely change per tenant.",
+
+  "color": {
+    "primary": "#25396F",
+    "background": "#FFFFFF",
+    "surface": "#F5F5F7",
+    "surfaceAlt": "#F9F9F9",
+    "border": "#D9D9D9",
+    "borderSubtle": "#E6E6E6",
+    "foreground": "#000000",
+    "foregroundStrong": "#181818",
+    "muted": "#727272",
+    "placeholder": "#AEAEB2",
+    "whatsappStart": "#1FAF38",
+    "whatsappEnd": "#60D669"
+  },
+
+  "gradient": {
+    "subtleSurface": "linear-gradient(180deg, #F5F5F7 0%, #FFFFFF 100%)",
+    "softSurface": "linear-gradient(180deg, #F9F9F9 0%, #FFFFFF 100%)",
+    "imageFadeOverlay": "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
+    "whatsapp": "linear-gradient(135deg, #1FAF38 0%, #60D669 100%)"
+  },
+
+  "font": {
+    "heading": "Inter",
+    "body": "Inter"
+  },
+
+  "type": {
+    "$comment": "px values pulled directly from Figma. lineHeight in px. Mapped to logical roles, not 1:1 to HTML tags — the same role can render as h1/h2/etc. depending on document outline.",
+    "displayXL":      { "size": 64, "lineHeight": 77, "weight": 700, "letterSpacing": 0,    "example": "HOME OF THE BEST QUALITY" },
+    "displayL":       { "size": 48, "lineHeight": 58, "weight": 700, "letterSpacing": 0,    "example": "MR UK Double door refrigirator" },
+    "sectionHeading": { "size": 48, "lineHeight": 58, "weight": 600, "letterSpacing": 0,    "example": "Featured products" },
+    "h1":             { "size": 40, "lineHeight": 48, "weight": 700, "letterSpacing": 0,    "example": "Modern Technology, Trusted Quality" },
+    "h2":             { "size": 36, "lineHeight": 44, "weight": 700, "letterSpacing": 0,    "example": "Air fryer" },
+    "h3":             { "size": 32, "lineHeight": 39, "weight": 700, "letterSpacing": 0,    "example": "French Microwave" },
+    "h4":             { "size": 24, "lineHeight": 29, "weight": 600, "letterSpacing": 0,    "example": "Kitchen Appliances" },
+    "subhead":        { "size": 24, "lineHeight": 29, "weight": 400, "letterSpacing": 0,    "example": "Take care of your kitchen with modern appliances" },
+    "ctaLg":          { "size": 24, "lineHeight": 29, "weight": 500, "letterSpacing": 0,    "example": "Learn more / View all kitchen appliances" },
+    "bodyLg":         { "size": 20, "lineHeight": 24, "weight": 600, "letterSpacing": 0,    "example": "Superior performance you can rely on" },
+    "ctaMd":          { "size": 20, "lineHeight": 24, "weight": 500, "letterSpacing": 0,    "example": "Learn more" },
+    "bodyEmph":       { "size": 16, "lineHeight": 19, "weight": 600, "letterSpacing": 0,    "example": "Kitchen Appliances (compact heads)" },
+    "body":           { "size": 16, "lineHeight": 24, "weight": 400, "letterSpacing": 0,    "example": "Get fresh market updates and exclusive offers" },
+    "caption":        { "size": 14, "lineHeight": 21, "weight": 400, "letterSpacing": 0,    "example": "© 2026 Mr UK. All rights reserved." },
+    "small":          { "size": 12, "lineHeight": 18, "weight": 400, "letterSpacing": 0,    "example": "By subscribing you agree to our Privacy Policy" }
+  },
+
+  "elevation": {
+    "$comment": "Zero drop-shadows in the Home page section. Depth is conveyed via surface tint differences (#FFFFFF / #F5F5F7 / #F9F9F9), not elevation. Re-extract from Product / PDP sections if shadows are needed there."
+  },
+
+  "layout": {
+    "$comment": "Designs are at 1512px viewport (MacBook Pro 14\"). Hero is full-bleed 1512x740. Navbar is 1512x64. Treat 1512 as the design reference width and scale up/down responsively.",
+    "designWidth": 1512,
+    "navbarHeight": 64,
+    "heroHeight": 740
+  }
+}

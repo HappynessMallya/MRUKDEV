@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/*
+ * Tenant theme tokens
+ * -------------------
+ * The actual values for `--brand-*` are injected by `app/layout.tsx` per-request
+ * from the tenant config. Tailwind's `@theme inline` maps the design-token names
+ * (`--color-primary`, `--font-heading`, etc.) directly to those runtime vars,
+ * so utilities like `bg-primary`, `text-foreground`, `font-heading` resolve
+ * to the right value for whichever tenant is being served — no rebuild needed.
+ *
+ * Names mirror /src/design-tokens.json which is the canonical Figma extract.
+ */
+
+:root {
+  /* Heading font defaults to body font; override in layout.tsx for tenants
+     that ship a different heading face. */
+  --brand-font-heading: var(--brand-font-body);
+}
+
+@theme inline {
+  /* Colors */
+  --color-primary: var(--brand-primary);
+  --color-background: var(--brand-background);
+  --color-surface: var(--brand-surface);
+  --color-surface-alt: var(--brand-surface-alt);
+  --color-border: var(--brand-border);
+  --color-border-subtle: var(--brand-border-subtle);
+  --color-foreground: var(--brand-foreground);
+  --color-foreground-strong: var(--brand-foreground-strong);
+  --color-muted: var(--brand-muted);
+  --color-placeholder: var(--brand-placeholder);
+
+  /* Type families */
+  --font-heading: var(--brand-font-heading);
+  --font-body: var(--brand-font-body);
+}
+
+html,
+body {
+  background: var(--brand-background);
+  color: var(--brand-foreground);
+  font-family: var(--brand-font-body), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--brand-font-heading), var(--brand-font-body), system-ui, sans-serif;
+}
