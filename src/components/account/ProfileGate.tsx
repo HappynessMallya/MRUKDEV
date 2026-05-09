@@ -439,6 +439,10 @@ function Field({
   placeholder?: string
 }) {
   const name = id.split('-').slice(1).join('-')
+  const isPassword = type === 'password'
+  const [reveal, setReveal] = useState(false)
+  const renderedType = isPassword && reveal ? 'text' : type
+
   return (
     <label htmlFor={id} className="flex flex-col gap-2">
       <span
@@ -447,18 +451,40 @@ function Field({
       >
         {label}
       </span>
-      <input
-        id={id}
-        name={name}
-        type={type}
-        required={required}
-        minLength={minLength}
-        autoComplete={autoComplete}
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        className="rounded-lg border border-gray-200 bg-background px-4 py-3 text-foreground placeholder:text-foreground/45 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
-        style={{ fontSize: 14, lineHeight: '20px' }}
-      />
+      <div className="relative">
+        <input
+          id={id}
+          name={name}
+          type={renderedType}
+          required={required}
+          minLength={minLength}
+          autoComplete={autoComplete}
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          className={`w-full rounded-lg border border-gray-200 bg-background px-4 py-3 text-foreground placeholder:text-foreground/45 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary ${
+            isPassword ? 'pr-11' : ''
+          }`}
+          style={{ fontSize: 14, lineHeight: '20px' }}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setReveal((r) => !r)}
+            aria-label={reveal ? 'Hide password' : 'Show password'}
+            aria-pressed={reveal}
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-md text-foreground/55 transition-colors hover:bg-surface hover:text-foreground"
+          >
+            <Icon
+              icon={
+                reveal
+                  ? 'material-symbols:visibility-off-outline'
+                  : 'material-symbols:visibility-outline'
+              }
+              width={18}
+            />
+          </button>
+        )}
+      </div>
       {helper && (
         <span className="text-foreground/55" style={{ fontSize: 12, lineHeight: '16px' }}>
           {helper}
