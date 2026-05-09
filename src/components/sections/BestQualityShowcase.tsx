@@ -65,6 +65,7 @@ function ShowcaseItemCard({
               src={item.imageUrl}
               alt={t(item.title)}
               fill
+              unoptimized
               sizes="(min-width: 1024px) 1280px, 100vw"
               className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
               onError={() => setImgErrored(true)}

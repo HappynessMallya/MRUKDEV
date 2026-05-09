@@ -57,13 +57,14 @@ export function BlogPreview({ heading, subtitle, limit = 3, cta }: BlogPreviewPr
   )
 }
 
-// Two stories — covers use product-09 and product-10 from the public folder.
+// Two stories — covers live in /public/stories as the project's editorial
+// imagery for the Explore Stories block.
 const MOCK_POSTS: BlogPostData[] = [
   {
     id: 'b1',
     title: 'Innovation hub event',
     excerpt: 'Explore what happens during the innovation hub event held on Monday — there are new products, demos and giveaways.',
-    imageUrl: '/products/product-09.png',
+    imageUrl: '/stories/innovation-1.svg',
     href: '/blog/innovation-hub',
     minRead: 5,
   },
@@ -71,7 +72,7 @@ const MOCK_POSTS: BlogPostData[] = [
     id: 'b2',
     title: 'Behind the RF4200',
     excerpt: 'Two years of engineering went into our flagship double-door refrigerator. Here is the story behind the build.',
-    imageUrl: '/products/product-10.png',
+    imageUrl: '/stories/innovation-2.svg',
     href: '/blog/rf4200',
     minRead: 6,
   },
