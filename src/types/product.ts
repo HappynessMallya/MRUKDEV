@@ -13,8 +13,14 @@ export interface Product {
   sub?: string
   shortDescription?: BilingualText
 
-  // Gallery
+  // Gallery — used by the PDP gallery only.
   images: string[]
+  // Optional override for the catalog/list-card thumbnail. When set, the
+  // ProductListCard (and any place that renders a card-sized preview) uses
+  // this URL instead of `images[0]`. Lets the PDP keep deep photos in a
+  // subfolder while the list displays a clean SVG silhouette from the
+  // category root folder.
+  listImage?: string
 
   // Bullet feature list shown next to the gallery
   featureBullets?: BilingualText[]

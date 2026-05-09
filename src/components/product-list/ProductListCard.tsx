@@ -18,7 +18,15 @@ export function ProductListCard({ product }: { product: Product }) {
   const [active, setActive] = useState(0)
   const [errored, setErrored] = useState<Set<number>>(new Set())
 
-  const images = product.images.length > 0 ? product.images : ['']
+  // Cards prefer `listImage` (a single category-root thumbnail). When it's
+  // absent, fall back to the first PDP gallery image so older mocks still
+  // render. Keeps the catalog card visually aligned with the SVGs the
+  // marketing team curates per category folder.
+  const images = product.listImage
+    ? [product.listImage]
+    : product.images.length > 0
+      ? product.images
+      : ['']
   const fail = (i: number) => setErrored((s) => new Set(s).add(i))
 
   const goPrev = () => setActive((i) => (i - 1 + images.length) % images.length)

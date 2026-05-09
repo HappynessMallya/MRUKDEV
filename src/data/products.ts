@@ -5,153 +5,10 @@ import type { Product } from '@/types/product'
 // data source — components stay the same.
 
 const PRODUCTS: Record<string, Product> = {
-  rf4200: {
-    id: 'rf4200',
-    slug: 'rf4200',
-    name: { en: 'P605TMSWD Top Mounted Refrigerator', sw: 'Friji ya P605TMSWD' },
-    model: 'P605TMSWD',
-    category: 'refrigerator-ac',
-    shortDescription: {
-      en: 'Spacious 605L double-door refrigerator with total no-frost technology and electronic controls.',
-      sw: 'Friji ya milango miwili ya 605L na teknolojia ya total no-frost.',
-    },
-    images: [
-      '/products/product-09.png',
-      '/products/product-10.png',
-      '/products/product-11.png',
-      '/products/product-12.png',
-    ],
-    featureBullets: [
-      { en: 'Total no frost — fresh food longer', sw: 'Total no frost — chakula safi kwa muda mrefu' },
-      { en: 'Electronic Control with LED display', sw: 'Udhibiti wa Kielektroniki na onyesho la LED' },
-      { en: 'Built-in LED interior light', sw: 'Taa ya LED ndani ya friji' },
-      { en: 'Energy efficient — A++ rating', sw: 'Inaokoa nishati — kiwango A++' },
-      { en: '605L total capacity', sw: 'Uwezo wa lita 605' },
-    ],
-    isAvailable: true,
-    colors: [
-      { id: 'black', label: { en: 'Black', sw: 'Nyeusi' }, hex: '#1A1A1A' },
-      { id: 'silver', label: { en: 'Silver', sw: 'Fedha' }, hex: '#C7CCD1' },
-    ],
-    highlightIcons: [
-      { id: 'h1', iconName: 'material-symbols:bolt-rounded', label: { en: 'Digital Inverter motor', sw: 'Motor ya Inverter' } },
-      { id: 'h2', iconName: 'material-symbols:eco-rounded', label: { en: 'Energy efficient', sw: 'Inaokoa nishati' } },
-      { id: 'h3', iconName: 'material-symbols:ac-unit-rounded', label: { en: 'Total no frost', sw: 'Total no frost' } },
-      { id: 'h4', iconName: 'material-symbols:lightbulb-outline', label: { en: 'LED interior light', sw: 'Taa ya LED' } },
-    ],
-    characteristics: [
-      {
-        id: 'c1',
-        title: { en: 'Powerful & Efficient Cooling', sw: 'Ubaridi wa Nguvu na Ufanisi' },
-        subtitle: { en: 'Fast, even cooling performance throughout the cabinet.', sw: 'Ubaridi wa haraka na sawa ndani ya friji.' },
-        imageUrl: '/features/modern-technology.png',
-        layout: 'stacked',
-      },
-      {
-        id: 'c2',
-        title: { en: 'Versatile Storage', sw: 'Hifadhi ya Aina Mbalimbali' },
-        subtitle: { en: 'Adjustable shelves and door bins for every kind of grocery.', sw: 'Vituo vinavyoweza kubadilishwa.' },
-        imageUrl: '/features/built-to-last.png',
-        layout: 'stacked',
-      },
-      {
-        id: 'c3',
-        title: { en: 'Durable & Reliable Build', sw: 'Imeundwa Kudumu' },
-        subtitle: { en: 'Built to last — designed for long, dependable service.', sw: 'Imeundwa kudumu kwa muda mrefu.' },
-        imageUrl: '/features/modern-technology.png',
-        layout: 'image-left',
-      },
-      {
-        id: 'c4',
-        title: { en: 'Modern & Elegant Design', sw: 'Muundo wa Kisasa na wa Kupendeza' },
-        subtitle: { en: 'Sleek, minimal, timeless — fits any kitchen.', sw: 'Mzuri, mdogo, wa kudumu.' },
-        imageUrl: '/features/built-to-last.png',
-        layout: 'image-right',
-      },
-    ],
-    specifications: [
-      { id: 's1', label: { en: 'Power capacity', sw: 'Uwezo wa nguvu' }, value: { en: '230-240 V / 50 Hz', sw: '230-240 V / 50 Hz' } },
-      { id: 's2', label: { en: 'Power Consumption', sw: 'Matumizi ya nguvu' }, value: { en: '1500 W', sw: '1500 W' } },
-      { id: 's3', label: { en: 'Total capacity', sw: 'Uwezo wa jumla' }, value: { en: '605 L', sw: '605 L' } },
-      { id: 's4', label: { en: 'Energy class', sw: 'Daraja la nishati' }, value: { en: 'A++', sw: 'A++' } },
-      { id: 's5', label: { en: 'Dimensions (HxWxD)', sw: 'Vipimo (HxWxD)' }, value: { en: '180 × 70 × 65 cm', sw: '180 × 70 × 65 cm' } },
-      { id: 's6', label: { en: 'Weight', sw: 'Uzito' }, value: { en: '78 kg', sw: '78 kg' } },
-      { id: 's7', label: { en: 'Defrost system', sw: 'Mfumo wa defrost' }, value: { en: 'Total no frost', sw: 'Total no frost' } },
-      { id: 's8', label: { en: 'Warranty', sw: 'Dhamana' }, value: { en: '2 years (parts) + 5 years (compressor)', sw: 'Miaka 2 (vipuri) + miaka 5 (kompressor)' } },
-    ],
-    relatedSlugs: ['air-fryer', 'microwave', 'oven', 'breezin-ac'],
-  },
-
-  'air-fryer': {
-    id: 'air-fryer',
-    slug: 'air-fryer',
-    name: { en: 'MR UK Air Fryer', sw: 'Air Fryer ya MR UK' },
-    model: 'AF-4200',
-    category: 'kitchen',
-    shortDescription: {
-      en: '4kg-capacity air fryer with dual-cooking and 360° heat circulation.',
-      sw: 'Air fryer ya 4kg na 360° mzunguko wa joto.',
-    },
-    images: ['/products/product-01.png', '/products/product-02.png', '/products/product-03.png'],
-    featureBullets: [
-      { en: '4 kg capacity', sw: 'Uwezo wa kg 4' },
-      { en: 'Dual cooking modes', sw: 'Hali mbili za kupikia' },
-      { en: '360° heat circulation', sw: 'Mzunguko wa joto wa 360°' },
-      { en: 'Smart digital control', sw: 'Udhibiti wa kidijiti' },
-    ],
-    isAvailable: true,
-    highlightIcons: [
-      { id: 'h1', iconName: 'material-symbols:bolt-rounded', label: { en: 'Smart control', sw: 'Smart control' } },
-      { id: 'h2', iconName: 'material-symbols:thermostat', label: { en: 'Dual cooking', sw: 'Dual cooking' } },
-      { id: 'h3', iconName: 'material-symbols:loop', label: { en: '360° heat', sw: '360° heat' } },
-      { id: 'h4', iconName: 'material-symbols:eco-rounded', label: { en: 'Oil-free', sw: 'Bila mafuta' } },
-    ],
-    characteristics: [
-      {
-        id: 'c1',
-        title: { en: 'Powerful & Efficient Heating', sw: 'Joto la Nguvu na Ufanisi' },
-        subtitle: { en: 'Fast, even cooking performance every time.', sw: 'Mapishi ya haraka na sawa kila wakati.' },
-        imageUrl: '/features/built-to-last.png',
-        layout: 'stacked',
-      },
-      {
-        id: 'c2',
-        title: { en: 'Versatile Cooking', sw: 'Mapishi ya Aina Mbalimbali' },
-        subtitle: { en: 'More than just heating — fries, grills, bakes and reheats.', sw: 'Zaidi ya kupasha tu — kubongoa, kuchoma na zaidi.' },
-        imageUrl: '/features/modern-technology.png',
-        layout: 'stacked',
-      },
-    ],
-    specifications: [
-      { id: 's1', label: { en: 'Power', sw: 'Nguvu' }, value: { en: '1500 W', sw: '1500 W' } },
-      { id: 's2', label: { en: 'Capacity', sw: 'Uwezo' }, value: { en: '4 kg', sw: 'kg 4' } },
-      { id: 's3', label: { en: 'Voltage', sw: 'Voltage' }, value: { en: '230-240 V / 50 Hz', sw: '230-240 V / 50 Hz' } },
-      { id: 's4', label: { en: 'Warranty', sw: 'Dhamana' }, value: { en: '2 years', sw: 'Miaka 2' } },
-    ],
-    relatedSlugs: ['microwave', 'oven', 'rf4200'],
-  },
-
-  microwave: {
-    id: 'microwave',
-    slug: 'microwave',
-    name: { en: 'French Microwave', sw: 'Microwave ya French' },
-    model: 'MW-32K',
-    category: 'kitchen',
-    shortDescription: { en: 'Modernize your kitchen with smart cooking.', sw: 'Boresha jiko lako.' },
-    images: ['/products/product-02.png', '/products/product-03.png'],
-    featureBullets: [
-      { en: '32 L capacity', sw: 'Uwezo wa lita 32' },
-      { en: 'Heavy defrost', sw: 'Heavy defrost' },
-      { en: '10 power levels', sw: 'Viwango 10 vya nguvu' },
-    ],
-    isAvailable: true,
-    relatedSlugs: ['oven', 'air-fryer', 'rf4200'],
-  },
-
   // Frame 204+205 hero microwave used as the canonical "rich PDP" reference.
-  // Uses the /microwave/{1..6}.png hero gallery and /microwave/dis{...}.png
-  // discover row. Subcategory is `microwaves` so it surfaces under the
-  // Kitchen Appliances › Microwaves tile.
+  // Uses the /products/kitchen/microwave/{1..6}.png hero gallery and
+  // /products/kitchen/microwave/dis{...}.png discover row. Subcategory is
+  // `microwaves` so it surfaces under the Kitchen Appliances › Microwaves tile.
   p605tmswd: {
     id: 'p605tmswd',
     slug: 'p605tmswd',
@@ -159,13 +16,16 @@ const PRODUCTS: Record<string, Product> = {
     model: 'P605TMSWD',
     category: 'kitchen',
     sub: 'microwaves',
+    // Catalog thumbnail lives at the category root; deep PDP gallery uses the
+    // /microwave/ subfolder so the rich photo set stays scoped to this SKU.
+    listImage: '/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20black.svg',
     images: [
-      '/microwave/1.png',
-      '/microwave/2.png',
-      '/microwave/3.png',
-      '/microwave/4.png',
-      '/microwave/5.png',
-      '/microwave/6.png',
+      '/products/kitchen/microwave/1.png',
+      '/products/kitchen/microwave/2.png',
+      '/products/kitchen/microwave/3.png',
+      '/products/kitchen/microwave/4.png',
+      '/products/kitchen/microwave/5.png',
+      '/products/kitchen/microwave/6.png',
     ],
     featureBullets: [
       { en: 'Total no frost' },
@@ -194,7 +54,7 @@ const PRODUCTS: Record<string, Product> = {
           en:
             'Enjoy quick and consistent results with powerful heating designed for everyday convenience. The microwave delivers efficient energy distribution to ensure your food is heated evenly, saving time while maintaining great taste and quality',
         },
-        imageUrl: '/microwave/2.png',
+        imageUrl: '/products/kitchen/microwave/2.png',
         layout: 'stacked',
       },
       {
@@ -205,7 +65,7 @@ const PRODUCTS: Record<string, Product> = {
           en:
             'Unlock more cooking possibilities with a built-in grill feature that adds a perfect finish to your meals. Enjoy enhanced flavor and texture with ease.',
         },
-        imageUrl: '/microwave/3.png',
+        imageUrl: '/products/kitchen/microwave/3.png',
         layout: 'stacked',
       },
       {
@@ -216,7 +76,7 @@ const PRODUCTS: Record<string, Product> = {
           en:
             'Crafted with high-quality materials and a strong glass door, this microwave is designed for long-lasting performance. Enjoy dependable operation you can trust every day',
         },
-        imageUrl: '/microwave/4.png',
+        imageUrl: '/products/kitchen/microwave/4.png',
         layout: 'image-right',
       },
       {
@@ -227,7 +87,7 @@ const PRODUCTS: Record<string, Product> = {
           en:
             'A refined grey finish and minimalist design create a sophisticated look that complements modern living spaces effortlessly.',
         },
-        imageUrl: '/microwave/5.png',
+        imageUrl: '/products/kitchen/microwave/5.png',
         layout: 'image-left',
       },
       {
@@ -238,7 +98,7 @@ const PRODUCTS: Record<string, Product> = {
           en:
             'Easily adjust the power to suit different foods and cooking needs. From gentle defrosting to high-power heating, enjoy precise control that delivers consistent and reliable results every time',
         },
-        imageUrl: '/microwave/6.png',
+        imageUrl: '/products/kitchen/microwave/6.png',
         layout: 'stacked',
       },
     ],
@@ -252,19 +112,19 @@ const PRODUCTS: Record<string, Product> = {
       { id: 's7', label: { en: 'Door type' }, value: { en: 'Recessed Handle' } },
       { id: 's8', label: { en: 'Color' }, value: { en: 'Black, White' } },
     ],
-    relatedSlugs: ['ms23-disc-1', 'ms23-disc-2', 'ms23-disc-3', 'ms23-disc-4'],
+    relatedSlugs: ['mw-32l-black-2', 'mw-32l-black-3', 'kt-32l-black', 'kt-32l-white'],
   },
 
-  // Discover row variants — same SKU stub repeated four times with different
-  // photos. Real catalog will replace these with distinct microwave models.
-  'ms23-disc-1': {
-    id: 'ms23-disc-1',
-    slug: 'ms23-disc-1',
-    name: { en: '32L Microwave Oven Quick Defrost White' },
+  // Two more microwave variants in the Kitchen › Microwaves subcategory list.
+  // They reuse the same featureBullets as p605tmswd; each has its own SVG.
+  'mw-32l-black-2': {
+    id: 'mw-32l-black-2',
+    slug: 'mw-32l-black-2',
+    name: { en: '32L Microwave Oven Quick Defrost Black' },
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'microwaves',
-    images: ['/microwave/dis1.png'],
+    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20blac2.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -272,44 +132,14 @@ const PRODUCTS: Record<string, Product> = {
     ],
     isAvailable: true,
   },
-  'ms23-disc-2': {
-    id: 'ms23-disc-2',
-    slug: 'ms23-disc-2',
-    name: { en: '32L Microwave Oven Quick Defrost White' },
+  'mw-32l-black-3': {
+    id: 'mw-32l-black-3',
+    slug: 'mw-32l-black-3',
+    name: { en: '32L Microwave Oven Quick Defrost Black' },
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'microwaves',
-    images: ['/microwave/disc2.png'],
-    featureBullets: [
-      { en: 'Heavy defrost' },
-      { en: '32L capacity' },
-      { en: 'Clock timer' },
-    ],
-    isAvailable: true,
-  },
-  'ms23-disc-3': {
-    id: 'ms23-disc-3',
-    slug: 'ms23-disc-3',
-    name: { en: '32L Microwave Oven Quick Defrost White' },
-    model: 'MS23K3513AW/SG',
-    category: 'kitchen',
-    sub: 'microwaves',
-    images: ['/microwave/disc3.png'],
-    featureBullets: [
-      { en: 'Heavy defrost' },
-      { en: '32L capacity' },
-      { en: 'Clock timer' },
-    ],
-    isAvailable: true,
-  },
-  'ms23-disc-4': {
-    id: 'ms23-disc-4',
-    slug: 'ms23-disc-4',
-    name: { en: '32L Microwave Oven Quick Defrost White' },
-    model: 'MS23K3513AW/SG',
-    category: 'kitchen',
-    sub: 'microwaves',
-    images: ['/microwave/disc4.png'],
+    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20Black3.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -318,41 +148,40 @@ const PRODUCTS: Record<string, Product> = {
     isAvailable: true,
   },
 
-  oven: {
-    id: 'oven',
-    slug: 'oven',
-    name: { en: 'MR UK Oven', sw: 'Oveni ya MR UK' },
-    model: 'OV-DC',
+  // Kettles subcategory.
+  'kt-32l-black': {
+    id: 'kt-32l-black',
+    slug: 'kt-32l-black',
+    name: { en: '32L Kettle Oven Quick Defrost Black' },
+    model: 'MS23K3513AW/SG',
     category: 'kitchen',
-    shortDescription: { en: 'Four cooks with oven, energy efficient.', sw: 'Inapika mara nne, inaokoa nishati.' },
-    images: ['/products/product-03.png', '/products/product-04.png'],
+    sub: 'kettles',
+    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20Black.svg'],
     featureBullets: [
-      { en: 'Dual cooking', sw: 'Dual cooking' },
-      { en: 'Energy efficient', sw: 'Inaokoa nishati' },
+      { en: 'Heavy defrost' },
+      { en: '32L capacity' },
+      { en: 'Clock timer' },
     ],
     isAvailable: true,
-    relatedSlugs: ['microwave', 'air-fryer', 'rf4200'],
   },
-
-  'breezin-ac': {
-    id: 'breezin-ac',
-    slug: 'breezin-ac',
-    name: { en: 'BreezIN Air Conditioner', sw: 'Kiyoyozi cha BreezIN' },
-    model: 'S09P5S0',
-    category: 'refrigerator-ac',
-    sub: 'air-conditioning',
-    shortDescription: { en: 'Cool beyond limit. Smart control with WiFi, Google Home and Alexa.', sw: 'Baridi isiyo na kikomo.' },
-    images: ['/hero/products/ac.png'],
+  'kt-32l-white': {
+    id: 'kt-32l-white',
+    slug: 'kt-32l-white',
+    name: { en: '32L Kettle Oven Quick Defrost White' },
+    model: 'MS23K3513AW/SG',
+    category: 'kitchen',
+    sub: 'kettles',
+    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20White.svg'],
     featureBullets: [
-      { en: 'Smart control with WiFi', sw: 'Udhibiti wa WiFi' },
-      { en: 'Google Home and Alexa support', sw: 'Inafanya kazi na Google Home na Alexa' },
-      { en: 'Inverter technology — quieter', sw: 'Teknolojia ya inverter — kimya' },
+      { en: 'Heavy defrost' },
+      { en: '32L capacity' },
+      { en: 'Clock timer' },
     ],
     isAvailable: true,
-    relatedSlugs: ['rf4200', 'uk-q65c-soundbar'],
   },
 
-  // Refrigerator subcategory — six SKUs matching the Figma list.
+  // Refrigerator subcategory — nine SKUs (paths URL-encoded because the
+  // folder name has `&` and the filenames have spaces and an en-dash).
   'sky-43-9wd': {
     id: 'sky-43-9wd',
     slug: 'sky-43-9wd',
@@ -360,7 +189,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY 43-9WD',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/regrigirator-1.png'],
+    images: ['/products/refrigirator%26ac/SKY%2043-9WD%20%E2%80%93%20BLack%20Inox.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '439L capacity' },
@@ -375,7 +204,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-50-5BI',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/freezer-1.png'],
+    images: ['/products/refrigirator%26ac/SKY-50-5BI%20%E2%80%93%20Black%20Inox.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '423L capacity' },
@@ -390,7 +219,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'MS23K3513AW/SG',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/regrigirator-1.png'],
+    images: ['/products/refrigirator%26ac/SKY%20-32-Black%20Inox.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '320L capacity' },
@@ -405,7 +234,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-24-6BI',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/freezer-1.png'],
+    images: ['/products/refrigirator%26ac/Combi%20Style%20No%20Frost.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -420,7 +249,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-10-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/regrigirator-1.png'],
+    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -435,7 +264,52 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-13-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/freezer-1.png'],
+    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White.svg'],
+    featureBullets: [
+      { en: 'Heavy defrost' },
+      { en: '32L capacity' },
+      { en: 'Clock timer' },
+    ],
+    isAvailable: true,
+  },
+  'sky-17-3bg': {
+    id: 'sky-17-3bg',
+    slug: 'sky-17-3bg',
+    name: { en: 'SKY-17-3BG Refrigerator' },
+    model: 'SKY-17-3BG',
+    category: 'refrigerator-ac',
+    sub: 'refrigerator',
+    images: ['/products/refrigirator%26ac/SKY-17-3BG%20Refrigerator.svg'],
+    featureBullets: [
+      { en: 'Heavy defrost' },
+      { en: '32L capacity' },
+      { en: 'Clock timer' },
+    ],
+    isAvailable: true,
+  },
+  'sky-10-8i-2': {
+    id: 'sky-10-8i-2',
+    slug: 'sky-10-8i-2',
+    name: { en: 'SKY-10-8I RefrigeratorDefrost White' },
+    model: 'SKY-10-8I',
+    category: 'refrigerator-ac',
+    sub: 'refrigerator',
+    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White2.svg'],
+    featureBullets: [
+      { en: 'Heavy defrost' },
+      { en: '32L capacity' },
+      { en: 'Clock timer' },
+    ],
+    isAvailable: true,
+  },
+  'sky-13-8i-2': {
+    id: 'sky-13-8i-2',
+    slug: 'sky-13-8i-2',
+    name: { en: 'SKY-13-8I Freezer Defrost White' },
+    model: 'SKY-13-8I',
+    category: 'refrigerator-ac',
+    sub: 'refrigerator',
+    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White2.svg'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -444,22 +318,6 @@ const PRODUCTS: Record<string, Product> = {
     isAvailable: true,
   },
 
-  'uk-q65c-soundbar': {
-    id: 'uk-q65c-soundbar',
-    slug: 'uk-q65c-soundbar',
-    name: { en: 'High end home theater soundbar', sw: 'Soundbar ya Hali ya Juu' },
-    model: 'UKQ65C',
-    category: 'music',
-    shortDescription: { en: 'Delicate sound, sound reconstruction.', sw: 'Sauti laini, ufungaji upya wa sauti.' },
-    images: ['/hero/products/soundbar.png'],
-    featureBullets: [
-      { en: 'Dolby Atmos', sw: 'Dolby Atmos' },
-      { en: 'Wireless subwoofer', sw: 'Subwoofer ya wireless' },
-      { en: 'Voice control', sw: 'Udhibiti wa sauti' },
-    ],
-    isAvailable: true,
-    relatedSlugs: ['breezin-ac', 'rf4200'],
-  },
 }
 
 export function getProduct(slug: string): Product | null {

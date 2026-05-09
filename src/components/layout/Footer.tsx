@@ -31,7 +31,7 @@ export function Footer({ config }: { config: TenantConfig }) {
       <Container className="py-12 md:py-14">
         <div className="grid gap-10 lg:grid-cols-[auto_1fr_auto] lg:gap-16">
           <div className="flex items-start lg:pt-1">
-            <FooterLogo logoUrl="/logo-white.png" name={config.identity.companyName} />
+            <FooterLogo logoUrl="/branding/logo-white.png" name={config.identity.companyName} />
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
