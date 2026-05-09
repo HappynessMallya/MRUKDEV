@@ -138,6 +138,7 @@ function SlideContent({
                   alt={t(slide.title)}
                   fill
                   priority={active}
+                  unoptimized
                   sizes="(min-width: 1024px) 720px, 50vw"
                   className="object-contain"
                 />
@@ -206,7 +207,7 @@ function ArrowButton({
       className="pointer-events-auto flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-[#E8EAEC] shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors hover:bg-[#DDDFE2]"
     >
       <Image
-        src="/arrow.svg"
+        src="/icons/arrow.svg"
         alt=""
         width={10}
         height={18}

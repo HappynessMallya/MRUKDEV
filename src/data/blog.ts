@@ -10,7 +10,7 @@ const POSTS: Record<string, BlogPost> = {
     title: 'The innovation event that led to fruitful result',
     excerpt:
       'Explore what happened during the innovation hub event held on Monday — there are new products, demos, and giveaways.',
-    coverImage: '/blog1.png',
+    coverImage: '/content/blog1.png',
     publishedAt: '2026-03-15',
     minRead: 6,
     tags: ['Innovation', 'Local markets', 'Fresh produce', 'Shopping tips', 'Quality food'],
@@ -31,7 +31,7 @@ const POSTS: Record<string, BlogPost> = {
         text:
           'Eget quis mi enim, leo lacinia pharetra, semper. Eget in volutpat mollis at volutpat lectus velit, sed auctor. Porttitor fames arcu quis fusce augue enim. Quis ut habitant diam at. Suscipit tristique risus, at donec. In turpis vel et quam imperdiet. Ipsum molestie aliquet sodales id est ac volutpat.',
       },
-      { type: 'image', src: '/blog2.png', caption: 'Image caption goes here' },
+      { type: 'image', src: '/content/blog2.png', caption: 'Image caption goes here' },
       {
         type: 'paragraph',
         text:
@@ -78,7 +78,7 @@ const POSTS: Record<string, BlogPost> = {
     title: 'Behind the RF4200 — two years of engineering',
     excerpt:
       'A look at the design and engineering decisions that shaped our flagship double-door refrigerator.',
-    coverImage: '/blog2.png',
+    coverImage: '/content/blog2.png',
     publishedAt: '2026-04-12',
     minRead: 6,
     tags: ['Design', 'Engineering'],

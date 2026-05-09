@@ -2,14 +2,14 @@
 
 import Image from 'next/image'
 
-// Frame 81 in Figma — full-width hero band. /contact.png is the background
-// product collage; a soft dark overlay keeps the white centered copy legible
-// regardless of which image is used.
+// Frame 81 in Figma — full-width hero band. /content/contact.png is the
+// background product collage; a soft dark overlay keeps the white centered
+// copy legible regardless of which image is used.
 export function ContactHero() {
   return (
     <section className="relative overflow-hidden isolate">
       <Image
-        src="/contact.png"
+        src="/content/contact.png"
         alt=""
         fill
         priority

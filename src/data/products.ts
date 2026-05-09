@@ -180,10 +180,10 @@ const PRODUCTS: Record<string, Product> = {
     ],
     isAvailable: true,
     highlightIcons: [
-      { id: 'h1', iconName: '/1.svg', label: { en: 'Digital Invetor motor' } },
-      { id: 'h2', iconName: '/2.svg', label: { en: 'Digital Invetor motor' } },
-      { id: 'h3', iconName: '/3.svg', label: { en: 'Digital Invetor motor' } },
-      { id: 'h4', iconName: '/4.svg', label: { en: 'Digital Invetor motor' } },
+      { id: 'h1', iconName: '/icons/1.svg', label: { en: 'Digital Invetor motor' } },
+      { id: 'h2', iconName: '/icons/2.svg', label: { en: 'Digital Invetor motor' } },
+      { id: 'h3', iconName: '/icons/3.svg', label: { en: 'Digital Invetor motor' } },
+      { id: 'h4', iconName: '/icons/4.svg', label: { en: 'Digital Invetor motor' } },
     ],
     characteristics: [
       {

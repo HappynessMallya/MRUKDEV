@@ -161,7 +161,7 @@ export default function AboutPage() {
 
             <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-surface-alt">
               <Image
-                src="/promise.png"
+                src="/about/promise.png"
                 alt="Two hands forming a promise gesture"
                 fill
                 sizes="(min-width: 1024px) 600px, 100vw"
