@@ -1,12 +1,13 @@
 'use client'
 
-import { Container, Heading } from '@/components/atoms'
+import { Container } from '@/components/atoms'
 import { useTenantStore } from '@/stores/tenantStore'
 import type { SpecRow } from '@/types/product'
 import type { BilingualText } from '@/types/tenant'
 
-// Frame 194 — centered heading + key/value table on a surface card.
-// Zebra rows for scannability; left column is muted, right column is foreground.
+// Frame 194 — centered heading + key/value table that spans the full content
+// column. Alternating gray/white rows for scannability; spec label on the
+// left at 60% opacity, value on the right.
 export function ProductSpecs({ specs }: { specs: SpecRow[] }) {
   const t = useTenantStore((s) => s.t)
   const config = useTenantStore((s) => s.config)
@@ -16,25 +17,34 @@ export function ProductSpecs({ specs }: { specs: SpecRow[] }) {
   if (!specs.length) return null
 
   return (
-    <section id="specifications" className="bg-surface py-16 md:py-20">
+    <section id="specifications" className="bg-background py-14 md:py-20">
       <Container>
-        <Heading size="section" as="h2" className="text-center">
+        <h2
+          className="font-heading text-foreground text-center"
+          style={{ fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1.15, fontWeight: 700 }}
+        >
           {t(headingLabel)}
-        </Heading>
+        </h2>
 
-        <div className="mt-10 mx-auto max-w-3xl overflow-hidden rounded-xl border border-border-subtle bg-background">
+        <div className="mt-10 overflow-hidden rounded-lg">
           <dl>
             {specs.map((row, i) => (
               <div
                 key={row.id}
-                className={`grid grid-cols-1 gap-1 px-6 py-4 sm:grid-cols-[1fr_1.5fr] sm:items-center sm:gap-6 ${
-                  i % 2 === 1 ? 'bg-surface' : 'bg-background'
-                } ${i !== specs.length - 1 ? 'border-b border-border-subtle' : ''}`}
+                className={`grid grid-cols-2 items-center gap-6 px-6 py-4 ${
+                  i % 2 === 0 ? 'bg-surface' : 'bg-background'
+                }`}
               >
-                <dt className="text-muted" style={{ fontSize: 14, lineHeight: '21px', fontWeight: 500 }}>
+                <dt
+                  className="text-foreground"
+                  style={{ fontSize: 15, lineHeight: '22px', fontWeight: 600 }}
+                >
                   {t(row.label)}
                 </dt>
-                <dd className="text-foreground" style={{ fontSize: 16, lineHeight: '24px', fontWeight: 500 }}>
+                <dd
+                  className="text-foreground/55"
+                  style={{ fontSize: 15, lineHeight: '22px' }}
+                >
                   {t(row.value)}
                 </dd>
               </div>

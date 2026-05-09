@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Container } from '@/components/atoms'
 import {
   CategoryHero,
+  CompareStrip,
   FilterBar,
   FilterSidebar,
   ProductListCard,
@@ -56,9 +57,9 @@ export default async function ProductsListPage({
 }: {
   searchParams: Promise<SearchParams>
 }) {
-  const { category, sort } = await searchParams
+  const { category, sub, sort } = await searchParams
 
-  const products = sortProducts(getProductsByCategory(category), sort)
+  const products = sortProducts(getProductsByCategory(category, sub), sort)
   const subcategories = getSubcategories(category)
   const catLabel = category ? getCategoryLabel(category) : null
   const heading = catLabel
@@ -70,6 +71,8 @@ export default async function ProductsListPage({
       {category && subcategories.length > 0 && (
         <CategoryHero heading={heading} subcategories={subcategories} category={category} />
       )}
+
+      <CompareStrip />
 
       <div className="bg-background">
         <Container>

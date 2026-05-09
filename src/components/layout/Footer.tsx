@@ -31,7 +31,7 @@ export function Footer({ config }: { config: TenantConfig }) {
       <Container className="py-12 md:py-14">
         <div className="grid gap-10 lg:grid-cols-[auto_1fr_auto] lg:gap-16">
           <div className="flex items-start lg:pt-1">
-            <FooterLogo logoUrl={config.branding.logos.navbar.dark} name={config.identity.companyName} />
+            <FooterLogo logoUrl="/logo-white.png" name={config.identity.companyName} />
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
@@ -75,7 +75,7 @@ export function Footer({ config }: { config: TenantConfig }) {
                 <li key={link.id}>
                   <Link
                     href={link.href}
-                    className="text-white/60 underline-offset-4 transition-colors hover:text-white hover:underline"
+                    className="text-white/70 underline underline-offset-4 transition-colors hover:text-white"
                     style={{ fontSize: 13, lineHeight: '20px' }}
                   >
                     {t(link.label)}
@@ -111,20 +111,23 @@ function FooterLogo({ logoUrl, name }: { logoUrl?: string; name: string }) {
 
 function NewsletterBlock({ socials }: { socials: Record<string, string> }) {
   return (
-    <div className="lg:max-w-[360px] space-y-4">
+    <div className="space-y-5 lg:max-w-[420px]">
       <div>
-        <h4 className="font-heading text-white" style={{ fontSize: 15, lineHeight: '20px', fontWeight: 700 }}>
+        <h4
+          className="font-heading text-white"
+          style={{ fontSize: 16, lineHeight: '22px', fontWeight: 700 }}
+        >
           Stay in the loop
         </h4>
-        <p className="text-white/75 mt-1" style={{ fontSize: 14, lineHeight: '20px' }}>
+        <p className="text-white/80 mt-1" style={{ fontSize: 14, lineHeight: '20px' }}>
           Get fresh market updates and exclusive offers
         </p>
       </div>
 
-      <SocialIcons socials={socials} iconSize={18} className="gap-2" />
+      <SocialIcons socials={socials} iconSize={28} />
 
       <form
-        className="flex items-stretch gap-0 rounded-lg border border-white/25"
+        className="flex items-stretch gap-3"
         onSubmit={(e) => {
           e.preventDefault()
           // Hook up to /api/subscribe once backend is live.
@@ -135,19 +138,19 @@ function NewsletterBlock({ socials }: { socials: Record<string, string> }) {
           required
           aria-label="Email address"
           placeholder="Your email"
-          className="flex-1 bg-transparent px-4 py-2.5 text-white placeholder:text-white/45 outline-none"
+          className="flex-1 rounded-md border border-white/30 bg-transparent px-4 py-2.5 text-white placeholder:text-white/55 outline-none transition-colors focus:border-white/60"
           style={{ fontSize: 14, lineHeight: '20px' }}
         />
         <button
           type="submit"
-          className="rounded-md bg-white/10 px-5 py-2 text-white transition-colors hover:bg-white/20"
+          className="rounded-md border border-white/30 bg-transparent px-5 py-2 text-white transition-colors hover:border-white/60 hover:bg-white/10"
           style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
         >
           Subscribe
         </button>
       </form>
 
-      <p className="text-white/45" style={{ fontSize: 12, lineHeight: '18px' }}>
+      <p className="text-white/55" style={{ fontSize: 12, lineHeight: '18px' }}>
         By subscribing you agree to our{' '}
         <Link href="/privacy" className="underline underline-offset-2 hover:text-white">
           Privacy Policy

@@ -1,4 +1,5 @@
 export { CategoryHero } from './CategoryHero'
+export { CompareStrip } from './CompareStrip'
 export { FilterBar } from './FilterBar'
 export { FilterSidebar } from './FilterSidebar'
 export { ProductListCard } from './ProductListCard'

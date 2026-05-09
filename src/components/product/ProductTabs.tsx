@@ -7,14 +7,14 @@ import { useTenantStore } from '@/stores/tenantStore'
 import { cn } from '@/lib/cn'
 import type { BilingualText } from '@/types/tenant'
 
-// Frame 154 — three text tabs centered. Clicking a tab smooth-scrolls to that
-// section. As the user scrolls, the tab tracking the section in view becomes
-// active (IntersectionObserver). Sticky just below the navbar so it stays
-// reachable through the long page.
-const TABS: { id: string; key: 'characteristics' | 'specifications' | 'discover'; href: string }[] = [
-  { id: 'characteristics', key: 'characteristics', href: '#characteristics' },
-  { id: 'specifications', key: 'specifications', href: '#specifications' },
-  { id: 'discover', key: 'discover', href: '#discover' },
+// Frame 154 — three text tabs centered (Features / Specifications / Discover).
+// Clicking a tab smooth-scrolls to that section. As the user scrolls, the tab
+// tracking the section in view becomes active (IntersectionObserver). Sticky
+// just below the navbar so it stays reachable through the long page.
+const TABS: { id: string; key: 'features' | 'specifications' | 'discover'; href: string; fallback: string }[] = [
+  { id: 'characteristics', key: 'features', href: '#characteristics', fallback: 'Features' },
+  { id: 'specifications', key: 'specifications', href: '#specifications', fallback: 'Specifications' },
+  { id: 'discover', key: 'discover', href: '#discover', fallback: 'Discover' },
 ]
 
 export function ProductTabs() {
@@ -42,7 +42,7 @@ export function ProductTabs() {
   }, [])
 
   return (
-    <div className="sticky top-16 z-30 bg-background border-b border-border-subtle">
+    <div className="sticky top-16 z-30 bg-background">
       <Container>
         <nav
           role="tablist"
@@ -50,7 +50,7 @@ export function ProductTabs() {
           className="flex items-center justify-center gap-8"
         >
           {TABS.map((tab) => {
-            const label = tabsCopy[tab.key] ?? { en: tab.key }
+            const label = tabsCopy[tab.key] ?? { en: tab.fallback }
             const isActive = tab.id === active
             return (
               <a
@@ -63,13 +63,18 @@ export function ProductTabs() {
                   document.getElementById(tab.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
                 className={cn(
-                  'relative -mb-px py-4 transition-colors',
+                  'relative py-4 transition-colors',
                   isActive ? 'text-primary' : 'text-muted hover:text-foreground'
                 )}
-                style={{ fontSize: 16, lineHeight: '19px', fontWeight: 600 }}
+                style={{ fontSize: 15, lineHeight: '20px', fontWeight: 600 }}
               >
                 {t(label)}
-                {isActive && <span aria-hidden className="absolute inset-x-0 -bottom-px h-0.5 bg-primary" />}
+                {isActive && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-2 h-0.5 rounded-full bg-primary"
+                  />
+                )}
               </a>
             )
           })}

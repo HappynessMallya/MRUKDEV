@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react'
 
 import { Button } from '@/components/atoms'
 import { useTenantStore } from '@/stores/tenantStore'
+import { useCompareStore } from '@/stores/compareStore'
 import { cn } from '@/lib/cn'
 import type { Product } from '@/types/product'
 
@@ -18,7 +19,8 @@ export function ProductListCard({ product }: { product: Product }) {
   const t = useTenantStore((s) => s.t)
   const [active, setActive] = useState(0)
   const [errored, setErrored] = useState<Set<number>>(new Set())
-  const [compared, setCompared] = useState(false)
+  const compared = useCompareStore((s) => s.items.some((i) => i.id === product.id))
+  const toggleCompare = useCompareStore((s) => s.toggle)
 
   const images = product.images.length > 0 ? product.images : ['']
   const fail = (i: number) => setErrored((s) => new Set(s).add(i))
@@ -110,7 +112,14 @@ export function ProductListCard({ product }: { product: Product }) {
           <input
             type="checkbox"
             checked={compared}
-            onChange={() => setCompared((c) => !c)}
+            onChange={() =>
+              toggleCompare({
+                id: product.id,
+                slug: product.slug,
+                name: t(product.name),
+                imageUrl: product.images[0] ?? '',
+              })
+            }
             className={cn(
               'h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border border-border bg-background transition-colors',
               'checked:border-primary checked:bg-primary',

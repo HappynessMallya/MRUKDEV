@@ -1,108 +1,142 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { Icon } from '@iconify/react'
 
-import { Button, Heading, Text } from '@/components/atoms'
+import { Button } from '@/components/atoms'
 import { useTenantStore } from '@/stores/tenantStore'
+import { cn } from '@/lib/cn'
 import type { Product } from '@/types/product'
 import type { BilingualText } from '@/types/tenant'
 
-// Frame 204 right column — name, model code, bullet features, primary CTAs,
-// and the wishlist/share affordances. Labels read from
-// tenant.pages.product_detail.texts so they stay localised.
+// Frame 204 right column — name, model code, bullet features, an optional
+// color picker, and three CTAs: Get Quotation (outline), Add to Cart (solid),
+// and a full-width WhatsApp-to-order pill underneath.
 export function ProductInfo({ product }: { product: Product }) {
   const t = useTenantStore((s) => s.t)
   const config = useTenantStore((s) => s.config)
 
   const texts = (config?.pages.product_detail?.texts ?? {}) as Record<string, BilingualText | undefined>
-  const settings = (config?.pages.product_detail?.settings ?? {}) as Record<string, unknown>
-  const showWishlist = settings.showWishlist !== false
-  const showCompare = settings.showComparison !== false
 
-  const addToCart = texts.addToCart ?? { en: 'Add to Cart' }
-  const getQuote = texts.getQuote ?? { en: 'Get a Quote' }
-  const wishlistLabel = texts.wishlistLabel ?? { en: 'Add to Wishlist' }
-  const compareLabel = texts.compareLabel ?? { en: 'Add to Compare' }
+  const colors = product.colors ?? []
+  const [activeColor, setActiveColor] = useState(colors[0]?.id)
+
+  const addToCart = texts.addToCart ?? { en: 'Add to cart' }
+  const getQuote = texts.getQuote ?? { en: 'Get a quotation' }
   const modelLabel = texts.modelLabel ?? { en: 'Model' }
-  const outOfStock = texts.outOfStock ?? { en: 'Out of Stock' }
+  const outOfStock = texts.outOfStock ?? { en: 'Out of stock' }
+  const whatsapp = config?.global.contact.whatsapp
+
+  const whatsappHref = whatsapp
+    ? `https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi, I'd like to order: ${t(product.name)}`)}`
+    : undefined
 
   return (
     <div className="flex flex-col gap-5">
-      <Link
-        href={`/products?category=${product.category}`}
-        className="text-muted hover:text-primary transition-colors"
-        style={{ fontSize: 12, lineHeight: '18px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}
+      <h1
+        className="font-heading text-foreground"
+        style={{ fontSize: 'clamp(24px, 2.6vw, 34px)', lineHeight: 1.15, fontWeight: 700 }}
       >
-        ← {product.category.replace(/-/g, ' ')}
-      </Link>
-
-      <Heading size="h1" as="h1">
         {t(product.name)}
-      </Heading>
+      </h1>
 
       {product.model && (
-        <Text size="bodyEmph" className="text-muted">
-          {t(modelLabel)}: <span className="text-foreground">{product.model}</span>
-        </Text>
+        <p
+          className="text-foreground/45"
+          style={{ fontSize: 14, lineHeight: '20px' }}
+        >
+          {t(modelLabel)}: <span className="text-foreground/70">{product.model}</span>
+        </p>
       )}
 
       {product.featureBullets && product.featureBullets.length > 0 && (
         <ul className="flex flex-col gap-2 mt-2">
           {product.featureBullets.map((b, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <Icon icon="material-symbols:check-circle-rounded" width={20} className="mt-0.5 shrink-0 text-primary" />
-              <span className="text-foreground" style={{ fontSize: 16, lineHeight: '24px' }}>
-                {t(b)}
-              </span>
+            <li
+              key={i}
+              className="flex items-start gap-2 text-foreground/80"
+              style={{ fontSize: 14, lineHeight: '20px' }}
+            >
+              <span aria-hidden className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-foreground/60" />
+              <span>{t(b)}</span>
             </li>
           ))}
         </ul>
       )}
 
+      {colors.length > 0 && (
+        <div className="mt-3 space-y-2">
+          <p
+            className="text-foreground"
+            style={{ fontSize: 13, lineHeight: '18px', fontWeight: 600 }}
+          >
+            Choose your model
+          </p>
+          <div className="flex items-center gap-3">
+            {colors.map((c) => {
+              const isActive = c.id === activeColor
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setActiveColor(c.id)}
+                  aria-label={t(c.label)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    'relative h-7 w-7 rounded-full transition-transform',
+                    isActive && 'ring-2 ring-primary ring-offset-2'
+                  )}
+                  style={{ background: c.hex }}
+                />
+              )
+            })}
+            <span className="text-foreground/60" style={{ fontSize: 13, lineHeight: '18px' }}>
+              {t(colors.find((c) => c.id === activeColor)?.label ?? colors[0].label)}
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         {product.isAvailable === false ? (
-          <Button variant="solid" size="md" disabled>
+          <Button variant="solid" size="md" disabled fullWidth>
             {t(outOfStock)}
           </Button>
         ) : (
           <>
-            <Button variant="solid" size="md" leftIcon={<Icon icon="tdesign:cart" width={18} />}>
-              {t(addToCart)}
-            </Button>
             <Link href="/inquiry">
-              <Button variant="outline" size="md">
+              <Button
+                variant="outline"
+                size="sm"
+                leftIcon={<Icon icon="material-symbols:request-quote-outline" width={16} />}
+              >
                 {t(getQuote)}
               </Button>
             </Link>
+            <Button
+              variant="solid"
+              size="sm"
+              leftIcon={<Icon icon="tdesign:cart" width={16} />}
+            >
+              {t(addToCart)}
+            </Button>
           </>
         )}
       </div>
 
-      <div className="flex items-center gap-4 mt-2 text-muted">
-        {showWishlist && (
-          <button
-            type="button"
-            aria-label={t(wishlistLabel)}
-            className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
-            style={{ fontSize: 14, lineHeight: '21px', fontWeight: 500 }}
+      {whatsappHref && product.isAvailable !== false && (
+        <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="solid"
+            size="md"
+            fullWidth
+            leftIcon={<Icon icon="ic:baseline-whatsapp" width={18} />}
           >
-            <Icon icon="material-symbols:favorite-outline" width={18} />
-            {t(wishlistLabel)}
-          </button>
-        )}
-        {showCompare && (
-          <button
-            type="button"
-            aria-label={t(compareLabel)}
-            className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
-            style={{ fontSize: 14, lineHeight: '21px', fontWeight: 500 }}
-          >
-            <Icon icon="material-symbols:compare-arrows-rounded" width={18} />
-            {t(compareLabel)}
-          </button>
-        )}
-      </div>
+            WhatsApp to order
+          </Button>
+        </a>
+      )}
     </div>
   )
 }

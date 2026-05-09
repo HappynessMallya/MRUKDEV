@@ -18,7 +18,7 @@ const ICON_MAP: Record<string, string> = {
 export function SocialIcons({
   socials,
   className,
-  iconSize = 20,
+  iconSize = 28,
 }: {
   socials: Record<string, string>
   className?: string
@@ -28,7 +28,7 @@ export function SocialIcons({
   if (entries.length === 0) return null
 
   return (
-    <ul className={cn('flex items-center gap-3', className)}>
+    <ul className={cn('flex items-center gap-4', className)}>
       {entries.map(([key, url]) => {
         const iconName = ICON_MAP[key] ?? 'material-symbols:link'
         return (
@@ -38,7 +38,7 @@ export function SocialIcons({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={key}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              className="text-white transition-opacity hover:opacity-75"
             >
               <Icon icon={iconName} width={iconSize} />
             </Link>

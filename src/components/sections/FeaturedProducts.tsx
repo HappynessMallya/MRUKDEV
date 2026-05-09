@@ -151,34 +151,30 @@ function CategoryHeroCard({
   )
 }
 
-// Mock products use the renamed Frame 29 images (/products/product-01.png etc.).
-// Image-to-product mapping is intentionally arbitrary while we wait for the
-// real product catalog from the backend — adjust here as the catalog firms up.
-const img = (n: number) => `/products/product-${String(n).padStart(2, '0')}.png`
-
+// Mock products keyed by category — image paths point at the real assets in
+// /public/products/. Update names/copy here as the catalog firms up.
 const MOCK_PRODUCTS: Record<string, ProductCardData[]> = {
   kitchen: [
-    { id: 'p1', name: 'Air fryer', description: '4kg capacity, Dual cooking, 360 heat circulation', href: '/products/air-fryer', imageUrl: img(1), isNew: true },
-    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/french-microwave', imageUrl: img(2) },
-    { id: 'p3', name: 'MR-UK Dual cooking f...', description: 'Four cooks with oven', href: '/products/mr-uk-dual-cooker', imageUrl: img(3) },
-    { id: 'p4', name: 'UK- 45 Blender', description: 'Smart control, 360 heat circulation', href: '/products/uk-45-blender', imageUrl: img(4) },
+    { id: 'p1', name: 'Air fryer', description: '4kg capacity, Dual cooking, 360 heat circulation', href: '/products/air-fryer', imageUrl: '/products/air-frier.png', isNew: true },
+    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/french-microwave', imageUrl: '/products/microwave.png' },
+    { id: 'p3', name: 'MR-UK Dual cooking f...', description: 'Four cooks with oven', href: '/products/mr-uk-dual-cooker', imageUrl: '/products/dual-cooking.png' },
+    { id: 'p4', name: 'UK- 45 Blender', description: 'Smart control, 360 heat circulation', href: '/products/uk-45-blender', imageUrl: '/products/blender.png' },
   ],
   music: [
-    { id: 'm1', name: 'Party Box X90', description: 'Floor-shaking bass, 12-hour battery', href: '/products/party-box-x90', imageUrl: img(5) },
-    { id: 'm2', name: 'Sound Bar Pro', description: 'Dolby Atmos, wireless subwoofer', href: '/products/sound-bar-pro', imageUrl: img(6) },
-    { id: 'm3', name: 'Compact Speaker', description: 'Bluetooth 5.2, weather-proof', href: '/products/compact-speaker', imageUrl: img(7) },
-    { id: 'm4', name: 'DJ Console', description: 'For pros and beginners alike', href: '/products/dj-console', imageUrl: img(8) },
+    { id: 'm1', name: 'Party Box X90', description: 'Floor-shaking bass, 12-hour battery', href: '/products/party-box-x90', imageUrl: '/products/music-1.png' },
+    { id: 'm2', name: 'Sound Bar Pro', description: 'Dolby Atmos, wireless subwoofer', href: '/products/sound-bar-pro', imageUrl: '/products/music-2.png' },
+    { id: 'm3', name: 'Compact Speaker', description: 'Bluetooth 5.2, weather-proof', href: '/products/compact-speaker', imageUrl: '/products/music-3.png' },
+    { id: 'm4', name: 'DJ Console', description: 'For pros and beginners alike', href: '/products/dj-console', imageUrl: '/products/music-4.png' },
   ],
   refrigerator: [
-    { id: 'r1', name: 'RF4200 Double Door', description: 'Freshness starts here, 420L', href: '/products/rf4200', imageUrl: img(9), isNew: true },
-    { id: 'r2', name: 'Inverter Split AC', description: 'Whisper-quiet, energy efficient', href: '/products/inverter-split-ac', imageUrl: img(10) },
-    { id: 'r3', name: 'Compact Freezer', description: '180L, fast-freeze technology', href: '/products/compact-freezer', imageUrl: img(11) },
-    { id: 'r4', name: 'Wine Cooler', description: 'Dual zone, 36-bottle capacity', href: '/products/wine-cooler', imageUrl: img(12) },
+    { id: 'r1', name: 'RF4200 Double Door', description: 'Freshness starts here, 420L', href: '/products/rf4200', imageUrl: '/products/regrigirator-1.png', isNew: true },
+    { id: 'r2', name: 'Inverter Split AC', description: 'Whisper-quiet, energy efficient', href: '/products/inverter-split-ac', imageUrl: '/products/ac-1.png' },
+    { id: 'r3', name: 'Pedestal Fan', description: 'Quiet motor, three-speed', href: '/products/pedestal-fan', imageUrl: '/products/fan-1.png' },
+    { id: 'r4', name: 'Compact Freezer', description: '180L, fast-freeze technology', href: '/products/compact-freezer', imageUrl: '/products/freezer-1.png' },
   ],
   agriculture: [
-    { id: 'a1', name: 'Diesel Generator', description: '5kVA, fuel efficient', href: '/products/diesel-generator', imageUrl: img(13) },
-    { id: 'a2', name: 'Water Pump 1.5HP', description: 'High flow, low noise', href: '/products/water-pump', imageUrl: img(14) },
-    { id: 'a3', name: 'Solar Inverter', description: 'Off-grid ready, 3000W', href: '/products/solar-inverter', imageUrl: img(15) },
-    { id: 'a4', name: 'Maize Mill', description: 'Heavy-duty, low maintenance', href: '/products/maize-mill', imageUrl: img(16) },
+    { id: 'a1', name: 'Water Pump 1.5HP', description: 'High flow, low noise', href: '/products/water-pump', imageUrl: '/products/agri-1.png' },
+    { id: 'a2', name: 'Diesel Generator', description: '5kVA, fuel efficient', href: '/products/diesel-generator', imageUrl: '/products/agri-2.png' },
+    { id: 'a3', name: 'Solar Inverter', description: 'Off-grid ready, 3000W', href: '/products/solar-inverter', imageUrl: '/products/agri-3.png' },
   ],
 }

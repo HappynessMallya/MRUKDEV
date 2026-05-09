@@ -8,6 +8,9 @@ export interface Product {
   name: BilingualText
   model?: string
   category: string
+  // Optional subcategory slug — matches the SUBCATEGORIES tile slug so the
+  // products list page can filter by `?sub=` when a tile is active.
+  sub?: string
   shortDescription?: BilingualText
 
   // Gallery
@@ -20,6 +23,9 @@ export interface Product {
   price?: { amount: number; currency: string }
   isAvailable?: boolean
   stockCount?: number
+
+  // Optional color/variant picker shown above the CTAs on the PDP.
+  colors?: ColorVariant[]
 
   // Quick-look icon row at the top of the Characteristics section
   highlightIcons?: HighlightIcon[]
@@ -34,6 +40,12 @@ export interface Product {
   relatedSlugs?: string[]
 }
 
+export interface ColorVariant {
+  id: string
+  label: BilingualText
+  hex: string
+}
+
 export interface HighlightIcon {
   id: string
   iconName: string
@@ -42,8 +54,12 @@ export interface HighlightIcon {
 
 export interface CharacteristicBlock {
   id: string
+  // Bold large heading.
   title: BilingualText
+  // Optional bold smaller heading rendered between title and description.
   subtitle?: BilingualText
+  // Optional paragraph copy rendered under the subtitle.
+  description?: BilingualText
   imageUrl?: string
   // Image positioning relative to the text. Stacked = full-width image below text.
   layout?: 'stacked' | 'image-left' | 'image-right'

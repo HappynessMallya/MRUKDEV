@@ -103,7 +103,7 @@
       "showLanguageSwitcher": false,
       "supportLink": {
         "label": { "en": "Support", "sw": "Msaada" },
-        "href": "/support"
+        "href": "/contact"
       },
       "cta": {
         "enabled": false,
@@ -407,7 +407,8 @@
         "wishlistLabel": { "en": "Add to Wishlist", "sw": "Ongeza kwenye Orodha" },
         "shareLabel": { "en": "Share", "sw": "Shiriki" },
         "tabs": {
-          "characteristics": { "en": "Characteristics", "sw": "Sifa" },
+          "features": { "en": "Features", "sw": "Sifa" },
+          "characteristics": { "en": "Characteristic", "sw": "Sifa" },
           "specifications": { "en": "Specifications", "sw": "Maelezo ya Kiufundi" },
           "discover": { "en": "Discover", "sw": "Gundua" }
         },
