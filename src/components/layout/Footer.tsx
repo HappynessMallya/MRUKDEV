@@ -94,7 +94,16 @@ function FooterLogo({ logoUrl, name }: { logoUrl?: string; name: string }) {
   if (logoUrl) {
     return (
       <Link href="/" className="inline-flex items-center">
-        <Image src={logoUrl} alt={name} width={120} height={80} className="h-14 w-auto object-contain" />
+        {/* `unoptimized` skips the /_next/image cache so updates to
+            /public/logo-white.png show up without a dev-server restart. */}
+        <Image
+          src={logoUrl}
+          alt={name}
+          width={120}
+          height={80}
+          unoptimized
+          className="h-14 w-auto object-contain"
+        />
       </Link>
     )
   }

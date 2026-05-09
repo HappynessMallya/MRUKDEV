@@ -156,7 +156,7 @@ function CategoryHeroCard({
 const MOCK_PRODUCTS: Record<string, ProductCardData[]> = {
   kitchen: [
     { id: 'p1', name: 'Air fryer', description: '4kg capacity, Dual cooking, 360 heat circulation', href: '/products/air-fryer', imageUrl: '/products/air-frier.png', isNew: true },
-    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/french-microwave', imageUrl: '/products/microwave.png' },
+    { id: 'p2', name: 'French Microwave', description: 'Mordenize your kitchen', href: '/products/p605tmswd', imageUrl: '/products/microwave.png' },
     { id: 'p3', name: 'MR-UK Dual cooking f...', description: 'Four cooks with oven', href: '/products/mr-uk-dual-cooker', imageUrl: '/products/dual-cooking.png' },
     { id: 'p4', name: 'UK- 45 Blender', description: 'Smart control, 360 heat circulation', href: '/products/uk-45-blender', imageUrl: '/products/blender.png' },
   ],
