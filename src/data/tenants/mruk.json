@@ -233,7 +233,7 @@
             "slides": [
               {
                 "id": "slide-001",
-                "imageUrl": "/Hero/regrigirator.svg",
+                "imageUrl": "/Hero/regrigirator.png",
                 "title": { "en": "MR UK Double door refrigerator", "sw": "Friji ya Milango Miwili ya MR UK" },
                 "subtitle": { "en": "RF4200 | Freshness starts here", "sw": "RF4200 | Mwanzo wa ubora" },
                 "cta": { "label": { "en": "Learn more", "sw": "Jifunze zaidi" }, "href": "/products/rf4200" },
@@ -242,7 +242,7 @@
               },
               {
                 "id": "slide-002",
-                "imageUrl": "/Hero/air-frier.svg",
+                "imageUrl": "/Hero/air-frier.png",
                 "title": { "en": "Air Fryer", "sw": "Air Fryer" },
                 "subtitle": { "en": "RF4200 | Cook in a minute", "sw": "RF4200 | Pika kwa dakika" },
                 "cta": { "label": { "en": "Learn more", "sw": "Jifunze zaidi" }, "href": "/products/air-fryer" },
@@ -251,7 +251,7 @@
               },
               {
                 "id": "slide-003",
-                "imageUrl": "/Hero/ac.svg",
+                "imageUrl": "/Hero/ac.png",
                 "title": { "en": "BreezIN Air conditioner", "sw": "Kiyoyozi cha BreezIN" },
                 "subtitle": { "en": "S09P5S0 | Cool beyond limit\nGentle breeze\nSmart control with WIFI, Google home and Alexa", "sw": "S09P5S0 | Baridi isiyo na kikomo\nUpepo laini\nUdhibiti wa WiFi, Google Home na Alexa" },
                 "cta": { "label": { "en": "Learn more", "sw": "Jifunze zaidi" }, "href": "/products/breezin-ac" },
@@ -285,7 +285,7 @@
                   "label": { "en": "Kitchen Appliances", "sw": "Vifaa vya Jikoni" },
                   "category": "kitchen",
                   "hero": {
-                    "imageUrl": "/categories/kitchen.svg",
+                    "imageUrl": "/categories/kitchen.png",
                     "title": { "en": "Kitchen appliances", "sw": "Vifaa vya jikoni" },
                     "subtitle": { "en": "Take care of your kitchen with modern appliances", "sw": "Tunza jiko lako kwa vifaa vya kisasa" },
                     "cta": { "label": { "en": "View all kitchen appliances", "sw": "Tazama vyote" }, "href": "/products?category=kitchen" }
@@ -296,7 +296,7 @@
                   "label": { "en": "Music systems", "sw": "Mifumo ya Muziki" },
                   "category": "music",
                   "hero": {
-                    "imageUrl": "/categories/music.svg",
+                    "imageUrl": "/categories/music.png",
                     "title": { "en": "Music systems", "sw": "Mifumo ya muziki" },
                     "subtitle": { "en": "Sound that comforts your day", "sw": "Sauti inayofurahisha siku yako" },
                     "cta": { "label": { "en": "View all music systems", "sw": "Tazama vyote" }, "href": "/products?category=music" }
@@ -307,7 +307,7 @@
                   "label": { "en": "Refrigerator & AC", "sw": "Friji na Viyoyozi" },
                   "category": "refrigerator",
                   "hero": {
-                    "imageUrl": "/categories/refrigerator.svg",
+                    "imageUrl": "/categories/refrigerator.png",
                     "title": { "en": "Refrigerator & AC", "sw": "Friji na viyoyozi" },
                     "subtitle": { "en": "Cool, fresh, and efficient — every day of the year", "sw": "Baridi, safi na ya kuokoa nishati" },
                     "cta": { "label": { "en": "View all refrigerator & AC", "sw": "Tazama vyote" }, "href": "/products?category=refrigerator-ac" }
@@ -318,7 +318,7 @@
                   "label": { "en": "Agriculture appliances", "sw": "Vifaa vya Kilimo" },
                   "category": "agriculture",
                   "hero": {
-                    "imageUrl": "/categories/agriculture.svg",
+                    "imageUrl": "/categories/agriculture.png",
                     "title": { "en": "Agriculture appliances", "sw": "Vifaa vya kilimo" },
                     "subtitle": { "en": "Built for the field, made for the harvest", "sw": "Imeundwa kwa shamba lako" },
                     "cta": { "label": { "en": "View all agriculture appliances", "sw": "Tazama vyote" }, "href": "/products?category=agriculture" }
@@ -339,14 +339,14 @@
             "items": [
               {
                 "id": "bq-001",
-                "imageUrl": "/features/modern-technology.svg",
+                "imageUrl": "/features/modern-technology.png",
                 "title": { "en": "Modern Technology, Trusted Quality", "sw": "Teknolojia ya Kisasa, Ubora Unaoaminika" },
                 "subtitle": { "en": "Superior performance you can rely on", "sw": "Utendaji bora unaoweza kutegemea" },
                 "cta": { "label": { "en": "Learn more", "sw": "Jifunze zaidi" }, "href": "/about/technology" }
               },
               {
                 "id": "bq-002",
-                "imageUrl": "/features/built-to-last.svg",
+                "imageUrl": "/features/built-to-last.png",
                 "title": { "en": "Built to last", "sw": "Imeundwa Kudumu" },
                 "subtitle": { "en": "Designed for durability in everyday use.", "sw": "Imeundwa kwa uimara wa kila siku." },
                 "cta": { "label": { "en": "Learn more", "sw": "Jifunze zaidi" }, "href": "/about/durability" }

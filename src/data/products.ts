@@ -18,14 +18,14 @@ const PRODUCTS: Record<string, Product> = {
     sub: 'microwaves',
     // Catalog thumbnail lives at the category root; deep PDP gallery uses the
     // /microwave/ subfolder so the rich photo set stays scoped to this SKU.
-    listImage: '/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20black.svg',
+    listImage: '/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20black.png',
     images: [
-      '/products/kitchen/microwave/m1.svg',
-      '/products/kitchen/microwave/m2.svg',
-      '/products/kitchen/microwave/m3.svg',
-      '/products/kitchen/microwave/m4.svg',
-      '/products/kitchen/microwave/m5.svg',
-      '/products/kitchen/microwave/m6.svg',
+      '/products/kitchen/microwave/m1.png',
+      '/products/kitchen/microwave/m2.png',
+      '/products/kitchen/microwave/m3.png',
+      '/products/kitchen/microwave/m4.png',
+      '/products/kitchen/microwave/m5.png',
+      '/products/kitchen/microwave/m6.png',
     ],
     featureBullets: [
       { en: 'Total no frost' },
@@ -131,7 +131,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'microwaves',
-    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20blac2.svg'],
+    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20blac2.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -153,7 +153,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'microwaves',
-    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20Black3.svg'],
+    images: ['/products/kitchen/32L%20Microwave%20Oven%20Quick%20Defrost%20Black3.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -177,7 +177,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'kettles',
-    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20Black.svg'],
+    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20Black.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -199,7 +199,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'MS23K3513AW/SG',
     category: 'kitchen',
     sub: 'kettles',
-    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20White.svg'],
+    images: ['/products/kitchen/32L%20kittle%20Oven%20Quick%20Defrost%20White.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -224,7 +224,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY 43-9WD',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY%2043-9WD%20%E2%80%93%20BLack%20Inox.svg'],
+    images: ['/products/refrigirator%26ac/SKY%2043-9WD%20%E2%80%93%20BLack%20Inox.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '439L capacity' },
@@ -246,7 +246,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-50-5BI',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-50-5BI%20%E2%80%93%20Black%20Inox.svg'],
+    images: ['/products/refrigirator%26ac/SKY-50-5BI%20%E2%80%93%20Black%20Inox.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '423L capacity' },
@@ -268,7 +268,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY -32',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY%20-32-Black%20Inox.svg'],
+    images: ['/products/refrigirator%26ac/SKY%20-32-Black%20Inox.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '320L capacity' },
@@ -290,7 +290,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-24-6BI',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/Combi%20Style%20No%20Frost.svg'],
+    images: ['/products/refrigirator%26ac/Combi%20Style%20No%20Frost.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -312,7 +312,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-10-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White.svg'],
+    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -334,7 +334,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-13-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White.svg'],
+    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -356,7 +356,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-17-3BG',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-17-3BG%20Refrigerator.svg'],
+    images: ['/products/refrigirator%26ac/SKY-17-3BG%20Refrigerator.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -378,7 +378,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-10-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White2.svg'],
+    images: ['/products/refrigirator%26ac/SKY-10-8I%20RefrigeratorDefrost%20White2.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -400,7 +400,7 @@ const PRODUCTS: Record<string, Product> = {
     model: 'SKY-13-8I',
     category: 'refrigerator-ac',
     sub: 'refrigerator',
-    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White2.svg'],
+    images: ['/products/refrigirator%26ac/SKY-13-8I%20Freezer%20Defrost%20White2.png'],
     featureBullets: [
       { en: 'Heavy defrost' },
       { en: '32L capacity' },
@@ -469,25 +469,25 @@ export interface SubcategoryEntry {
 
 export const SUBCATEGORIES: Record<string, SubcategoryEntry[]> = {
   kitchen: [
-    { slug: 'microwaves', label: { en: 'Microwaves' }, imageUrl: '/categories/nav/microwaves.svg' },
-    { slug: 'blender', label: { en: 'Blender' }, imageUrl: '/categories/nav/blender.svg' },
-    { slug: 'air-fryer', label: { en: 'Air Fryer' }, imageUrl: '/categories/nav/air-friers.svg' },
-    { slug: 'cookers', label: { en: 'Cookers' }, imageUrl: '/categories/nav/cookers.svg' },
-    { slug: 'kettles', label: { en: 'Kettles' }, imageUrl: '/categories/nav/kettles.svg' },
-    { slug: 'gas-stove', label: { en: 'Electric & Gas stove' }, imageUrl: '/categories/nav/Electric%20%26%20Gas%20stove.svg' },
+    { slug: 'microwaves', label: { en: 'Microwaves' }, imageUrl: '/categories/nav/microwaves.png' },
+    { slug: 'blender', label: { en: 'Blender' }, imageUrl: '/categories/nav/blender.png' },
+    { slug: 'air-fryer', label: { en: 'Air Fryer' }, imageUrl: '/categories/nav/air-friers.png' },
+    { slug: 'cookers', label: { en: 'Cookers' }, imageUrl: '/categories/nav/cookers.png' },
+    { slug: 'kettles', label: { en: 'Kettles' }, imageUrl: '/categories/nav/kettles.png' },
+    { slug: 'gas-stove', label: { en: 'Electric & Gas stove' }, imageUrl: '/categories/nav/Electric%20%26%20Gas%20stove.png' },
   ],
   music: [
-    { slug: 'music-systems', label: { en: 'Music systems' }, imageUrl: '/categories/nav/music.svg' },
+    { slug: 'music-systems', label: { en: 'Music systems' }, imageUrl: '/categories/nav/music.png' },
   ],
   'refrigerator-ac': [
-    { slug: 'refrigerator', label: { en: 'Refrigarator' }, imageUrl: '/categories/nav/freezer.svg' },
-    { slug: 'air-conditioning', label: { en: 'Air conditioning' }, imageUrl: '/categories/nav/ac.svg' },
+    { slug: 'refrigerator', label: { en: 'Refrigarator' }, imageUrl: '/categories/nav/freezer.png' },
+    { slug: 'air-conditioning', label: { en: 'Air conditioning' }, imageUrl: '/categories/nav/ac.png' },
   ],
   agriculture: [
-    { slug: 'water-pumps', label: { en: 'Water pumps' }, imageUrl: '/categories/nav/water-pump.svg' },
-    { slug: 'generators', label: { en: 'Generators' }, imageUrl: '/categories/nav/generator.svg' },
-    { slug: 'pvc-hoses', label: { en: 'PVC hoses' }, imageUrl: '/categories/nav/pvs-horses.svg' },
-    { slug: 'garden-hoses', label: { en: 'Garden hoses' }, imageUrl: '/categories/nav/garnen-horses.svg' },
+    { slug: 'water-pumps', label: { en: 'Water pumps' }, imageUrl: '/categories/nav/water-pump.png' },
+    { slug: 'generators', label: { en: 'Generators' }, imageUrl: '/categories/nav/generator.png' },
+    { slug: 'pvc-hoses', label: { en: 'PVC hoses' }, imageUrl: '/categories/nav/pvs-horses.png' },
+    { slug: 'garden-hoses', label: { en: 'Garden hoses' }, imageUrl: '/categories/nav/garnen-horses.png' },
   ],
 }
 
