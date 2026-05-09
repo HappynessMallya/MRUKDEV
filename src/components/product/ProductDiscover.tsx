@@ -29,7 +29,7 @@ export function ProductDiscover({ related }: { related: Product[] }) {
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {related.map((p) => (
-            <ProductListCard key={p.id} product={p} />
+            <ProductListCard key={p.id} product={p} showCompare={false} />
           ))}
         </div>
       </Container>

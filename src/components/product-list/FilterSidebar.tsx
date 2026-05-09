@@ -6,16 +6,48 @@ import { useState } from 'react'
 
 import { cn } from '@/lib/cn'
 
-const TYPE_OPTIONS = ['convection', 'grill', 'grill-2', 'solo']
+interface TypeOption {
+  value: string
+  label: string
+}
+
+// Each top-level category has its own Type filter set. Keep this map in sync
+// with the catalog's product attributes — the URL `?type=<value>` is what the
+// FilterBar chips read back.
+const TYPES_BY_CATEGORY: Record<string, TypeOption[]> = {
+  kitchen: [
+    { value: 'convection', label: 'Convection' },
+    { value: 'grill', label: 'Grill' },
+    { value: 'solo', label: 'Solo' },
+  ],
+  'refrigerator-ac': [
+    { value: 'chest-freezers', label: 'Chest Freezers' },
+    { value: 'showcase-fridges', label: 'Showcase Fridges' },
+    { value: 'four-door-fridges', label: 'Four door fridges' },
+    { value: 'two-door-fridges', label: 'Two door fridges' },
+  ],
+  music: [
+    { value: 'soundbars', label: 'Soundbars' },
+    { value: 'speakers', label: 'Speakers' },
+    { value: 'home-theater', label: 'Home theater' },
+  ],
+  agriculture: [
+    { value: 'water-pumps', label: 'Water pumps' },
+    { value: 'generators', label: 'Generators' },
+  ],
+}
 
 // Frame 26 in Figma — soft surface card on the left with a single collapsible
-// "Type" filter group. Selections live on the URL (?type=convection,grill) so
-// they survive reload and can be cleared by the chip in the FilterBar.
+// "Type" filter group. The option list is driven by the active `?category=`
+// param so each top-level category surfaces its own attribute set.
 export function FilterSidebar() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [open, setOpen] = useState(true)
+
+  const category = searchParams.get('category')
+  const options: TypeOption[] = category ? (TYPES_BY_CATEGORY[category] ?? []) : []
 
   const typeParam = searchParams.get('type') ?? ''
   const active = new Set(
@@ -36,6 +68,8 @@ export function FilterSidebar() {
     const qs = params.toString()
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
   }
+
+  if (options.length === 0) return null
 
   return (
     <aside className="lg:sticky lg:top-32 lg:self-start">
@@ -61,15 +95,15 @@ export function FilterSidebar() {
 
         {open && (
           <ul className="mt-5 space-y-3">
-            {TYPE_OPTIONS.map((value) => {
-              const checked = active.has(value)
+            {options.map((opt) => {
+              const checked = active.has(opt.value)
               return (
-                <li key={value}>
+                <li key={opt.value}>
                   <label className="inline-flex cursor-pointer items-center gap-3">
                     <input
                       type="checkbox"
                       checked={checked}
-                      onChange={() => toggle(value)}
+                      onChange={() => toggle(opt.value)}
                       className={cn(
                         'h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border border-border bg-background transition-colors',
                         'checked:border-primary checked:bg-primary',
@@ -77,10 +111,10 @@ export function FilterSidebar() {
                       )}
                     />
                     <span
-                      className="capitalize text-foreground/80"
+                      className="text-foreground/80"
                       style={{ fontSize: 14, lineHeight: '20px' }}
                     >
-                      {value.replace('-', ' ')}
+                      {opt.label}
                     </span>
                   </label>
                 </li>
