@@ -111,13 +111,33 @@ function SignUpForm({ onSwitch }: { onSwitch: () => void }) {
         // re-renders into <Profile/> automatically — no nav needed.
       }}
     >
-      <Field id="signup-name" label="Full name" autoComplete="name" required />
-      <Field id="signup-email" type="email" label="Email" autoComplete="email" required />
-      <Field id="signup-phone" type="tel" label="Phone (optional)" autoComplete="tel" />
+      <Field
+        id="signup-name"
+        label="Full name"
+        placeholder="Jane Doe"
+        autoComplete="name"
+        required
+      />
+      <Field
+        id="signup-email"
+        type="email"
+        label="Email"
+        placeholder="you@example.com"
+        autoComplete="email"
+        required
+      />
+      <Field
+        id="signup-phone"
+        type="tel"
+        label="Phone (optional)"
+        placeholder="+255 7XX XXX XXX"
+        autoComplete="tel"
+      />
       <Field
         id="signup-password"
         type="password"
         label="Password"
+        placeholder="At least 6 characters"
         autoComplete="new-password"
         required
         minLength={6}
@@ -168,11 +188,19 @@ function SignInForm({ onSwitch }: { onSwitch: () => void }) {
         }
       }}
     >
-      <Field id="signin-email" type="email" label="Email" autoComplete="email" required />
+      <Field
+        id="signin-email"
+        type="email"
+        label="Email"
+        placeholder="you@example.com"
+        autoComplete="email"
+        required
+      />
       <Field
         id="signin-password"
         type="password"
         label="Password"
+        placeholder="Your password"
         autoComplete="current-password"
         required
       />
@@ -398,6 +426,7 @@ function Field({
   autoComplete,
   helper,
   defaultValue,
+  placeholder,
 }: {
   id: string
   label: string
@@ -407,6 +436,7 @@ function Field({
   autoComplete?: string
   helper?: string
   defaultValue?: string
+  placeholder?: string
 }) {
   const name = id.split('-').slice(1).join('-')
   return (
@@ -425,7 +455,8 @@ function Field({
         minLength={minLength}
         autoComplete={autoComplete}
         defaultValue={defaultValue}
-        className="rounded-lg bg-background px-4 py-3 text-foreground placeholder:text-foreground/35 outline-none ring-1 ring-transparent transition-colors focus:ring-primary"
+        placeholder={placeholder}
+        className="rounded-lg border border-gray-200 bg-background px-4 py-3 text-foreground placeholder:text-foreground/45 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
         style={{ fontSize: 14, lineHeight: '20px' }}
       />
       {helper && (
