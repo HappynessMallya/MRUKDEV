@@ -10,7 +10,8 @@ import {
   ProductSpecs,
   ProductDiscover,
 } from '@/components/product'
-import { CATEGORIES, getProduct, listAllSlugs } from '@/data/products'
+import { CATEGORIES } from '@/data/products'
+import { getProduct, listAllSlugs } from '@/lib/catalog'
 import { getTenantConfig } from '@/lib/tenant'
 
 interface SearchParams {
@@ -28,8 +29,9 @@ function fallbackUrl(from: string | undefined): string {
 
 // Pre-render every product slug at build time. Once the backend is live this
 // becomes a paginated `getStaticPaths`-style fetch from the catalog API.
-export function generateStaticParams() {
-  return listAllSlugs().map((slug) => ({ slug }))
+export async function generateStaticParams() {
+  const slugs = await listAllSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({
@@ -38,7 +40,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const product = getProduct(slug)
+  const product = await getProduct(slug)
   const tenant = await getTenantConfig()
   if (!product) return { title: tenant.identity.companyName }
 
@@ -66,7 +68,7 @@ export default async function ProductPage({
 }) {
   const { slug } = await params
   const { from } = await searchParams
-  const product = getProduct(slug)
+  const product = await getProduct(slug)
   // No SKU detail page yet for this slug? Send the visitor to the category
   // landing instead of a dead-end 404 — they'll see related products there.
   if (!product) redirect(fallbackUrl(from))
@@ -76,8 +78,9 @@ export default async function ProductPage({
   const altText = product.name[lang] ?? product.name.en
 
   // Resolve related slugs → full Product objects, drop any that don't exist.
-  const related = (product.relatedSlugs ?? [])
-    .map((s) => getProduct(s))
+  const related = (
+    await Promise.all((product.relatedSlugs ?? []).map((s) => getProduct(s)))
+  )
     .filter((p): p is NonNullable<typeof p> => p !== null)
     .slice(0, 4)
 

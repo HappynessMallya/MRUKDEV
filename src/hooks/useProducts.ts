@@ -1,60 +1,35 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+'use client'
 
-import { apiFetch } from '@/lib/apiClient'
+import { useQuery } from '@tanstack/react-query'
 
-// Skeleton — Product / ProductInput shapes get tightened once the
-// Mongoose schemas land. Keep the function signatures stable so call sites
-// don't need to change later.
-export interface Product {
-  _id: string
-  name: { en: string; sw?: string }
-  slug: string
-  category: string
-  price: number
-  currency: string
-  images: string[]
-  tags?: string[]
-  isAvailable?: boolean
-}
+import { mapProduct } from '@/lib/api/mappers'
+import {
+  getProductBySlug,
+  listProducts,
+  type ListProductsParams,
+} from '@/lib/api/products'
 
-export interface ProductsParams {
-  category?: string
-  featured?: boolean
-  tag?: string
-  limit?: number
-  page?: number
-  sort?: string
-}
+// Client-side catalog hooks (public reads — tenant header only, no token).
+// These call the live API and map straight to the frontend `Product` view
+// model, so client components (compare, mega-menu featured rows) get the same
+// shape the server components render.
 
-export function useProducts(params?: ProductsParams) {
+export function useProducts(params?: ListProductsParams) {
   return useQuery({
     queryKey: ['products', params],
-    queryFn: () =>
-      apiFetch<Product[]>(
-        `/api/products?${new URLSearchParams(params as Record<string, string>)}`
-      ),
-    staleTime: 30_000,
-  })
-}
-
-export function useProduct(id: string) {
-  return useQuery({
-    queryKey: ['products', id],
-    queryFn: () => apiFetch<Product>(`/api/products/${id}`),
-    enabled: Boolean(id),
-  })
-}
-
-export function useCreateProduct() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (data: Partial<Product>) =>
-      apiFetch<Product>('/api/products', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['products'] })
+    queryFn: async () => {
+      const res = await listProducts(params)
+      return { items: res.data.map(mapProduct), meta: res.meta }
     },
+    staleTime: 60_000,
+  })
+}
+
+export function useProduct(slug: string) {
+  return useQuery({
+    queryKey: ['product', slug],
+    queryFn: () => getProductBySlug(slug).then(mapProduct),
+    enabled: Boolean(slug),
+    staleTime: 60_000,
   })
 }

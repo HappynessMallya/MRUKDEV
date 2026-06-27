@@ -22,6 +22,18 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+
+  // Multi-Zone: the admin dashboard is a separate Next app (in ./dashboard)
+  // served under /dashboard via its own `basePath`. We proxy every /dashboard
+  // request to that zone. Set DASHBOARD_URL to the dashboard deployment URL in
+  // production; it defaults to the local dev server (port 3001).
+  async rewrites() {
+    const dashboard = process.env.DASHBOARD_URL ?? 'http://localhost:3001'
+    return [
+      { source: '/dashboard', destination: `${dashboard}/dashboard` },
+      { source: '/dashboard/:path*', destination: `${dashboard}/dashboard/:path*` },
+    ]
+  },
 }
 
 export default nextConfig

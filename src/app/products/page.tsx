@@ -8,7 +8,8 @@ import {
   FilterSidebar,
   ProductListCard,
 } from '@/components/product-list'
-import { getCategoryLabel, getProductsByCategory, getSubcategories } from '@/data/products'
+import { getCategoryLabel, getSubcategories } from '@/data/products'
+import { getProductsByCategory } from '@/lib/catalog'
 import { getTenantConfig } from '@/lib/tenant'
 import type { Product } from '@/types/product'
 
@@ -59,7 +60,7 @@ export default async function ProductsListPage({
 }) {
   const { category, sub, sort } = await searchParams
 
-  const products = sortProducts(getProductsByCategory(category, sub), sort)
+  const products = sortProducts(await getProductsByCategory(category, sub), sort)
   const subcategories = getSubcategories(category)
   const catLabel = category ? getCategoryLabel(category) : null
   const heading = catLabel
