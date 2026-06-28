@@ -6,48 +6,25 @@ import { useState } from 'react'
 
 import { cn } from '@/lib/cn'
 
-interface TypeOption {
+interface FilterOption {
   value: string
   label: string
 }
 
-// Each top-level category has its own Type filter set. Keep this map in sync
-// with the catalog's product attributes — the URL `?type=<value>` is what the
-// FilterBar chips read back.
-const TYPES_BY_CATEGORY: Record<string, TypeOption[]> = {
-  kitchen: [
-    { value: 'convection', label: 'Convection' },
-    { value: 'grill', label: 'Grill' },
-    { value: 'solo', label: 'Solo' },
-  ],
-  'refrigerator-ac': [
-    { value: 'chest-freezers', label: 'Chest Freezers' },
-    { value: 'showcase-fridges', label: 'Showcase Fridges' },
-    { value: 'four-door-fridges', label: 'Four door fridges' },
-    { value: 'two-door-fridges', label: 'Two door fridges' },
-  ],
-  music: [
-    { value: 'soundbars', label: 'Soundbars' },
-    { value: 'speakers', label: 'Speakers' },
-    { value: 'home-theater', label: 'Home theater' },
-  ],
-  agriculture: [
-    { value: 'water-pumps', label: 'Water pumps' },
-    { value: 'generators', label: 'Generators' },
-  ],
+interface FilterSidebarProps {
+  // Subcategories of the active category, from the LIVE taxonomy (passed by the
+  // products page). Each toggles `?type=<sub-slug>`, which the page applies by
+  // matching product.sub — so the options always reflect real catalog data.
+  options?: FilterOption[]
 }
 
-// Frame 26 in Figma — soft surface card on the left with a single collapsible
-// "Type" filter group. The option list is driven by the active `?category=`
-// param so each top-level category surfaces its own attribute set.
-export function FilterSidebar() {
+// Soft surface card on the left with a collapsible "Type" group, driven by the
+// live subcategories of the active category.
+export function FilterSidebar({ options = [] }: FilterSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [open, setOpen] = useState(true)
-
-  const category = searchParams.get('category')
-  const options: TypeOption[] = category ? (TYPES_BY_CATEGORY[category] ?? []) : []
 
   const typeParam = searchParams.get('type') ?? ''
   const active = new Set(

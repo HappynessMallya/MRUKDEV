@@ -61,13 +61,25 @@ export default async function ProductsListPage({
 }: {
   searchParams: Promise<SearchParams>
 }) {
-  const { category, sub, sort } = await searchParams
+  const { category, sub, sort, type } = await searchParams
+  const tenant = await getTenantConfig()
+  const lang = tenant.defaultLang
 
-  const [products, subcategories, catLabel] = await Promise.all([
+  const [sorted, subcategories, catLabel] = await Promise.all([
     getProductsByCategory(category, sub).then((p) => sortProducts(p, sort)),
     getSubcategories(category),
     category ? getCategoryLabel(category) : Promise.resolve(null),
   ])
+  // "Type" sidebar filter — ?type=<sub-slug>[,<sub-slug>], applied on subcategory.
+  const typeSet = new Set((type ?? '').split(',').map((s) => s.trim()).filter(Boolean))
+  const products = typeSet.size
+    ? sorted.filter((p) => p.sub && typeSet.has(p.sub))
+    : sorted
+  // Live subcategories become the sidebar's Type options (values match p.sub).
+  const filterOptions = subcategories.map((s) => ({
+    value: s.slug,
+    label: s.label[lang] ?? s.label.en,
+  }))
   const heading = catLabel
     ? { en: `Explore ${catLabel.en.toLowerCase()}`, sw: catLabel.sw && `Tazama ${catLabel.sw.toLowerCase()}` }
     : { en: 'Explore products' }
@@ -88,7 +100,7 @@ export default async function ProductsListPage({
 
       <Container className="py-8 md:py-10">
         <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-          <FilterSidebar />
+          <FilterSidebar options={filterOptions} />
 
           {products.length === 0 ? (
             <EmptyState />
