@@ -2,12 +2,14 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { BlogArticle } from '@/components/blog'
-import { getBlogPost, listAllBlogSlugs } from '@/data/blog'
+import { getBlogPostBySlug, listAllBlogSlugs } from '@/lib/blog'
 import { getTenantConfig } from '@/lib/tenant'
 
-// Pre-render every blog slug at build time.
-export function generateStaticParams() {
-  return listAllBlogSlugs().map((slug) => ({ slug }))
+// Pre-render every published article slug at build time (mock slugs when none
+// are seeded yet — see src/lib/blog.ts).
+export async function generateStaticParams() {
+  const slugs = await listAllBlogSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({
@@ -16,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = getBlogPost(slug)
+  const post = await getBlogPostBySlug(slug)
   const tenant = await getTenantConfig()
   if (!post) return { title: 'Article not found' }
 
@@ -37,7 +39,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = getBlogPost(slug)
+  const post = await getBlogPostBySlug(slug)
   if (!post) notFound()
 
   return <BlogArticle post={post} />

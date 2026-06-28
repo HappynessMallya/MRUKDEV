@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Container } from '@/components/atoms'
-import { getAllBlogPosts } from '@/data/blog'
+import { getBlogPosts } from '@/lib/blog'
 import { getTenantConfig } from '@/lib/tenant'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,10 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-// Lightweight index that lists every mock post. Replace with a paginated CMS
-// fetch once the content backend is live.
-export default function BlogIndexPage() {
-  const posts = getAllBlogPosts()
+// Lists published articles from the live API (mock fallback when none are
+// seeded or the backend is unreachable — see src/lib/blog.ts).
+export default async function BlogIndexPage() {
+  const posts = await getBlogPosts()
 
   return (
     <Container className="py-12 md:py-16">
