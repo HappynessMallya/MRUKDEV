@@ -25,19 +25,23 @@ function withSecurityHeaders(res: NextResponse): NextResponse {
 export default auth((req) => {
   const { nextUrl } = req;
   const isAuthed = Boolean(req.auth);
-  const isPublic = PUBLIC_ROUTES.some((p) => nextUrl.pathname.startsWith(p));
-
-  // In middleware, nextUrl.pathname is basePath-stripped, and NextResponse
-  // redirects are NOT auto-prefixed — so we add basePath ('/dashboard') back
-  // onto absolute redirect targets to keep them inside this zone.
-  const base = nextUrl.basePath || "";
+  // basePath ('/dashboard') is only SOMETIMES stripped from nextUrl.pathname in
+  // this multi-zone proxy setup, so normalize it ourselves before matching —
+  // otherwise '/dashboard/login' fails the PUBLIC_ROUTES check, the login page
+  // gets guarded, and it redirects in a loop to a 404. NextResponse redirects
+  // are NOT auto-prefixed, so we also add basePath back onto redirect targets.
+  const base = nextUrl.basePath || "/dashboard";
+  const path = nextUrl.pathname.startsWith(base)
+    ? nextUrl.pathname.slice(base.length) || "/"
+    : nextUrl.pathname;
+  const isPublic = PUBLIC_ROUTES.some((p) => path === p || path.startsWith(p));
 
   // Unauthenticated users hitting a protected route → /login (with return path).
   if (!isAuthed && !isPublic) {
     const url = new URL(`${base}/login`, nextUrl);
     // callbackUrl stays basePath-relative; the login form's router.push()
     // re-applies basePath automatically.
-    url.searchParams.set("callbackUrl", nextUrl.pathname + nextUrl.search);
+    url.searchParams.set("callbackUrl", path + nextUrl.search);
     return withSecurityHeaders(NextResponse.redirect(url));
   }
 
