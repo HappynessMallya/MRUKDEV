@@ -10,6 +10,17 @@ import type {
   ProductInput,
   ProductListQuery,
 } from "@/lib/validations";
+import { ApiError, apiFetch } from "@/lib/api/client";
+import {
+  findLeafCategoryId,
+  mapBackendCategories,
+  mapBackendList,
+  mapBackendProduct,
+  productInputToPayload,
+  type BackendCategory,
+  type BackendListEnvelope,
+  type BackendProduct,
+} from "@/lib/api/products-map";
 
 /**
  * In-memory mock store. Persists for the life of the server process (fine for
@@ -257,41 +268,114 @@ const store: { products: Product[] } = { products: seed() };
 
 /* ──────────────────────────── Reads ──────────────────────────────── */
 
+// Reads now come from the live Fanisi catalog. Product reads are PUBLIC (only
+// the tenant header is needed — apiFetch adds it), so they work without a
+// backend token even under the dev auth bypass. Writes below still use the mock
+// store until the create/update path is mapped to CreateProductDto.
+
 export async function getCategories(): Promise<Category[]> {
-  return CATEGORIES;
+  try {
+    const tree = (await apiFetch("/categories", {
+      authenticated: false,
+      next: { revalidate: 300 },
+    })) as BackendCategory[];
+    return mapBackendCategories(tree);
+  } catch {
+    return CATEGORIES; // fallback to mock if the API is unreachable
+  }
 }
 
 export async function getProducts(
   query: ProductListQuery,
 ): Promise<ProductListResult> {
-  const { page, pageSize, search, category, subcategory, status } = query;
-  let rows = store.products;
-
-  if (category) rows = rows.filter((p) => p.category === category);
-  if (subcategory) rows = rows.filter((p) => p.subcategory === subcategory);
-  if (status) rows = rows.filter((p) => p.status === status);
-  if (search) {
-    const q = search.toLowerCase();
-    rows = rows.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.model.toLowerCase().includes(q) ||
-        p.variants.some((v) => v.sku.toLowerCase().includes(q)),
-    );
-  }
-
-  const total = rows.length;
-  const start = (page - 1) * pageSize;
-  const data = rows.slice(start, start + pageSize);
-  return { data, total, page, pageSize };
+  const env = (await apiFetch("/products", {
+    authenticated: false,
+    query: {
+      page: query.page,
+      limit: query.pageSize,
+      search: query.search,
+      // dashboard "published" filter → backend isPublished; draft → false.
+      isPublished:
+        query.status === "published"
+          ? true
+          : query.status === "draft"
+            ? false
+            : undefined,
+    },
+    next: { revalidate: 30 },
+  })) as BackendListEnvelope;
+  return mapBackendList(env);
 }
 
 export async function getProduct(id: string): Promise<Product | null> {
-  return store.products.find((p) => p.id === id) ?? null;
+  try {
+    const p = (await apiFetch(`/products/${id}`, {
+      authenticated: false,
+      next: { revalidate: 30 },
+    })) as BackendProduct;
+    return mapBackendProduct(p);
+  } catch {
+    return null;
+  }
 }
 
-/* ─────────────────────────── Mutations ───────────────────────────── */
-// Called only by guarded Server Actions (lib/actions/products.ts).
+/* ─────────────── Backend writes (require a real admin token) ─────────────── */
+// These hit the admin write path on the live backend. They need a valid backend
+// JWT, so they work only after a REAL admin login (admin@mruk.com) — the dev
+// bypass token is rejected by the backend with 401.
+
+async function resolveCategoryId(
+  category: string,
+  subcategory: string,
+): Promise<string> {
+  const tree = (await apiFetch("/categories", {
+    authenticated: false,
+  })) as BackendCategory[];
+  const id = findLeafCategoryId(tree, category, subcategory);
+  if (!id) {
+    throw new ApiError(400, `Unknown category "${category} / ${subcategory}".`);
+  }
+  return id;
+}
+
+export async function createProductOnApi(
+  input: ProductInput,
+): Promise<{ id: string }> {
+  const categoryId = await resolveCategoryId(input.category, input.subcategory);
+  const payload = productInputToPayload(input, categoryId, true);
+  const created = (await apiFetch("/products", {
+    method: "POST",
+    body: payload,
+  })) as { id: string };
+  return { id: created.id };
+}
+
+export async function updateProductOnApi(
+  id: string,
+  input: ProductInput,
+): Promise<void> {
+  const categoryId = await resolveCategoryId(input.category, input.subcategory);
+  const payload = productInputToPayload(input, categoryId, false);
+  await apiFetch(`/products/${id}`, { method: "PATCH", body: payload });
+}
+
+export async function deleteProductOnApi(id: string): Promise<void> {
+  await apiFetch(`/products/${id}`, { method: "DELETE" });
+}
+
+export async function setStatusOnApi(
+  id: string,
+  status: ProductStatus,
+): Promise<void> {
+  await apiFetch(`/products/${id}`, {
+    method: "PATCH",
+    body: { isPublished: status === "published" },
+  });
+}
+
+/* ─────────────────────────── Mutations (mock) ───────────────────────────── */
+// Legacy in-memory writes — superseded by the *OnApi functions above. Kept for
+// reference/offline dev only.
 
 function toVariants(input: ProductInput["variants"]): Product["variants"] {
   return input.map((v, i) => ({

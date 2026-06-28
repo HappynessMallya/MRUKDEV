@@ -10,7 +10,6 @@ import {
   ProductSpecs,
   ProductDiscover,
 } from '@/components/product'
-import { CATEGORIES } from '@/data/products'
 import { getProduct, listAllSlugs } from '@/lib/catalog'
 import { getTenantConfig } from '@/lib/tenant'
 
@@ -21,10 +20,9 @@ interface SearchParams {
 }
 
 function fallbackUrl(from: string | undefined): string {
-  if (from && CATEGORIES.some((c) => c.slug === from)) {
-    return `/products?category=${from}`
-  }
-  return '/products'
+  // `from` is a category slug appended by home-page links; send a missing SKU
+  // back to that category landing (or the full catalog if absent).
+  return from ? `/products?category=${encodeURIComponent(from)}` : '/products'
 }
 
 // Pre-render every product slug at build time. Once the backend is live this

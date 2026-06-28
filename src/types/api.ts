@@ -96,6 +96,10 @@ export interface ApiCategory {
   slug: string
   name: Localized
   parentId?: string | null
+  icon?: string | null
+  image?: string | null
+  sortOrder?: number
+  isActive?: boolean
   // /categories returns a 2-level tree: roots carry immediate children only.
   children?: ApiCategory[]
 }
@@ -139,6 +143,42 @@ export interface ApiProduct {
   updatedAt?: string
 }
 
+// ── Inquiries ────────────────────────────────────────────────────────────────
+// Lead capture. POST /inquiries is public (a Bearer token, when present, links
+// the inquiry to that user). `source` tags the channel; WhatsApp/email are
+// click-to-chat handoffs the storefront opens in addition to this POST.
+export type InquirySource = 'web' | 'whatsapp' | 'email'
+
+// NOTE: when an item is sent, the backend validates `productId` AND `sku` as
+// required non-empty strings (despite being typed optional here for callers that
+// send an empty `items: []`). Only attach an item when both are known.
+export interface InquiryItemInput {
+  productId?: string
+  productName?: string
+  sku?: string
+  quantity?: number
+  notes?: string
+}
+
+export interface InquiryInput {
+  contactName: string
+  // At least one contact channel should be provided.
+  contactEmail?: string
+  contactPhone?: string
+  company?: string
+  message: string
+  source?: InquirySource
+  items?: InquiryItemInput[]
+}
+
+export interface ApiInquiry {
+  id: string
+  inquiryNumber: string
+  status: string
+  source: InquirySource
+  items?: InquiryItemInput[]
+}
+
 // ── Auth ────────────────────────────────────────────────────────────────────
 export interface ApiAuthUser {
   id: string
@@ -148,16 +188,20 @@ export interface ApiAuthUser {
   roleSlug: string
 }
 
-// POST /auth/login → access token only (no refresh token); 7-day lifetime.
+// POST /auth/login & POST /auth/refresh → both tokens in the body (no cookie).
+// Access token 7-day, refresh token 30-day. Store both client-side.
 export interface ApiLoginResponse {
   accessToken: string
+  refreshToken: string
   user: ApiAuthUser
 }
 
-// POST /auth/register → no token; distributor profiles are admin-provisioned
-// before they can log in.
+// POST /auth/register → no token. Customers are active immediately
+// (`pendingApproval` false/absent); distributors come back `pendingApproval:true`
+// and cannot log in until an admin approves them.
 export interface ApiRegisterResponse {
   message: string
+  pendingApproval?: boolean
   user: ApiAuthUser
 }
 

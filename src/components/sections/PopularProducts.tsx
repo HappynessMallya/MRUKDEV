@@ -10,14 +10,18 @@ export interface PopularProductsProps {
   source?: string
   sourceValue?: string
   limit?: number
+  // Real product cards injected server-side (see catalog.enrichHomeSections).
+  // Falls back to MOCK_POPULAR when absent/empty so the row always renders.
+  products?: ProductCardData[]
 }
 
 // Frame 48 in Figma — centered heading + a 3-card row. Cards share the same
 // surface treatment as the featured grid but use the larger `popular` variant
 // so the product image reads cleaner at three-up.
-export function PopularProducts({ heading, limit = 3 }: PopularProductsProps) {
+export function PopularProducts({ heading, limit = 3, products: injected }: PopularProductsProps) {
   const t = useTenantStore((s) => s.t)
-  const products = MOCK_POPULAR.slice(0, limit)
+  const source = injected && injected.length > 0 ? injected : MOCK_POPULAR
+  const products = source.slice(0, limit)
 
   return (
     <section className="bg-background py-14 md:py-16">

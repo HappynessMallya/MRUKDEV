@@ -9,10 +9,10 @@ import {
 } from "@/lib/validations";
 import {
   applyBulkInventory,
-  createProductRecord,
-  deleteProductRecord,
-  setProductStatus,
-  updateProductRecord,
+  createProductOnApi,
+  deleteProductOnApi,
+  setStatusOnApi,
+  updateProductOnApi,
 } from "@/lib/data/products";
 import type { ProductStatus } from "@/types/product";
 
@@ -39,7 +39,7 @@ export async function createProduct(
         fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
       };
     }
-    const product = createProductRecord(parsed.data);
+    const product = await createProductOnApi(parsed.data);
     revalidatePath("/products");
     return { ok: true, data: { id: product.id } };
   } catch (err) {
@@ -61,8 +61,7 @@ export async function updateProduct(
         fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
       };
     }
-    const updated = updateProductRecord(id, parsed.data);
-    if (!updated) return { ok: false, error: "Product not found." };
+    await updateProductOnApi(id, parsed.data);
     revalidatePath("/products");
     revalidatePath(`/products/${id}/edit`);
     return { ok: true, data: { id } };
@@ -77,8 +76,7 @@ export async function changeProductStatus(
 ): Promise<ActionResult> {
   try {
     await requireRole("EDITOR");
-    const updated = setProductStatus(id, status);
-    if (!updated) return { ok: false, error: "Product not found." };
+    await setStatusOnApi(id, status);
     revalidatePath("/products");
     return { ok: true, data: undefined };
   } catch (err) {
@@ -90,8 +88,7 @@ export async function deleteProduct(id: string): Promise<ActionResult> {
   try {
     // Deleting is higher-privilege than editing.
     await requireRole("ADMIN");
-    const removed = deleteProductRecord(id);
-    if (!removed) return { ok: false, error: "Product not found." };
+    await deleteProductOnApi(id);
     revalidatePath("/products");
     return { ok: true, data: undefined };
   } catch (err) {

@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'bucket.mruk.co.tz' },
       { protocol: 'https', hostname: '*.mruk.co.tz' },
+      // Cloudflare R2 bucket (mruk-product-images) — the backend returns
+      // product/category image URLs from this host.
+      { protocol: 'https', hostname: 'pub-1c80634c6ca74f99a1583b3d9b57f3de.r2.dev' },
       // Temporary placeholder source — used for music + agriculture product
       // mocks until the real catalog photography is supplied. Drop this entry
       // once every product image lives under /products/<category>/.

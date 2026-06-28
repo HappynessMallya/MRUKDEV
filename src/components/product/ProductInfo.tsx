@@ -11,9 +11,22 @@ import { cn } from '@/lib/cn'
 import type { Product } from '@/types/product'
 import type { BilingualText } from '@/types/tenant'
 
-// Frame 204 right column — name, model code, bullet features, an optional
-// color picker, and three CTAs: Get Quotation (outline), Add to Cart (solid),
-// and a full-width WhatsApp-to-order pill underneath.
+function formatMoney(amount: number, currency = 'TZS'): string {
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount)
+  } catch {
+    // Unknown ISO currency → fall back to a plain prefixed number.
+    return `${currency} ${amount.toLocaleString()}`
+  }
+}
+
+// Frame 204 right column — name, model code, stock badge, price (when priced),
+// bullet features, an optional color picker, three CTAs (Get Quotation, Add to
+// Cart, WhatsApp-to-order), and any downloadable spec sheets / catalogues.
 export function ProductInfo({ product }: { product: Product }) {
   const t = useTenantStore((s) => s.t)
   const config = useTenantStore((s) => s.config)
@@ -29,7 +42,21 @@ export function ProductInfo({ product }: { product: Product }) {
   const addToCart = texts.addToCart ?? { en: 'Add to cart' }
   const getQuote = texts.getQuote ?? { en: 'Get a quotation' }
   const outOfStock = texts.outOfStock ?? { en: 'Out of stock' }
+  const inStock = texts.inStock ?? { en: 'In stock' }
+  const downloadsTitle = texts.downloads ?? { en: 'Downloads' }
   const whatsapp = config?.global.contact.whatsapp
+
+  const isOutOfStock = product.isAvailable === false
+
+  // Quote-only products carry no price; otherwise show a single price or the
+  // backend-computed variant range (`product.priceRange`).
+  const priceLabel = product.price
+    ? formatMoney(product.price.amount, product.price.currency)
+    : product.priceRange
+      ? product.priceRange.min === product.priceRange.max
+        ? formatMoney(product.priceRange.min, product.priceRange.currency)
+        : `${formatMoney(product.priceRange.min, product.priceRange.currency)} – ${formatMoney(product.priceRange.max, product.priceRange.currency)}`
+      : undefined
 
   const whatsappHref = whatsapp
     ? `https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi, I'd like to order: ${t(product.name)}`)}`
@@ -52,6 +79,37 @@ export function ProductInfo({ product }: { product: Product }) {
           {product.model}
         </p>
       )}
+
+      <div className="flex flex-wrap items-center gap-3">
+        <span
+          className={cn(
+            'inline-flex items-center gap-1.5 rounded-full px-3 py-1',
+            isOutOfStock
+              ? 'bg-red-50 text-red-600'
+              : 'bg-green-50 text-green-700'
+          )}
+          style={{ fontSize: 13, lineHeight: '18px', fontWeight: 600 }}
+        >
+          <Icon
+            icon={
+              isOutOfStock
+                ? 'material-symbols:cancel-outline'
+                : 'material-symbols:check-circle-outline'
+            }
+            width={15}
+          />
+          {t(isOutOfStock ? outOfStock : inStock)}
+        </span>
+
+        {priceLabel && (
+          <span
+            className="font-heading text-foreground"
+            style={{ fontSize: 22, lineHeight: '26px', fontWeight: 700 }}
+          >
+            {priceLabel}
+          </span>
+        )}
+      </div>
 
       {product.featureBullets && product.featureBullets.length > 0 && (
         <ul className="mt-2 list-disc space-y-2 pl-5 marker:text-foreground">
@@ -101,7 +159,7 @@ export function ProductInfo({ product }: { product: Product }) {
       )}
 
       <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {product.isAvailable === false ? (
+        {isOutOfStock ? (
           <Button variant="solid" size="md" disabled fullWidth className="sm:col-span-2">
             {t(outOfStock)}
           </Button>
@@ -145,7 +203,7 @@ export function ProductInfo({ product }: { product: Product }) {
         )}
       </div>
 
-      {whatsappHref && product.isAvailable !== false && (
+      {whatsappHref && !isOutOfStock && (
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
           <Button
             variant="solid"
@@ -156,6 +214,33 @@ export function ProductInfo({ product }: { product: Product }) {
             WhatsApp to order
           </Button>
         </a>
+      )}
+
+      {product.documents && product.documents.length > 0 && (
+        <div className="mt-3 space-y-2 border-t border-gray-100 pt-4">
+          <p
+            className="text-foreground"
+            style={{ fontSize: 14, lineHeight: '20px', fontWeight: 700 }}
+          >
+            {t(downloadsTitle)}
+          </p>
+          <ul className="space-y-2">
+            {product.documents.map((doc) => (
+              <li key={doc.id}>
+                <a
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                  style={{ fontSize: 14, lineHeight: '20px', fontWeight: 500 }}
+                >
+                  <Icon icon="material-symbols:download" width={16} />
+                  {doc.name ?? 'Download'}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   )

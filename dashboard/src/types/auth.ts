@@ -16,27 +16,21 @@ export function hasAtLeastRole(role: Role, required: Role): boolean {
 }
 
 /**
- * The Fanisi backend returns a lowercase `roleSlug` (e.g. "admin",
- * "super_admin", "distributor"); the dashboard's RBAC uses the uppercase Role
- * enum. Map known admin/staff slugs onto roles; everything else (customer,
- * distributor, unknown) falls back to the least-privileged VIEWER.
- *
- * NOTE: confirm the exact admin role slug(s) the backend seeds for the `mr-uk`
- * tenant and extend this map accordingly.
+ * The Fanisi backend returns a lowercase `roleSlug`; the dashboard's RBAC uses
+ * the uppercase Role enum. Confirmed tenant roles are exactly `admin`, `staff`,
+ * `distributor`, `customer` (no editor/super_admin at the tenant level —
+ * super_admin is a separate platform role). `admin` is the highest tenant role,
+ * so it maps to the dashboard's top role for full access; distributors/customers
+ * are not admin-dashboard users → least-privileged VIEWER.
  */
 export function roleFromSlug(slug: string): Role {
   switch (slug.toLowerCase()) {
-    case "super_admin":
-    case "superadmin":
-    case "owner":
-      return "SUPER_ADMIN";
     case "admin":
-      return "ADMIN";
-    case "editor":
-    case "manager":
+      return "SUPER_ADMIN";
     case "staff":
       return "EDITOR";
     default:
+      // distributor, customer, anything unknown
       return "VIEWER";
   }
 }

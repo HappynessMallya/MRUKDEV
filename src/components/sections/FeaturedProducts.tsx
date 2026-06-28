@@ -28,17 +28,24 @@ export interface FeaturedProductsProps {
   heading: BilingualText
   tabs?: { enabled: boolean; items?: TabItem[] }
   limit?: number
+  // Real product cards per tab `category` slug, injected server-side (see
+  // catalog.enrichHomeSections). Tabs missing from this map fall back to
+  // MOCK_PRODUCTS for that category, so the grid is never empty.
+  productsByCategory?: Record<string, ProductCardData[]>
 }
 
 // Frame 55 in Figma — section heading + text-only tab row, a category hero
 // card (lifestyle image left, copy + CTA right), and a 4-up product grid.
-export function FeaturedProducts({ heading, tabs, limit = 4 }: FeaturedProductsProps) {
+export function FeaturedProducts({ heading, tabs, limit = 4, productsByCategory }: FeaturedProductsProps) {
   const t = useTenantStore((s) => s.t)
   const tabItems = tabs?.items ?? []
   const [activeId, setActiveId] = useState(tabItems[0]?.id ?? '')
 
   const activeTab = tabItems.find((tt) => tt.id === activeId) ?? tabItems[0]
-  const products = (activeTab && MOCK_PRODUCTS[activeTab.category]) ?? []
+  const live = activeTab ? productsByCategory?.[activeTab.category] : undefined
+  const products = live && live.length > 0
+    ? live
+    : (activeTab && MOCK_PRODUCTS[activeTab.category]) ?? []
 
   return (
     <section className="bg-background py-14 md:py-16">

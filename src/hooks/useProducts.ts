@@ -19,7 +19,7 @@ export function useProducts(params?: ListProductsParams) {
     queryKey: ['products', params],
     queryFn: async () => {
       const res = await listProducts(params)
-      return { items: res.data.map(mapProduct), meta: res.meta }
+      return { items: res.data.map((p) => mapProduct(p)), meta: res.meta }
     },
     staleTime: 60_000,
   })

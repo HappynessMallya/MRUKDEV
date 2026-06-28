@@ -8,8 +8,11 @@ import {
   FilterSidebar,
   ProductListCard,
 } from '@/components/product-list'
-import { getCategoryLabel, getSubcategories } from '@/data/products'
-import { getProductsByCategory } from '@/lib/catalog'
+import {
+  getCategoryLabel,
+  getProductsByCategory,
+  getSubcategories,
+} from '@/lib/catalog'
 import { getTenantConfig } from '@/lib/tenant'
 import type { Product } from '@/types/product'
 
@@ -45,7 +48,7 @@ export async function generateMetadata({
   const { category } = await searchParams
   const tenant = await getTenantConfig()
   const lang = tenant.defaultLang
-  const catLabel = category ? getCategoryLabel(category) : null
+  const catLabel = category ? await getCategoryLabel(category) : null
   const heading = catLabel ? (catLabel[lang] ?? catLabel.en) : 'All products'
   return {
     title: `${heading} — ${tenant.identity.companyName}`,
@@ -60,9 +63,11 @@ export default async function ProductsListPage({
 }) {
   const { category, sub, sort } = await searchParams
 
-  const products = sortProducts(await getProductsByCategory(category, sub), sort)
-  const subcategories = getSubcategories(category)
-  const catLabel = category ? getCategoryLabel(category) : null
+  const [products, subcategories, catLabel] = await Promise.all([
+    getProductsByCategory(category, sub).then((p) => sortProducts(p, sort)),
+    getSubcategories(category),
+    category ? getCategoryLabel(category) : Promise.resolve(null),
+  ])
   const heading = catLabel
     ? { en: `Explore ${catLabel.en.toLowerCase()}`, sw: catLabel.sw && `Tazama ${catLabel.sw.toLowerCase()}` }
     : { en: 'Explore products' }

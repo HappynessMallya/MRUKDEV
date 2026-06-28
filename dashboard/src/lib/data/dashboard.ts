@@ -1,50 +1,86 @@
 import "server-only";
+import { z } from "zod";
 import type { DashboardOverview } from "@/types/dashboard";
 import type { AppNotification } from "@/types/notification";
+import { apiFetch } from "@/lib/api/client";
+import { formatNumber, formatTSh } from "@/lib/format";
 
 const minutesAgo = (m: number) => new Date(Date.now() - m * 60_000).toISOString();
 
-/**
- * Dashboard overview.
- *
- * MOCK for now. When the backend is ready, replace the body with:
- *
- *   import { apiFetch } from "@/lib/api/client";
- *   import { dashboardOverviewSchema } from "@/lib/validations";
- *   return apiFetch("/dashboard/overview", {
- *     schema: dashboardOverviewSchema,
- *     next: { revalidate: 60, tags: ["dashboard"] },
- *   });
- */
+// GET /dashboard/overview — flat all-time KPI snapshot (admin/staff). The
+// backend has no time-series or activity feed, so the chart/activity panels are
+// returned empty; revenue is `sum(amountPaid)` in major-unit TZS.
+const overviewSchema = z.object({
+  products: z.object({ total: z.number(), published: z.number() }),
+  categories: z.number(),
+  inquiries: z.object({ total: z.number() }),
+  proformas: z.object({ total: z.number() }),
+  invoices: z.object({
+    total: z.number(),
+    revenue: z.number(),
+    grossBilled: z.number().optional(),
+  }),
+  distributors: z.object({ total: z.number(), pending: z.number() }),
+  customers: z.object({ total: z.number() }),
+});
+
 export async function getDashboardOverview(): Promise<DashboardOverview> {
+  const o = await apiFetch("/dashboard/overview", {
+    schema: overviewSchema,
+    next: { revalidate: 60, tags: ["dashboard"] },
+  });
+
   return {
     kpis: [
-      { key: "revenue", label: "Total Revenue", value: "TSh 124.8M", hint: "+12.4%", hintTrend: "up" },
-      { key: "distributors", label: "Active Distributors", value: "842", hint: "+18 this week", hintTrend: "up" },
-      { key: "inventory", label: "Inventory Health", value: "94%", hint: "5 Low SKUs", hintTrend: "down" },
-      { key: "inquiries", label: "Open Inquiries", value: "42", hint: "avg. 4h response", hintTrend: "neutral" },
+      {
+        key: "revenue",
+        label: "Revenue Collected",
+        value: formatTSh(o.invoices.revenue),
+        hint: o.invoices.grossBilled != null ? `${formatTSh(o.invoices.grossBilled)} billed` : undefined,
+        hintTrend: "neutral",
+      },
+      {
+        key: "distributors",
+        label: "Distributors",
+        value: formatNumber(o.distributors.total),
+        hint: o.distributors.pending > 0 ? `${o.distributors.pending} pending` : "none pending",
+        hintTrend: o.distributors.pending > 0 ? "down" : "up",
+      },
+      {
+        key: "inventory",
+        label: "Published Products",
+        value: `${formatNumber(o.products.published)} / ${formatNumber(o.products.total)}`,
+        hint: `${formatNumber(o.categories)} categories`,
+        hintTrend: "neutral",
+      },
+      {
+        key: "inquiries",
+        label: "Open Inquiries",
+        value: formatNumber(o.inquiries.total),
+        hint: `${formatNumber(o.proformas.total)} proformas`,
+        hintTrend: "neutral",
+      },
     ],
-    chart: {
-      points: [
-        { week: "W1", quotes: 420, orders: 360 },
-        { week: "W2", quotes: 510, orders: 452 },
-        { week: "W3", quotes: 640, orders: 590 },
-        { week: "W4", quotes: 570, orders: 490 },
-      ],
-      totalQuotes: 2140,
-      totalOrders: 1892,
-      conversionRate: 88.4,
-    },
-    activity: [
-      { id: "a1", kind: "distributor", message: "Zahara Logistics registered as a new distributor in Arusha.", createdAt: minutesAgo(2) },
-      { id: "a2", kind: "quote", message: "Bulk Quote #4902 has been finalized by Admin.", createdAt: minutesAgo(45) },
-      { id: "a3", kind: "stock", message: "Stock Level Updated: SKU-990 Smart Oven (Mwanza Hub).", createdAt: minutesAgo(180) },
-      { id: "a4", kind: "verification", message: "Tanzanite Retailers completed onboarding verification.", createdAt: minutesAgo(300) },
-    ],
+    // No time-series from the backend yet.
+    chart: { points: [], totalQuotes: o.proformas.total, totalOrders: o.invoices.total, conversionRate: 0 },
+    activity: [],
     actions: [
-      { id: "act1", label: "Pending Approvals", description: "Requires immediate review", count: 8, severity: "danger", href: "/distributors" },
-      { id: "act2", label: "Unresolved Inquiries", description: "Wait time exceeding 2h", count: 12, severity: "info", href: "/inquiries" },
-      { id: "act3", label: "Low Stock Alerts", description: "SKU availability critical", count: 5, severity: "warning", href: "/products" },
+      {
+        id: "act-approvals",
+        label: "Pending Approvals",
+        description: "Distributor applications awaiting review",
+        count: o.distributors.pending,
+        severity: "danger",
+        href: "/distributors?status=pending",
+      },
+      {
+        id: "act-inquiries",
+        label: "Open Inquiries",
+        description: "Customer & distributor requests",
+        count: o.inquiries.total,
+        severity: "info",
+        href: "/inquiries",
+      },
     ],
   };
 }

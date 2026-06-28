@@ -3,20 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth-guard";
-import { ApiError } from "@/lib/api/client";
+import { ApiError, apiFetch } from "@/lib/api/client";
 import { ARTICLE_STATUSES, articleInputSchema } from "@/lib/validations";
-import {
-  createArticleRecord,
-  deleteArticleRecord,
-  setArticleStatus,
-  updateArticleRecord,
-} from "@/lib/data/articles";
+import { articleInputToPayload } from "@/lib/api/articles-map";
 import type { ActionResult } from "@/lib/actions/products";
 
 function fail(err: unknown): ActionResult<never> {
   if (err instanceof ApiError) return { ok: false, error: err.message };
   return { ok: false, error: "Something went wrong. Please try again." };
 }
+
+const createdSchema = z.object({ id: z.string() });
 
 export async function createArticle(
   values: unknown,
@@ -31,9 +28,13 @@ export async function createArticle(
         fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
       };
     }
-    const article = createArticleRecord(parsed.data);
+    const created = await apiFetch("/articles", {
+      method: "POST",
+      body: articleInputToPayload(parsed.data),
+      schema: createdSchema,
+    });
     revalidatePath("/articles");
-    return { ok: true, data: { id: article.id } };
+    return { ok: true, data: { id: created.id } };
   } catch (err) {
     return fail(err);
   }
@@ -53,8 +54,10 @@ export async function updateArticle(
         fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
       };
     }
-    const updated = updateArticleRecord(id, parsed.data);
-    if (!updated) return { ok: false, error: "Article not found." };
+    await apiFetch(`/articles/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: articleInputToPayload(parsed.data),
+    });
     revalidatePath("/articles");
     revalidatePath(`/articles/${id}`);
     return { ok: true, data: { id } };
@@ -71,8 +74,11 @@ export async function changeArticleStatus(
     await requireRole("EDITOR");
     const parsed = z.enum(ARTICLE_STATUSES).safeParse(status);
     if (!parsed.success) return { ok: false, error: "Invalid status." };
-    const updated = setArticleStatus(id, parsed.data);
-    if (!updated) return { ok: false, error: "Article not found." };
+    // Backend only has isPublished — "scheduled" has no equivalent (→ unpublished).
+    await apiFetch(`/articles/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: { isPublished: parsed.data === "published" },
+    });
     revalidatePath("/articles");
     return { ok: true, data: undefined };
   } catch (err) {
@@ -83,8 +89,7 @@ export async function changeArticleStatus(
 export async function deleteArticle(id: string): Promise<ActionResult> {
   try {
     await requireRole("ADMIN");
-    const removed = deleteArticleRecord(id);
-    if (!removed) return { ok: false, error: "Article not found." };
+    await apiFetch(`/articles/${encodeURIComponent(id)}`, { method: "DELETE" });
     revalidatePath("/articles");
     return { ok: true, data: undefined };
   } catch (err) {

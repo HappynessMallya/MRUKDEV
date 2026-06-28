@@ -3,17 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth-guard";
-import { ApiError } from "@/lib/api/client";
+import { ApiError, apiFetch } from "@/lib/api/client";
 import {
   INQUIRY_BADGES,
   INQUIRY_STATUSES,
   quoteUpdateSchema,
 } from "@/lib/validations";
-import {
-  saveQuoteRecord,
-  setInquiryStatus,
-  toggleInquiryBadgeRecord,
-} from "@/lib/data/inquiries";
+import { toBackendStatus } from "@/lib/api/inquiries-map";
 import type { ActionResult } from "@/lib/actions/products";
 
 function fail(err: unknown): ActionResult<never> {
@@ -29,8 +25,10 @@ export async function updateInquiryStatus(
     await requireRole("EDITOR");
     const parsed = z.enum(INQUIRY_STATUSES).safeParse(status);
     if (!parsed.success) return { ok: false, error: "Invalid status." };
-    const updated = setInquiryStatus(id, parsed.data);
-    if (!updated) return { ok: false, error: "Inquiry not found." };
+    await apiFetch(`/inquiries/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: { status: toBackendStatus(parsed.data) },
+    });
     revalidatePath("/inquiries");
     revalidatePath(`/inquiries/${id}`);
     return { ok: true, data: undefined };
@@ -43,18 +41,12 @@ export async function toggleInquiryBadge(
   id: string,
   badge: unknown,
 ): Promise<ActionResult> {
-  try {
-    await requireRole("EDITOR");
-    const parsed = z.enum(INQUIRY_BADGES).safeParse(badge);
-    if (!parsed.success) return { ok: false, error: "Invalid badge." };
-    const updated = toggleInquiryBadgeRecord(id, parsed.data);
-    if (!updated) return { ok: false, error: "Inquiry not found." };
-    revalidatePath("/inquiries");
-    revalidatePath(`/inquiries/${id}`);
-    return { ok: true, data: undefined };
-  } catch (err) {
-    return fail(err);
-  }
+  // Badges (high_value / urgent / new_seller) are a dashboard-only concept —
+  // the backend inquiry has no equivalent field, so this can't persist yet.
+  void id;
+  const parsed = z.enum(INQUIRY_BADGES).safeParse(badge);
+  if (!parsed.success) return { ok: false, error: "Invalid badge." };
+  return { ok: false, error: "Tagging inquiries isn’t supported by the backend yet." };
 }
 
 export async function saveQuote(
@@ -62,20 +54,15 @@ export async function saveQuote(
   values: unknown,
   mode: "draft" | "send",
 ): Promise<ActionResult> {
-  try {
-    await requireRole("EDITOR");
-    const parsed = quoteUpdateSchema.safeParse(values);
-    if (!parsed.success) {
-      return { ok: false, error: "Please review the quote line items." };
-    }
-    const updated = saveQuoteRecord(id, parsed.data, {
-      markSent: mode === "send",
-    });
-    if (!updated) return { ok: false, error: "Inquiry not found." };
-    revalidatePath("/inquiries");
-    revalidatePath(`/inquiries/${id}`);
-    return { ok: true, data: undefined };
-  } catch (err) {
-    return fail(err);
-  }
+  // The quote builder (line prices, tax, delivery) maps to the backend's
+  // separate PROFORMA flow, which isn't wired into the dashboard yet. Validate
+  // the input but don't pretend to persist it.
+  void id;
+  void mode;
+  const parsed = quoteUpdateSchema.safeParse(values);
+  if (!parsed.success) return { ok: false, error: "Please review the quote line items." };
+  return {
+    ok: false,
+    error: "Quoting will be wired through proformas in a later update.",
+  };
 }

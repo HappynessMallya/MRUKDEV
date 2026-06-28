@@ -13,14 +13,18 @@ export interface BlogPreviewProps {
   source?: string
   limit?: number
   cta?: { label: BilingualText; href: string }
+  // Real posts injected server-side (see catalog.enrichHomeSections). Falls
+  // back to MOCK_POSTS when absent/empty (e.g. no articles seeded yet).
+  posts?: BlogPostData[]
 }
 
 // Frame 49 in Figma — 'Explore Stories'. Heading + subtitle, then a 3-up grid
-// of blog cards, then a "View all posts" CTA. Until the backend is live we
-// show 3 mock posts so the layout reads correctly.
-export function BlogPreview({ heading, subtitle, limit = 3, cta }: BlogPreviewProps) {
+// of blog cards, then a "View all posts" CTA. Falls back to mock posts when no
+// articles are available so the layout always reads correctly.
+export function BlogPreview({ heading, subtitle, limit = 3, cta, posts: injected }: BlogPreviewProps) {
   const t = useTenantStore((s) => s.t)
-  const posts = MOCK_POSTS.slice(0, limit)
+  const source = injected && injected.length > 0 ? injected : MOCK_POSTS
+  const posts = source.slice(0, limit)
 
   return (
     <section className="bg-background py-14 md:py-16">

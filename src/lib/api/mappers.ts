@@ -18,6 +18,7 @@ import type {
   ColorVariant,
   HighlightIcon,
   Product,
+  ProductDocument,
   SpecRow,
 } from '@/types/product'
 import type { BilingualText } from '@/types/tenant'
@@ -89,6 +90,16 @@ function specs(api: ApiProduct): SpecRow[] | undefined {
   }))
 }
 
+// Ordered downloadable files (spec sheet / catalogue PDF).
+function documents(api: ApiProduct): ProductDocument[] | undefined {
+  const list = (api.documents ?? [])
+    .slice()
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .filter((d) => Boolean(d.url))
+    .map((d, i) => ({ id: d.id ?? `doc${i}`, url: d.url, name: d.name }))
+  return list.length > 0 ? list : undefined
+}
+
 function featureBullets(api: ApiProduct): BilingualText[] | undefined {
   const list = (api.highlights ?? [])
     .slice()
@@ -111,31 +122,79 @@ function compareSpecs(api: ApiProduct): Record<string, string> | undefined {
   return Object.keys(out).length > 0 ? out : undefined
 }
 
-export function mapProduct(api: ApiProduct): Product {
+// Index of every category by its ObjectId → { slug, parentSlug, label }.
+// Built from the /categories tree so a product (which only carries its LEAF
+// category) can be resolved to its top-level category for nav/filtering.
+export interface CategoryIndexEntry {
+  slug: string
+  parentSlug: string | null
+  label: BilingualText
+}
+export type CategoryIndex = Map<string, CategoryIndexEntry>
+
+export function buildCategoryIndex(tree: ApiCategory[]): CategoryIndex {
+  const idx: CategoryIndex = new Map()
+  for (const root of tree) {
+    idx.set(root.id, {
+      slug: root.slug,
+      parentSlug: null,
+      label: bi(root.name) ?? { en: root.slug },
+    })
+    for (const child of root.children ?? []) {
+      idx.set(child.id, {
+        slug: child.slug,
+        parentSlug: root.slug,
+        label: bi(child.name) ?? { en: child.slug },
+      })
+    }
+  }
+  return idx
+}
+
+export function mapProduct(api: ApiProduct, catIndex?: CategoryIndex): Product {
   const images = mediaUrls(api)
   const price =
     api.price != null && api.currency
       ? { amount: api.salePrice ?? api.price, currency: api.currency }
       : undefined
 
+  // Resolve the product's leaf category up to its top-level category. The
+  // product payload only includes the leaf (with a parentId, not a parent
+  // slug), so we look it up in the category index built from /categories.
+  let category = api.category?.slug ?? api.categoryId
+  let sub: string | undefined = api.category?.slug
+  const leafId = api.categoryId || api.category?.id
+  const entry = leafId ? catIndex?.get(leafId) : undefined
+  if (entry) {
+    if (entry.parentSlug) {
+      category = entry.parentSlug
+      sub = entry.slug
+    } else {
+      // Leaf is itself a top-level category (no children) → no subcategory.
+      category = entry.slug
+      sub = undefined
+    }
+  }
+
   return {
     id: api.id,
     slug: api.slug,
     name: bi(api.name) ?? { en: '' },
     model: api.modelNumber,
-    // Category slug from the included leaf category. The leaf's parent (top
-    // category) isn't on the product payload, so `category` holds the leaf
-    // slug; resolve the parent via the categories tree where the top-level
-    // grouping is needed. `sub` mirrors the leaf for subcategory filters.
-    category: api.category?.slug ?? api.categoryId,
-    sub: api.category?.slug,
+    category,
+    sub,
     shortDescription: bi(api.shortDescription),
     images,
     listImage: images[0],
     featureBullets: featureBullets(api),
     price,
+    priceRange:
+      api.priceRange != null
+        ? { ...api.priceRange, currency: api.currency }
+        : undefined,
     isAvailable: api.inStock ?? api.isPublished,
     stockCount: api.quantity,
+    documents: documents(api),
     colors: colors(api),
     highlightIcons: highlightIcons(api),
     characteristics: characteristicBlocks(api),

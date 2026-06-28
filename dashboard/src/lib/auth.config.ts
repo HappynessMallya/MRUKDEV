@@ -6,10 +6,13 @@ import type { NextAuthConfig } from "next-auth";
  * middleware bundle stays lightweight.
  */
 export const authConfig = {
-  // The app runs under basePath '/dashboard' (multi-zone), so Auth.js routes
-  // live at /dashboard/api/auth/*. This must match the SessionProvider basePath
-  // on the client (components/providers.tsx) or sign-in requests 404.
-  basePath: "/dashboard/api/auth",
+  // NOTE on basePath under multi-zone: the app runs with Next basePath
+  // '/dashboard', and Next STRIPS that prefix before the request reaches this
+  // route handler — so server-side Auth.js sees '/api/auth/*' and must keep the
+  // DEFAULT basePath ('/api/auth'). Only the browser-facing client needs the
+  // full '/dashboard/api/auth' (set on <SessionProvider basePath> in
+  // components/providers.tsx), because the browser builds absolute URLs that
+  // still include '/dashboard'. Setting basePath here breaks action parsing.
   pages: {
     signIn: "/login",
     error: "/login",

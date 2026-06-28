@@ -27,8 +27,14 @@ export interface Product {
 
   // Optional pricing — omitted entirely until commerce is wired
   price?: { amount: number; currency: string }
+  // Backend-computed price span across variants (`product.priceRange`). Null
+  // for quote-only products; present once variants carry prices.
+  priceRange?: { min: number; max: number; currency?: string }
   isAvailable?: boolean
   stockCount?: number
+
+  // Downloadable files (spec sheet / catalogue PDF) from `product.documents[]`.
+  documents?: ProductDocument[]
 
   // Optional color/variant picker shown above the CTAs on the PDP.
   colors?: ColorVariant[]
@@ -50,6 +56,13 @@ export interface Product {
 
   // IDs of related products (resolved against the products map)
   relatedSlugs?: string[]
+}
+
+export interface ProductDocument {
+  id: string
+  url: string
+  // Display label for the download link; falls back to a generic label.
+  name?: string
 }
 
 export interface ColorVariant {

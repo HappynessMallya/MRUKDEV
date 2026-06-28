@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { getTenantConfig } from '@/lib/tenant'
+import { getCategoryNavLinks, withCategoryNav } from '@/lib/catalog'
 import { getShell } from '@/layouts'
 import { TenantProvider } from '@/providers/TenantProvider'
 import { inter } from '@/lib/fonts'
@@ -30,8 +31,19 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const tenant = await getTenantConfig()
-  const Shell = getShell(tenant.layout)
-  const c = tenant.branding.colors
+
+  // Drive the navbar's top-level category links from the live catalog so the
+  // nav matches what users can actually browse. Falls back to the static config
+  // if categories can't be fetched.
+  let config = tenant
+  try {
+    config = withCategoryNav(tenant, await getCategoryNavLinks())
+  } catch {
+    config = tenant
+  }
+
+  const Shell = getShell(config.layout)
+  const c = config.branding.colors
 
   // Inject tenant brand tokens as CSS variables on :root so Tailwind utilities
   // (bg-primary, text-foreground, bg-surface, border-border-subtle, …) resolve
@@ -51,7 +63,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={tenant.defaultLang}
+      lang={config.defaultLang}
       className={inter.variable}
       // Browser extensions (Grammarly, password managers, CRX launchers, etc.)
       // commonly inject attributes onto <html> before React hydrates. We only
@@ -63,8 +75,8 @@ export default async function RootLayout({
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
       </head>
       <body>
-        <TenantProvider config={tenant}>
-          <Shell config={tenant}>{children}</Shell>
+        <TenantProvider config={config}>
+          <Shell config={config}>{children}</Shell>
         </TenantProvider>
       </body>
     </html>
