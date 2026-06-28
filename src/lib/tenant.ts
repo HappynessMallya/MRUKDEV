@@ -4,6 +4,11 @@ import { cache } from 'react'
 
 import mrukConfig from '@/data/tenants/mruk.json'
 import type { TenantConfig } from '@/types/tenant'
+import { applySiteConfig, getSiteConfig } from '@/lib/api/site-config'
+
+// When live, the CMS-owned `GET /site-config` overlays the static config's
+// `contact` (WhatsApp/email the inquiry handoff needs) and `features` toggles.
+const USE_API = process.env.NEXT_PUBLIC_USE_API === 'true'
 
 // Local registry — to be replaced with a fetch to the backend (`/api/tenants/:slug`)
 // once the backend is live. Keep the function signature stable so the swap is one line.
@@ -32,5 +37,10 @@ export const getTenantConfig = cache(async (): Promise<TenantConfig> => {
 
   const config = TENANTS[resolved]
   if (!config) throw new Error(`Tenant not found for slug "${resolved}" (host: ${host})`)
-  return config
+
+  // Overlay the live, dashboard-managed site-config when the API is on. The
+  // fetch is ISR-cached and returns null on any failure, so this never blocks a
+  // render or regresses to a broken state — it just falls back to the static config.
+  if (!USE_API) return config
+  return applySiteConfig(config, await getSiteConfig())
 })

@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { ImageIcon, X } from "lucide-react";
+import { ImageIcon, Loader2, Upload, X } from "lucide-react";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { requestUploadUrl } from "@/lib/actions/media";
 
 interface ImageUrlInputProps {
   id?: string;
@@ -24,9 +26,11 @@ function looksLikeUrl(value: string): boolean {
 }
 
 /**
- * URL-based image field with a live preview. Uses next/image with `unoptimized`
+ * Image field with a live preview, accepting either a pasted URL or a direct
+ * file upload. Uploads use the presigned-PUT flow (§8): a server action mints an
+ * R2 upload URL, the browser PUTs the bytes straight to R2, and the resulting
+ * public URL is written back via `onChange`. Uses next/image with `unoptimized`
  * so arbitrary (admin-provided) URLs render without remotePatterns config.
- * Ready to swap for a real upload once a storage endpoint exists.
  */
 export function ImageUrlInput({
   id,
@@ -39,7 +43,42 @@ export function ImageUrlInput({
   placeholder = "https://…",
 }: ImageUrlInputProps) {
   const [broken, setBroken] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const showPreview = looksLikeUrl(value) && !broken;
+
+  async function handleFile(file: File) {
+    setUploading(true);
+    try {
+      const presigned = await requestUploadUrl({
+        filename: file.name,
+        contentType: file.type,
+      });
+      if (!presigned.ok) {
+        toast.error(presigned.error);
+        return;
+      }
+      // Browser → R2 directly. The Content-Type MUST match what was presigned,
+      // or R2 rejects the PUT with a signature mismatch.
+      const put = await fetch(presigned.data.uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!put.ok) {
+        toast.error("Upload failed. Please try again.");
+        return;
+      }
+      setBroken(false);
+      onChange(presigned.data.publicUrl);
+      toast.success("Image uploaded.");
+    } catch {
+      toast.error("Upload failed. Check your connection and try again.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
 
   return (
     <div className="space-y-2">
@@ -81,17 +120,43 @@ export function ImageUrlInput({
           </div>
         )}
       </div>
-      <Input
-        id={id}
-        value={value}
-        placeholder={placeholder}
-        onChange={(e) => {
-          setBroken(false);
-          onChange(e.target.value);
-        }}
-        onBlur={onBlur}
-        aria-invalid={!!error}
-      />
+      <div className="flex items-center gap-2">
+        <Input
+          id={id}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => {
+            setBroken(false);
+            onChange(e.target.value);
+          }}
+          onBlur={onBlur}
+          aria-invalid={!!error}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) void handleFile(file);
+          }}
+        />
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          className="shrink-0"
+        >
+          {uploading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Upload className="size-4" />
+          )}
+          {uploading ? "Uploading…" : "Upload"}
+        </Button>
+      </div>
       {error && <p className="text-destructive text-sm">{error}</p>}
     </div>
   );
