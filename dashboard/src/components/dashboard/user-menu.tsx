@@ -69,7 +69,7 @@ export function UserMenu({ name, email, image, role }: UserMenuProps) {
           variant="destructive"
           onSelect={(e) => {
             e.preventDefault();
-            void signOut({ callbackUrl: "/login" });
+            void signOut({ callbackUrl: "/dashboard/login" });
           }}
         >
           <LogOut className="size-4" />
