@@ -42,8 +42,12 @@ export function BlogPreview({ heading, subtitle, limit = 3, cta, posts: injected
         )}
 
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
-          {posts.map((post) => (
-            <BlogCard key={post.id} post={post} />
+          {posts.map((post, i) => (
+            <BlogCard
+              key={post.id}
+              post={post}
+              fallbackImage={i % 2 === 0 ? '/stories/innovation-1.png' : '/stories/innovation-2.png'}
+            />
           ))}
         </div>
 

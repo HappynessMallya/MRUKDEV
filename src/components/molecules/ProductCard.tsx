@@ -47,7 +47,9 @@ export function ProductCard({
       )}
     >
       <Link href={product.href} className="block">
-        <div className="relative aspect-square w-full overflow-hidden rounded-xl">
+        {/* White "stage" so product photos (shot on white) blend seamlessly
+            instead of floating as a white square on the gray card. */}
+        <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
           {product.imageUrl && !imgErrored ? (
             <Image
               src={product.imageUrl}

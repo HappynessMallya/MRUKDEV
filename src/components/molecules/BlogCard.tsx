@@ -3,9 +3,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { Icon } from '@iconify/react'
 
 import { cn } from '@/lib/cn'
+
+// Bundled editorial fallback so a post with no cover (e.g. a live article the
+// admin hasn't given an image yet) still shows imagery rather than an empty
+// well. The admin's uploaded cover always wins once set.
+const DEFAULT_COVER = '/content/blog1.png'
 
 // Frame 49 in Figma — 'Explore Stories'. Soft surface card with a rounded
 // image well, then a centered title + excerpt. The whole tile is clickable.
@@ -19,8 +23,18 @@ export interface BlogPostData {
   minRead?: number
 }
 
-export function BlogCard({ post, className }: { post: BlogPostData; className?: string }) {
+export function BlogCard({
+  post,
+  className,
+  fallbackImage = DEFAULT_COVER,
+}: {
+  post: BlogPostData
+  className?: string
+  // Cover used when the post has none; callers may vary it for visual variety.
+  fallbackImage?: string
+}) {
   const [imgErrored, setImgErrored] = useState(false)
+  const src = post.imageUrl && !imgErrored ? post.imageUrl : fallbackImage
   return (
     <Link
       href={post.href}
@@ -30,20 +44,14 @@ export function BlogCard({ post, className }: { post: BlogPostData; className?: 
       )}
     >
       <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-background">
-        {post.imageUrl && !imgErrored ? (
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover transition-transform group-hover:scale-105"
-            onError={() => setImgErrored(true)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-placeholder">
-            <Icon icon="material-symbols:image-outline" width={48} />
-          </div>
-        )}
+        <Image
+          src={src}
+          alt={post.title}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover transition-transform group-hover:scale-105"
+          onError={() => setImgErrored(true)}
+        />
       </div>
       <div className="flex flex-col gap-1.5 px-4 pb-4 pt-1 text-center">
         <h3
