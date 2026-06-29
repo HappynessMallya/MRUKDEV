@@ -13,7 +13,8 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     // Add the backend / CDN hostnames that serve product & article images.
     remotePatterns: [
-      // { protocol: "https", hostname: "bucket.mruk.co.tz" },
+      // Cloudflare R2 (mruk-product-images) — live product & article images.
+      { protocol: "https", hostname: "pub-1c80634c6ca74f99a1583b3d9b57f3de.r2.dev" },
     ],
   },
 
