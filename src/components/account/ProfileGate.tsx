@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react'
 import { Button } from '@/components/atoms'
 import { useAuthStore } from '@/stores/authStore'
 import { cn } from '@/lib/cn'
+import { AccountDashboard } from '@/components/account/AccountDashboard'
 
 // Routes between the Sign in / Sign up forms when no user is authenticated,
 // or renders the profile when one is. Persists across reloads via the
@@ -16,7 +17,7 @@ export function ProfileGate() {
   const currentUser = useAuthStore((s) => s.currentUser)
 
   if (!currentUser) return <AuthGate />
-  return <Profile />
+  return <AccountDashboard />
 }
 
 function AuthGate() {
@@ -151,7 +152,7 @@ function SignUpForm({ onSwitch, onPending }: { onSwitch: () => void; onPending: 
             return
           }
           // Distributors land in a pending state; customers are auto-signed-in
-          // and ProfileGate re-renders into <Profile/> on its own.
+          // and ProfileGate re-renders into <AccountDashboard/> on its own.
           if (result.pendingApproval) onPending()
         })()
       }}
@@ -311,198 +312,6 @@ function SignInForm({ onSwitch, onPending }: { onSwitch: () => void; onPending: 
         </button>
       </p>
     </form>
-  )
-}
-
-function Profile() {
-  const user = useAuthStore((s) => s.currentUser)!
-  const updateProfile = useAuthStore((s) => s.updateProfile)
-  const signOut = useAuthStore((s) => s.signOut)
-  const [editing, setEditing] = useState(false)
-  const [savedAt, setSavedAt] = useState<number | null>(null)
-
-  const created = new Date(user.createdAt).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-
-  return (
-    <div className="mx-auto max-w-2xl">
-      <header className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-4">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Icon icon="iconoir:profile-circle" width={32} />
-          </span>
-          <div>
-            <p
-              className="text-foreground/60"
-              style={{ fontSize: 13, lineHeight: '20px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}
-            >
-              My profile
-            </p>
-            <h1
-              className="mt-1 font-heading text-foreground"
-              style={{ fontSize: 'clamp(24px, 2.6vw, 32px)', lineHeight: 1.15, fontWeight: 700 }}
-            >
-              {user.name}
-            </h1>
-            <p className="mt-1 text-foreground/65" style={{ fontSize: 14, lineHeight: '20px' }}>
-              Member since {created}
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={signOut}
-          className="text-foreground/55 underline underline-offset-4 hover:text-foreground"
-          style={{ fontSize: 13, lineHeight: '20px' }}
-        >
-          Sign out
-        </button>
-      </header>
-
-      <section className="mt-10 rounded-2xl bg-surface p-6 md:p-8">
-        <div className="flex items-center justify-between">
-          <h2
-            className="font-heading text-foreground"
-            style={{ fontSize: 18, lineHeight: '24px', fontWeight: 700 }}
-          >
-            Account details
-          </h2>
-          {!editing && (
-            <button
-              type="button"
-              onClick={() => setEditing(true)}
-              className="text-primary underline underline-offset-4 hover:opacity-75"
-              style={{ fontSize: 13, lineHeight: '20px', fontWeight: 600 }}
-            >
-              Edit
-            </button>
-          )}
-        </div>
-
-        {editing ? (
-          <form
-            className="mt-6 flex flex-col gap-4"
-            onSubmit={(e) => {
-              e.preventDefault()
-              const form = e.currentTarget
-              const data = new FormData(form)
-              updateProfile({
-                name: String(data.get('name') ?? user.name),
-                phone: String(data.get('phone') ?? '') || undefined,
-              })
-              setEditing(false)
-              setSavedAt(Date.now())
-            }}
-          >
-            <Field
-              id="profile-name"
-              label="Full name"
-              defaultValue={user.name}
-              required
-            />
-            <Field
-              id="profile-phone"
-              type="tel"
-              label="Phone"
-              defaultValue={user.phone ?? ''}
-            />
-            <p className="text-foreground/55" style={{ fontSize: 13, lineHeight: '18px' }}>
-              Email cannot be changed.
-            </p>
-            <div className="flex items-center gap-3">
-              <Button type="submit" variant="solid" size="sm">
-                Save changes
-              </Button>
-              <Button type="button" variant="soft" size="sm" onClick={() => setEditing(false)}>
-                Cancel
-              </Button>
-            </div>
-          </form>
-        ) : (
-          <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-            <Detail label="Full name" value={user.name} />
-            <Detail label="Email" value={user.email} />
-            <Detail label="Phone" value={user.phone || '—'} />
-          </dl>
-        )}
-
-        {savedAt && !editing && (
-          <p
-            className="mt-4 inline-flex items-center gap-1.5 text-foreground/60"
-            style={{ fontSize: 13, lineHeight: '18px' }}
-          >
-            <Icon icon="material-symbols:check-circle-outline" width={16} className="text-primary" />
-            Profile updated
-          </p>
-        )}
-      </section>
-
-      <section className="mt-6 grid gap-4 sm:grid-cols-2">
-        <ShortcutCard
-          icon="material-symbols:local-shipping-outline"
-          title="Orders"
-          description="Track current orders and view your order history."
-          href="/account/orders"
-        />
-        <ShortcutCard
-          icon="material-symbols:headset-mic-outline"
-          title="Support"
-          description="Reach our team — we typically reply in under 2 hours."
-          href="/contact"
-        />
-      </section>
-    </div>
-  )
-}
-
-function Detail({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-foreground/55" style={{ fontSize: 12, lineHeight: '18px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-        {label}
-      </dt>
-      <dd className="mt-1 text-foreground" style={{ fontSize: 15, lineHeight: '22px', fontWeight: 500 }}>
-        {value}
-      </dd>
-    </div>
-  )
-}
-
-function ShortcutCard({
-  icon,
-  title,
-  description,
-  href,
-}: {
-  icon: string
-  title: string
-  description: string
-  href: string
-}) {
-  return (
-    <a
-      href={href}
-      className="group flex items-start gap-3 rounded-2xl bg-surface p-5 transition-colors hover:bg-surface-alt"
-    >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background text-primary">
-        <Icon icon={icon} width={18} />
-      </span>
-      <div>
-        <h3
-          className="font-heading text-foreground"
-          style={{ fontSize: 15, lineHeight: '20px', fontWeight: 700 }}
-        >
-          {title}
-        </h3>
-        <p className="mt-1 text-foreground/65" style={{ fontSize: 13, lineHeight: '18px' }}>
-          {description}
-        </p>
-      </div>
-    </a>
   )
 }
 
