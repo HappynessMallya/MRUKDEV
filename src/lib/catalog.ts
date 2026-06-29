@@ -313,3 +313,24 @@ export async function getProductsByCategory(
   if (sub) list = list.filter((p) => p.sub === sub)
   return list
 }
+
+// Free-text product search (`?search=` from the header). The backend matches
+// the query against name.en/name.sw; mock mode filters the local catalog by
+// name so search still works behind the flag.
+export async function searchProducts(query: string): Promise<Product[]> {
+  const q = query.trim()
+  if (!q) return []
+  if (!USE_API) {
+    const all = await mockGetAll()
+    const needle = q.toLowerCase()
+    return all.filter((p) =>
+      `${p.name.en} ${p.name.sw ?? ''}`.toLowerCase().includes(needle)
+    )
+  }
+  const [res, tree] = await Promise.all([
+    listProducts({ limit: MAX_LIST, isPublished: true, search: q }),
+    listCategories(),
+  ])
+  const idx = buildCategoryIndex(tree)
+  return res.data.map((p) => mapProduct(p, idx))
+}

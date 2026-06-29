@@ -2,13 +2,31 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { Button, Container } from '@/components/atoms'
 import { useCompareStore } from '@/stores/compareStore'
 import { useTenantStore } from '@/stores/tenantStore'
-import { getProduct } from '@/data/products'
+import { getProduct as mockGetProduct } from '@/data/products'
+import { getProductBySlug } from '@/lib/api/products'
+import { mapProduct } from '@/lib/api/mappers'
 import type { Product } from '@/types/product'
+
+// Compare runs client-side off the compare store (which holds slugs), so it
+// resolves each slug against the LIVE catalog API — the previous mock lookup
+// returned null for every live slug, which is why the page showed "No products
+// selected" even with items ticked.
+const USE_API = process.env.NEXT_PUBLIC_USE_API === 'true'
+
+async function resolveProduct(slug: string): Promise<Product | null> {
+  if (!USE_API) return mockGetProduct(slug)
+  try {
+    return mapProduct(await getProductBySlug(slug))
+  } catch {
+    return mockGetProduct(slug)
+  }
+}
 
 interface CompareAttribute {
   key: string
@@ -31,11 +49,35 @@ export default function ComparePage() {
   const items = useCompareStore((s) => s.items)
   const t = useTenantStore((s) => s.t)
 
-  // Resolve store items → full Product entries for spec data. Filter out any
-  // slugs that no longer exist in the catalog (e.g. removed SKUs).
-  const products = items
-    .map((item) => getProduct(item.slug))
-    .filter((p): p is Product => p !== null)
+  // Resolve store items → full Product entries (for spec data) from the live
+  // catalog. Drops any slug that no longer resolves (e.g. removed SKUs).
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let alive = true
+    setLoading(true)
+    Promise.all(items.map((item) => resolveProduct(item.slug)))
+      .then((resolved) => {
+        if (!alive) return
+        setProducts(resolved.filter((p): p is Product => p !== null))
+        setLoading(false)
+      })
+    return () => {
+      alive = false
+    }
+  }, [items])
+
+  if (loading && items.length > 0) {
+    return (
+      <Container className="py-16 md:py-24">
+        <div className="flex items-center justify-center gap-2 text-foreground/55">
+          <Icon icon="svg-spinners:180-ring" width={22} />
+          <span style={{ fontSize: 15, lineHeight: '22px' }}>Loading comparison…</span>
+        </div>
+      </Container>
+    )
+  }
 
   if (products.length === 0) {
     return (

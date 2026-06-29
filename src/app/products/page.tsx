@@ -12,6 +12,7 @@ import {
   getCategoryLabel,
   getProductsByCategory,
   getSubcategories,
+  searchProducts,
 } from '@/lib/catalog'
 import { getTenantConfig } from '@/lib/tenant'
 import type { Product } from '@/types/product'
@@ -21,6 +22,8 @@ interface SearchParams {
   sub?: string
   sort?: string
   type?: string
+  // Free-text query from the header search → /products?search=
+  search?: string
 }
 
 // Sorts the filtered list in-place. `featured` keeps insertion order,
@@ -61,18 +64,25 @@ export default async function ProductsListPage({
 }: {
   searchParams: Promise<SearchParams>
 }) {
-  const { category, sub, sort, type } = await searchParams
+  const { category, sub, sort, type, search } = await searchParams
+  const query = search?.trim()
+  const isSearch = Boolean(query)
   const tenant = await getTenantConfig()
   const lang = tenant.defaultLang
 
+  // Search mode bypasses category/subcategory filtering entirely and matches
+  // the query across the whole catalog.
   const [sorted, subcategories, catLabel] = await Promise.all([
-    getProductsByCategory(category, sub).then((p) => sortProducts(p, sort)),
-    getSubcategories(category),
-    category ? getCategoryLabel(category) : Promise.resolve(null),
+    (isSearch
+      ? searchProducts(query as string)
+      : getProductsByCategory(category, sub)
+    ).then((p) => sortProducts(p, sort)),
+    isSearch ? Promise.resolve([]) : getSubcategories(category),
+    category && !isSearch ? getCategoryLabel(category) : Promise.resolve(null),
   ])
   // "Type" sidebar filter — ?type=<sub-slug>[,<sub-slug>], applied on subcategory.
   const typeSet = new Set((type ?? '').split(',').map((s) => s.trim()).filter(Boolean))
-  const products = typeSet.size
+  const products = !isSearch && typeSet.size
     ? sorted.filter((p) => p.sub && typeSet.has(p.sub))
     : sorted
   // Live subcategories become the sidebar's Type options (values match p.sub).
@@ -86,7 +96,23 @@ export default async function ProductsListPage({
 
   return (
     <div className="bg-surface">
-      {category && subcategories.length > 0 && (
+      {isSearch && (
+        <div className="bg-background">
+          <Container className="pt-8 md:pt-10">
+            <h1
+              className="font-heading text-foreground"
+              style={{ fontSize: 'clamp(22px, 2.6vw, 32px)', lineHeight: 1.2, fontWeight: 700 }}
+            >
+              Results for &ldquo;{query}&rdquo;
+            </h1>
+            <p className="mt-1 text-foreground/55" style={{ fontSize: 14, lineHeight: '20px' }}>
+              {products.length} {products.length === 1 ? 'product' : 'products'} found
+            </p>
+          </Container>
+        </div>
+      )}
+
+      {!isSearch && category && subcategories.length > 0 && (
         <CategoryHero heading={heading} subcategories={subcategories} category={category} />
       )}
 

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Icon } from '@iconify/react'
 
@@ -78,7 +79,7 @@ export function Navbar({ config }: { config: TenantConfig }) {
 
           {/* Right cluster — desktop */}
           <div className="hidden lg:flex items-center gap-3">
-            {nav.showSearch && <IconButton icon="material-symbols:search" label="Search" />}
+            {nav.showSearch && <NavSearch />}
             {nav.supportLink && (
               <Link
                 href={nav.supportLink.href}
@@ -186,6 +187,56 @@ export function Navbar({ config }: { config: TenantConfig }) {
         </div>
       )}
     </header>
+  )
+}
+
+// Header search: an icon that expands into an input and routes the query to
+// the catalog page (`/products?search=`), which already filters server-side
+// against the live API. Previously this was a dead icon with no handler.
+function NavSearch() {
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [q, setQ] = useState('')
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault()
+    const query = q.trim()
+    if (!query) return
+    router.push(`/products?search=${encodeURIComponent(query)}`)
+    setOpen(false)
+    setQ('')
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        aria-label="Search"
+        onClick={() => setOpen(true)}
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-surface hover:text-primary"
+      >
+        <Icon icon="material-symbols:search" width={22} />
+      </button>
+    )
+  }
+
+  return (
+    <form onSubmit={submit} className="flex h-10 items-center gap-2 rounded-full bg-surface px-3">
+      <Icon icon="material-symbols:search" width={18} className="text-foreground/50" />
+      <input
+        autoFocus
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        onBlur={() => { if (!q.trim()) setOpen(false) }}
+        placeholder="Search products…"
+        aria-label="Search products"
+        className="w-40 bg-transparent text-foreground outline-none placeholder:text-foreground/40"
+        style={{ fontSize: 14, lineHeight: '20px' }}
+      />
+      <button type="submit" aria-label="Submit search" className="text-foreground/60 transition-colors hover:text-primary">
+        <Icon icon="material-symbols:arrow-forward" width={18} />
+      </button>
+    </form>
   )
 }
 
