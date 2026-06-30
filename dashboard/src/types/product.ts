@@ -28,6 +28,8 @@ export interface Product {
   category: string;
   subcategory: string;
   status: ProductStatus;
+  /** Manual availability toggle (not inventory): true = in stock. Defaults true. */
+  inStock?: boolean;
   description: string;
   variants: ProductVariant[];
   highlights: HighlightFeature[];

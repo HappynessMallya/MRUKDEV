@@ -42,6 +42,7 @@ export interface BackendProduct {
   modelNumber?: string | null;
   description?: Localized | null;
   isPublished?: boolean;
+  inStockOverride?: boolean | null;
   categoryId?: string;
   category?: BackendCategory;
   media?: { url: string; isPrimary?: boolean; sortOrder?: number; type?: string }[];
@@ -80,6 +81,7 @@ export function mapBackendProduct(p: BackendProduct): Product {
     category: p.category?.name?.en ?? "",
     subcategory: "",
     status: status(p),
+    inStock: p.inStockOverride ?? true,
     description: p.description?.en ?? "",
     variants: (p.variants ?? []).map((v, i) => ({
       id: v.id ?? `v-${i}`,
@@ -162,6 +164,7 @@ export function productInputToPayload(
       ? { en: input.description, sw: input.description }
       : undefined,
     isPublished: input.status === "published",
+    inStockOverride: input.inStock,
     currency: "TZS",
     media: input.imageUrl
       ? [{ url: input.imageUrl, type: "image", isPrimary: true, sortOrder: 0 }]

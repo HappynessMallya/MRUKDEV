@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ImageUrlInput } from "@/components/forms/image-url-input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { createProduct, updateProduct } from "@/lib/actions/products";
 import { PRODUCT_STATUSES } from "@/lib/validations";
 import type { Category, Product } from "@/types/product";
@@ -30,6 +31,7 @@ const formSchema = z.object({
   category: z.string().trim().min(1, "Select a category"),
   subcategory: z.string().trim().min(1, "Select a subcategory"),
   status: z.enum(PRODUCT_STATUSES),
+  inStock: z.boolean(),
   description: z.string().trim().max(4000),
   imageUrl: z.union([z.literal(""), z.string().url("Enter a valid URL")]),
   variants: z
@@ -72,6 +74,7 @@ function toDefaults(product?: Product): FormValues {
       category: "",
       subcategory: "",
       status: "draft",
+      inStock: true,
       description: "",
       imageUrl: "",
       variants: [{ name: "", sku: "", stock: 0, price: 0, attributes: "" }],
@@ -85,6 +88,7 @@ function toDefaults(product?: Product): FormValues {
     category: product.category,
     subcategory: product.subcategory,
     status: product.status,
+    inStock: product.inStock ?? true,
     description: product.description,
     imageUrl: product.imageUrl ?? "",
     variants: product.variants.map((v) => ({
@@ -264,6 +268,26 @@ export function ProductForm({
               )}
             />
           </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Controller
+            control={control}
+            name="inStock"
+            render={({ field }) => (
+              <Checkbox
+                id="inStock"
+                checked={field.value}
+                onCheckedChange={(v) => field.onChange(v === true)}
+              />
+            )}
+          />
+          <Label htmlFor="inStock" className="cursor-pointer">
+            In stock{" "}
+            <span className="text-muted-foreground font-normal">
+              — uncheck to show “Out of stock”
+            </span>
+          </Label>
         </div>
 
         <div className="space-y-2">

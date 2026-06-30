@@ -128,6 +128,8 @@ export const productInputSchema = z.object({
   category: z.string().trim().min(1, "Category is required"),
   subcategory: z.string().trim().min(1, "Subcategory is required"),
   status: z.enum(PRODUCT_STATUSES).default("draft"),
+  // Manual availability toggle (not inventory): true = in stock.
+  inStock: z.boolean().default(true),
   description: z.string().trim().max(4000).default(""),
   imageUrl: z.string().url().nullish(),
   variants: z
