@@ -16,7 +16,8 @@ export interface CartItem {
 interface CartState {
   items: CartItem[]
   count: number
-  add: (item: Omit<CartItem, 'qty'>) => void
+  // Adds `qty` units (default 1); increments if the line already exists.
+  add: (item: Omit<CartItem, 'qty'>, qty?: number) => void
   remove: (id: string) => void
   setQty: (id: string, qty: number) => void
   clear: () => void
@@ -30,13 +31,14 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       count: 0,
-      add: (item) => {
+      add: (item, qty = 1) => {
+        const n = Math.max(1, Math.floor(qty))
         const existing = get().items.find((i) => i.id === item.id)
         const items = existing
           ? get().items.map((i) =>
-              i.id === item.id ? { ...i, qty: i.qty + 1 } : i
+              i.id === item.id ? { ...i, qty: i.qty + n } : i
             )
-          : [...get().items, { ...item, qty: 1 }]
+          : [...get().items, { ...item, qty: n }]
         set({ items, count: recountAfter(items) })
       },
       remove: (id) => {

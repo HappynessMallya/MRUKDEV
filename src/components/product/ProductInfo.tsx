@@ -36,8 +36,12 @@ export function ProductInfo({ product }: { product: Product }) {
   const colors = product.colors ?? []
   const [activeColor, setActiveColor] = useState(colors[0]?.id)
   const [justAdded, setJustAdded] = useState(false)
+  const [qty, setQty] = useState(1)
   const router = useRouter()
   const addToCartStore = useCartStore((s) => s.add)
+  // Reflect cart state so the user can jump to the cart to adjust quantity
+  // instead of blindly re-adding (which silently kept incrementing before).
+  const cartQty = useCartStore((s) => s.items.find((i) => i.id === product.id)?.qty ?? 0)
 
   const addToCart = texts.addToCart ?? { en: 'Add to cart' }
   const getQuote = texts.getQuote ?? { en: 'Get a quotation' }
@@ -158,6 +162,35 @@ export function ProductInfo({ product }: { product: Product }) {
         </div>
       )}
 
+      {!isOutOfStock && (
+        <div className="mt-2 flex items-center gap-3">
+          <span className="text-foreground/70" style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}>
+            Quantity
+          </span>
+          <div className="flex items-center gap-1 rounded-lg border border-gray-200 p-1">
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-foreground/70 transition-colors hover:bg-surface hover:text-foreground"
+            >
+              <Icon icon="material-symbols:remove" width={16} />
+            </button>
+            <span className="min-w-8 text-center text-foreground" style={{ fontSize: 15, lineHeight: '20px', fontWeight: 600 }}>
+              {qty}
+            </span>
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              onClick={() => setQty((q) => q + 1)}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-foreground/70 transition-colors hover:bg-surface hover:text-foreground"
+            >
+              <Icon icon="material-symbols:add" width={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {isOutOfStock ? (
           <Button variant="solid" size="md" disabled fullWidth className="sm:col-span-2">
@@ -186,22 +219,38 @@ export function ProductInfo({ product }: { product: Product }) {
               fullWidth
               leftIcon={<Icon icon={justAdded ? 'material-symbols:check-rounded' : 'tdesign:cart'} width={16} />}
               onClick={() => {
-                addToCartStore({
-                  id: product.id,
-                  slug: product.slug,
-                  name: t(product.name),
-                  imageUrl: product.listImage ?? product.images[0] ?? '',
-                  model: product.model,
-                })
+                addToCartStore(
+                  {
+                    id: product.id,
+                    slug: product.slug,
+                    name: t(product.name),
+                    imageUrl: product.listImage ?? product.images[0] ?? '',
+                    model: product.model,
+                  },
+                  qty
+                )
+                setQty(1)
                 setJustAdded(true)
                 setTimeout(() => setJustAdded(false), 1500)
               }}
             >
-              {justAdded ? 'Added' : t(addToCart)}
+              {justAdded ? 'Added ✓' : t(addToCart)}
             </Button>
           </>
         )}
       </div>
+
+      {cartQty > 0 && !isOutOfStock && (
+        <button
+          type="button"
+          onClick={() => router.push('/cart')}
+          className="-mt-1 inline-flex items-center gap-1.5 self-start text-primary hover:underline"
+          style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
+        >
+          <Icon icon="material-symbols:shopping-cart-checkout" width={16} />
+          {cartQty} in your cart — adjust quantity in the cart
+        </button>
+      )}
 
       {whatsappHref && !isOutOfStock && (
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer">

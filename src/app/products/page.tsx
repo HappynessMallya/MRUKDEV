@@ -90,6 +90,7 @@ export default async function ProductsListPage({
     value: s.slug,
     label: s.label[lang] ?? s.label.en,
   }))
+  const hasSidebar = filterOptions.length > 0
   const heading = catLabel
     ? { en: `Explore ${catLabel.en.toLowerCase()}`, sw: catLabel.sw && `Tazama ${catLabel.sw.toLowerCase()}` }
     : { en: 'Explore products' }
@@ -125,8 +126,12 @@ export default async function ProductsListPage({
       </div>
 
       <Container className="py-8 md:py-10">
-        <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-          <FilterSidebar options={filterOptions} />
+        {/* Only use the two-column [sidebar | grid] layout when there ARE filter
+            options. Otherwise FilterSidebar renders null and the lone product
+            grid would be placed into the fixed 240px column, collapsing every
+            card — so without a sidebar the grid spans the full width instead. */}
+        <div className={hasSidebar ? 'grid gap-6 lg:grid-cols-[240px_1fr]' : ''}>
+          {hasSidebar && <FilterSidebar options={filterOptions} />}
 
           {products.length === 0 ? (
             <EmptyState />

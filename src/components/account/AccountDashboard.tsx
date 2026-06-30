@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Icon } from '@iconify/react'
 
-import { Button } from '@/components/atoms'
 import { cn } from '@/lib/cn'
 import { useAuthStore } from '@/stores/authStore'
 import { useTenantStore } from '@/stores/tenantStore'
@@ -455,11 +454,23 @@ const ROLE_LABEL: Record<string, string> = {
   customer: 'Customer',
 }
 
+type SectionKey = 'overview' | 'inquiries' | 'orders' | 'documents' | 'wishlist' | 'cart'
+
+const NAV: { key: SectionKey; label: string; icon: string }[] = [
+  { key: 'overview', label: 'Overview', icon: 'material-symbols:dashboard-outline' },
+  { key: 'inquiries', label: 'Quote requests', icon: 'material-symbols:request-quote-outline' },
+  { key: 'orders', label: 'Orders', icon: 'material-symbols:local-shipping-outline' },
+  { key: 'documents', label: 'Quotes & invoices', icon: 'material-symbols:receipt-long-outline' },
+  { key: 'wishlist', label: 'Wishlist', icon: 'material-symbols:favorite-outline' },
+  { key: 'cart', label: 'Cart', icon: 'material-symbols:shopping-cart-outline' },
+]
+
 export function AccountDashboard() {
   const storeUser = useAuthStore((s) => s.currentUser)
   const token = useAuthStore((s) => s.accessToken)
   const signOut = useAuthStore((s) => s.signOut)
   const lang = useTenantStore((s) => s.lang)
+  const [active, setActive] = useState<SectionKey>('overview')
 
   const profile = useResource(getProfile, token)
   const user = profile.data
@@ -472,72 +483,124 @@ export function AccountDashboard() {
   const roleLabel = roleSlug ? ROLE_LABEL[roleSlug] ?? roleSlug : undefined
   const loyalty = user?.loyaltyAccount
 
+  const hasLoyalty = Boolean(
+    loyalty && (loyalty.points != null || loyalty.balance != null || loyalty.tier || loyalty.level)
+  )
+
   return (
-    <div className="mx-auto max-w-5xl">
-      {/* Header */}
-      <header className="rounded-2xl bg-surface p-6 md:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Icon icon="iconoir:profile-circle" width={32} />
-            </span>
-            <div>
-              <p
-                className="text-foreground/60"
-                style={{ fontSize: 13, lineHeight: '20px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}
-              >
-                My account
-              </p>
-              <h1
-                className="mt-1 font-heading text-foreground"
-                style={{ fontSize: 'clamp(24px, 2.6vw, 32px)', lineHeight: 1.15, fontWeight: 700 }}
-              >
-                {name}
-              </h1>
-              <div className="mt-1.5 flex flex-wrap items-center gap-2">
+    <div className="mx-auto max-w-6xl">
+      <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+        {/* Sidebar: profile + section nav (a sticky rail on desktop, a
+            horizontal scroller on mobile) — gives the account area the same
+            "real dashboard" shell as the admin app. */}
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-2xl bg-surface p-5">
+            <div className="flex items-center gap-3">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Icon icon="iconoir:profile-circle" width={28} />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate font-heading text-foreground" style={{ fontSize: 16, lineHeight: '22px', fontWeight: 700 }}>
+                  {name}
+                </p>
                 {email && (
-                  <span className="text-foreground/65" style={{ fontSize: 14, lineHeight: '20px' }}>
+                  <p className="truncate text-foreground/55" style={{ fontSize: 12, lineHeight: '16px' }}>
                     {email}
-                  </span>
-                )}
-                {roleLabel && (
-                  <span
-                    className="rounded-full bg-primary/10 px-2.5 py-0.5 text-primary"
-                    style={{ fontSize: 11, lineHeight: '16px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}
-                  >
-                    {roleLabel}
-                  </span>
+                  </p>
                 )}
               </div>
             </div>
-          </div>
+            {roleLabel && (
+              <span
+                className="mt-3 inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-primary"
+                style={{ fontSize: 11, lineHeight: '16px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}
+              >
+                {roleLabel}
+              </span>
+            )}
 
-          <Button variant="soft" size="sm" onClick={signOut} leftIcon={<Icon icon="material-symbols:logout" width={16} />}>
+            <nav className="mt-5 flex gap-1 overflow-x-auto lg:flex-col">
+              {NAV.map((item) => {
+                const isActive = active === item.key
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => setActive(item.key)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={cn(
+                      'flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-left transition-colors lg:w-full',
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-foreground/70 hover:bg-background hover:text-foreground'
+                    )}
+                    style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
+                  >
+                    <Icon icon={item.icon} width={18} />
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </button>
+                )
+              })}
+            </nav>
+
+            <button
+              type="button"
+              onClick={signOut}
+              className="mt-5 hidden w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-foreground/60 transition-colors hover:bg-background hover:text-foreground lg:flex"
+              style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
+            >
+              <Icon icon="material-symbols:logout" width={18} />
+              Sign out
+            </button>
+          </div>
+        </aside>
+
+        {/* Main content — the active section. Overview shows everything at a
+            glance; the other nav items focus a single section. */}
+        <main className="min-w-0">
+          {active === 'overview' && (
+            <div className="space-y-6">
+              {hasLoyalty && loyalty && (
+                <section className="rounded-2xl bg-surface p-5 md:p-6">
+                  <h2 className="font-heading text-foreground" style={{ fontSize: 17, lineHeight: '22px', fontWeight: 700 }}>
+                    Loyalty
+                  </h2>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <LoyaltyStat label="Points" value={(loyalty.points ?? loyalty.balance ?? 0).toLocaleString()} />
+                    {(loyalty.tier || loyalty.level?.name) && (
+                      <LoyaltyStat label="Tier" value={loyalty.tier ?? loyalty.level?.name ?? ''} />
+                    )}
+                    {loyalty.lifetimePoints != null && (
+                      <LoyaltyStat label="Lifetime" value={loyalty.lifetimePoints.toLocaleString()} />
+                    )}
+                  </div>
+                </section>
+              )}
+              <div className="grid gap-5 md:grid-cols-2">
+                <InquiriesPanel token={token} />
+                <OrdersPanel token={token} lang={lang} />
+                <DocumentsPanel token={token} />
+                <WishlistPanel token={token} lang={lang} />
+                <CartPanel token={token} lang={lang} />
+              </div>
+            </div>
+          )}
+          {active === 'inquiries' && <InquiriesPanel token={token} />}
+          {active === 'orders' && <OrdersPanel token={token} lang={lang} />}
+          {active === 'documents' && <DocumentsPanel token={token} />}
+          {active === 'wishlist' && <WishlistPanel token={token} lang={lang} />}
+          {active === 'cart' && <CartPanel token={token} lang={lang} />}
+
+          <button
+            type="button"
+            onClick={signOut}
+            className="mt-6 inline-flex items-center gap-2 text-foreground/55 transition-colors hover:text-foreground lg:hidden"
+            style={{ fontSize: 14, lineHeight: '20px', fontWeight: 600 }}
+          >
+            <Icon icon="material-symbols:logout" width={16} />
             Sign out
-          </Button>
-        </div>
-
-        {/* Loyalty strip — only when the account actually has loyalty data */}
-        {loyalty && (loyalty.points != null || loyalty.balance != null || loyalty.tier || loyalty.level) && (
-          <div className="mt-6 flex flex-wrap gap-3 border-t border-border-subtle pt-5">
-            <LoyaltyStat label="Points" value={(loyalty.points ?? loyalty.balance ?? 0).toLocaleString()} />
-            {(loyalty.tier || loyalty.level?.name) && (
-              <LoyaltyStat label="Tier" value={loyalty.tier ?? loyalty.level?.name ?? ''} />
-            )}
-            {loyalty.lifetimePoints != null && (
-              <LoyaltyStat label="Lifetime" value={loyalty.lifetimePoints.toLocaleString()} />
-            )}
-          </div>
-        )}
-      </header>
-
-      {/* Panels */}
-      <div className="mt-6 grid gap-5 md:grid-cols-2">
-        <InquiriesPanel token={token} />
-        <OrdersPanel token={token} lang={lang} />
-        <DocumentsPanel token={token} />
-        <WishlistPanel token={token} lang={lang} />
-        <CartPanel token={token} lang={lang} />
+          </button>
+        </main>
       </div>
     </div>
   )
